@@ -2,6 +2,7 @@ add_executable(
     libtest 
     src/simulate_vector.cpp
     src/simulate_compressed_sparse.cpp
+    src/throws_error.cpp
 )
 
 target_link_libraries(
