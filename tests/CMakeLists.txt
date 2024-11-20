@@ -3,12 +3,22 @@ add_executable(
     src/simulate_vector.cpp
     src/simulate_compressed_sparse.cpp
     src/throws_error.cpp
+    src/test_access.cpp
 )
 
 target_link_libraries(
     libtest
     tatami_test
 )
+
+include(FetchContent)
+FetchContent_Declare(
+  tatami
+  GIT_REPOSITORY https://github.com/tatami-inc/tatami
+  GIT_TAG master # ^3.0.0
+)
+FetchContent_MakeAvailable(tatami)
+target_link_libraries(libtest tatami)
 
 target_compile_options(libtest PRIVATE -Wall -Werror -Wpedantic -Wextra)
 

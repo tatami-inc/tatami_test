@@ -1,110 +1,158 @@
-#ifndef TATAMI_TEST_ACCESS_HPP
-#define TATAMI_TEST_ACCESS_HPP
+#ifndef TATAMI_TEST_TEST_ACCESS_HPP
+#define TATAMI_TEST_TEST_ACCESS_HPP
 
 #include <gtest/gtest.h>
 
+#include "tatami/utils/new_extractor.hpp"
+#include "tatami/utils/ConsecutiveOracle.hpp"
+#include "tatami/utils/FixedOracle.hpp"
+
 #include "fetch.hpp"
-#include "../tatami/utils/new_extractor.hpp"
-#include "../tatami/utils/ConsecutiveOracle.hpp"
-#include "../tatami/utils/FixedOracle.hpp"
 
 #include <vector>
 #include <limits>
 #include <random>
 #include <cmath>
 #include <memory>
+#include <cstdint>
+
+/**
+ * @file test_access.hpp
+ * @brief Test access patterns on a `tatami::Matrix`.
+ */
 
 namespace tatami_test {
 
-enum TestAccessOrder { FORWARD, REVERSE, RANDOM };
+/**
+ * Order for accessing rows/columns during `tatami::Matrix` access tests. 
+ *
+ * - `FORWARD`: rows/columns are accessed in strictly increasing order.
+ * - `REVERSE`: rows/columns are accessed in strictly decreasing order.
+ * - `RANDOM`: rows/columns are accessed in random order.
+ */
+enum class TestAccessOrder : char { FORWARD, REVERSE, RANDOM };
 
-struct TestAccessParameters {
-    // Whether to use an oracle.
+/**
+ * @brief Options for `test_full_access()` and friends.
+ */
+struct TestAccessOptions {
+    /**
+     * Whether to use an oracle.
+     */
     bool use_oracle = false;
 
-    // Whether to test access across rows.
+    /**
+     * Whether to test row access. 
+     * If `false`, column access is tested instead.
+     */
     bool use_row = true;
 
-    // Ordering of rows/columns to test.
-    TestAccessOrder order = FORWARD;
+    /**
+     * Ordering of row/column accesses in the test.
+     */
+    TestAccessOrder order = TestAccessOrder::FORWARD;
 
-    // Minimum jump between rows/columns.
+    /**
+     * Minimum distance between rows/columns to be accessed in the test.
+     */
     int jump = 1;
 
-    // Whether to expect NaNs (and sanitize them in the comparison).
-    bool has_nan = false;
-
-    // Whether to check that "sparse" matrices are actually sparse.
+    /**
+     * Whether to check that "sparse" matrices actually have density below 1.
+     */
     bool check_sparse = true;
-
 };
 
-typedef std::tuple<bool, bool, TestAccessOrder, int> StandardTestAccessParameters;
+/**
+ * Contents of `TestAccessOptions` as a tuple.
+ * This is required for GoogleTest's parametrized generators, see `standard_test_access_options_combinations()`.
+ */
+typedef std::tuple<bool, bool, TestAccessOrder, int> StandardTestAccessOptions;
 
-inline TestAccessParameters convert_access_parameters(const StandardTestAccessParameters& tup) {
-    TestAccessParameters output;
-    output.use_row = std::get<0>(tup);
-    output.use_oracle = std::get<1>(tup);
-    output.order = std::get<2>(tup);
-    output.jump = std::get<3>(tup);
+/**
+ * Convert from tuple-like options into a `TestAccessOptions` object.
+ * This allows `TEST_P` bodies to easily convert the `GetParam()`-supplied tuple into options for `test_full_access()` and friends.
+ *
+ * @param x Options as a tuple.
+ * @return The same options as a `TestAccessOptions` object.
+ */
+inline TestAccessOptions convert_test_access_options(const StandardTestAccessOptions& x) {
+    TestAccessOptions output;
+    output.use_row = std::get<0>(x);
+    output.use_oracle = std::get<1>(x);
+    output.order = std::get<2>(x);
+    output.jump = std::get<3>(x);
     return output;
 }
 
-inline auto standard_test_access_parameter_combinations() {
+/**
+ * @return A parametrized GoogleTest generator for all `TestAccessOptions` combinations.
+ * This should be used inside a `INSTANTIATE_TEST_SUITE_P` macro, which ensures that `GetParam()` in the `TEST_P` body returns a `StandardTestAccessOptions` instance.
+ */
+inline auto standard_test_access_options_combinations() {
     return ::testing::Combine(
         ::testing::Values(true, false), /* whether to access the rows. */
         ::testing::Values(true, false), /* whether to use an oracle. */
-        ::testing::Values(tatami_test::FORWARD, tatami_test::REVERSE, tatami_test::RANDOM), /* access order. */
+        ::testing::Values(TestAccessOrder::FORWARD, TestAccessOrder::REVERSE, TestAccessOrder::RANDOM), /* access order. */
         ::testing::Values(1, 3) /* jump between rows/columns. */
     );
 }
 
-/********************************************************
- ********************************************************/
-
+/**
+ * @cond
+ */
 namespace internal {
 
 template<typename Value_>
-void sanitize_nan(std::vector<Value_>& values, bool has_nan) {
-    if constexpr(std::numeric_limits<Value_>::has_quiet_NaN) {
-        if (has_nan) {
-            for (auto& x : values) {
-                if (std::isnan(x)) {
-                    // Using an appropriately silly placeholder that
-                    // should never occur in our test data.
-                    x = 1234567890;
-                }
-            }
+void compare_vectors(const std::vector<Value_>& expected, const std::vector<Value_>& observed, const std::string& context) {
+    size_t n_expected = expected.size();
+    ASSERT_EQ(n_expected, observed.size()) << "mismatch in vector length (" << context << ")";
+    for (size_t i = 0; i < n_expected; ++i) {
+        auto expected_val = expected[i], observed_val = observed[i];
+        if (std::isnan(expected_val)) {
+            EXPECT_EQ(std::isnan(expected_val), std::isnan(observed_val)) << "mismatching NaNs at position " << i << " (" << context << ")";
+        } else {
+            EXPECT_EQ(expected_val, observed_val) << "different values at position " << i << " (" << context << ")";
         }
     }
 }
 
 template<typename Index_>
-std::vector<Index_> simulate_sequence(const TestAccessParameters& params, Index_ NR, Index_ NC) {
+uint64_t create_seed(Index_ NR, Index_ NC, const TestAccessOptions& options) {
+    uint64_t seed = static_cast<uint64_t>(NR) * static_cast<uint64_t>(NC);
+    seed += 13 * static_cast<uint64_t>(options.use_row);
+    seed += 57 * static_cast<uint64_t>(options.order);
+    seed += 101 * static_cast<uint64_t>(options.jump);
+    return seed;
+}
+
+template<typename Index_>
+std::vector<Index_> simulate_test_access_sequence(Index_ NR, Index_ NC, const TestAccessOptions& options) {
     std::vector<Index_> sequence;
-    auto limit = (params.use_row ? NR : NC);
-    if (params.order == REVERSE) {
-        for (int i = limit; i > 0; i -= params.jump) {
+    auto limit = (options.use_row ? NR : NC);
+
+    if (options.order == TestAccessOrder::REVERSE) {
+        for (int i = limit; i > 0; i -= options.jump) {
             sequence.push_back(i - 1);
         }
     } else {
-        for (int i = 0; i < limit; i += params.jump) {
+        for (int i = 0; i < limit; i += options.jump) {
             sequence.push_back(i);
         }
-        if (params.order == RANDOM) {
-            uint64_t seed = static_cast<uint64_t>(NR) * NC + limit * static_cast<uint64_t>(params.order);
-            std::mt19937_64 rng(seed);
+        if (options.order == TestAccessOrder::RANDOM) {
+            std::mt19937_64 rng(create_seed(NR, NC, options));
             std::shuffle(sequence.begin(), sequence.end(), rng);
         }
     }
+
     return sequence;
 }
 
 template<bool use_oracle_, typename Index_>
-auto create_oracle(const TestAccessParameters& params, const std::vector<Index_>& sequence) {
+tatami::MaybeOracle<use_oracle_, Index_> create_oracle(const std::vector<Index_>& sequence, const TestAccessOptions& options) {
     if constexpr(use_oracle_) {
         std::shared_ptr<tatami::Oracle<Index_> > oracle;
-        if (params.jump == 1 && params.order == FORWARD) {
+        if (options.jump == 1 && options.order == TestAccessOrder::FORWARD) {
             oracle.reset(new tatami::ConsecutiveOracle<Index_>(0, sequence.size()));
         } else {
             oracle.reset(new tatami::FixedViewOracle<Index_>(sequence.data(), sequence.size()));
@@ -115,69 +163,66 @@ auto create_oracle(const TestAccessParameters& params, const std::vector<Index_>
     }
 }
 
-template<bool use_oracle_, typename Value_, typename Index_, class DenseExtract_, class SparseExpand_, typename ...Args_>
+template<bool use_oracle_, typename Value_, typename Index_, class SparseExpand_, typename ...Args_>
 void test_access_base(
-    const TestAccessParameters& params, 
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref, 
-    DenseExtract_ expector, 
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference, 
+    const TestAccessOptions& options, 
+    Index_ extent,
     SparseExpand_ sparse_expand, 
     Args_... args) 
 {
-    auto NR = ptr->nrow();
-    ASSERT_EQ(NR, ref->nrow());
-    auto NC = ptr->ncol();
-    ASSERT_EQ(NC, ref->ncol());
+    auto NR = matrix.nrow();
+    ASSERT_EQ(NR, reference.nrow());
+    auto NC = matrix.ncol();
+    ASSERT_EQ(NC, reference.ncol());
 
-    auto sequence = simulate_sequence(params, NR, NC);
-    auto oracle = create_oracle<use_oracle_>(params, sequence);
+    auto refwork = (options.use_row ? reference.dense_row(args...) : reference.dense_column(args...));
 
-    auto pwork = tatami::new_extractor<false, use_oracle_>(ptr, params.use_row, oracle, args...);
-    auto swork = tatami::new_extractor<true, use_oracle_>(ptr, params.use_row, oracle, args...);
+    auto sequence = simulate_test_access_sequence(NR, NC, options);
+    auto oracle = create_oracle<use_oracle_>(sequence, options);
+
+    auto pwork = tatami::new_extractor<false, use_oracle_>(&matrix, options.use_row, oracle, args...);
+    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args...);
 
     tatami::Options opt;
     opt.sparse_extract_index = false;
-    auto swork_v = tatami::new_extractor<true, use_oracle_>(ptr, params.use_row, oracle, args..., opt);
+    auto swork_v = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
 
     opt.sparse_extract_value = false;
-    auto swork_n = tatami::new_extractor<true, use_oracle_>(ptr, params.use_row, oracle, args..., opt);
+    auto swork_n = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
 
     opt.sparse_extract_index = true;
-    auto swork_i = tatami::new_extractor<true, use_oracle_>(ptr, params.use_row, oracle, args..., opt);
+    auto swork_i = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
 
     size_t sparse_counter = 0;
 
     // Looping over rows/columns and checking extraction against the reference.
     for (auto i : sequence) {
-        auto expected = expector(i);
-        sanitize_nan(expected, params.has_nan);
-        auto extent = expected.size(); // using the dense expected size to determine the expected extraction length.
+        auto expected = fetch(*refwork, i, extent);
 
         // Checking dense retrieval first.
         {
             auto observed = [&]() {
                 if constexpr(use_oracle_) {
-                    return fetch(pwork.get(), extent);
+                    return fetch(*pwork, extent);
                 } else {
-                    return fetch(pwork.get(), i, extent);
+                    return fetch(*pwork, i, extent);
                 }
             }();
-            sanitize_nan(observed, params.has_nan);
-            ASSERT_EQ(expected, observed);
+            compare_vectors(expected, observed, "dense retrieval");
         }
 
         // Various flavors of sparse retrieval.
         {
             auto observed = [&]() {
                 if constexpr(use_oracle_) {
-                    return fetch(swork.get(), extent);
+                    return fetch(*swork, extent);
                 } else {
-                    return fetch(swork.get(), i, extent);
+                    return fetch(*swork, i, extent);
                 }
             }();
-
-            sanitize_nan(observed.value, params.has_nan);
-            ASSERT_EQ(expected, sparse_expand(observed));
+            compare_vectors(expected, sparse_expand(observed), "sparse retrieval");
 
             sparse_counter += observed.value.size();
             {
@@ -204,19 +249,18 @@ void test_access_base(
             indices.resize(observed_i.number);
             ASSERT_EQ(observed.index, indices);
 
-            std::vector<Value_> vbuffer(extent);
+            std::vector<Value_> values(extent);
             auto observed_v = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_v->fetch(vbuffer.data(), NULL);
+                    return swork_v->fetch(values.data(), NULL);
                 } else {
-                    return swork_v->fetch(i, vbuffer.data(), NULL);
+                    return swork_v->fetch(i, values.data(), NULL);
                 }
             }();
             ASSERT_TRUE(observed_v.index == NULL);
-            tatami::copy_n(observed_v.value, observed_v.number, vbuffer.data());
-            vbuffer.resize(observed_v.number);
-            sanitize_nan(vbuffer, params.has_nan);
-            ASSERT_EQ(observed.value, vbuffer);
+            tatami::copy_n(observed_v.value, observed_v.number, values.data());
+            values.resize(observed_v.number);
+            compare_vectors(values, observed.value, "sparse retrieval with values only");
 
             auto observed_n = [&]() {
                 if constexpr(use_oracle_) {
@@ -231,29 +275,27 @@ void test_access_base(
         } 
     }
 
-    if (params.check_sparse && ptr->is_sparse()) {
+    if (options.check_sparse && matrix.is_sparse()) {
         EXPECT_TRUE(sparse_counter < static_cast<size_t>(NR) * static_cast<size_t>(NC));
     }
 }
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_full_access(
-    const TestAccessParameters& params, 
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref)
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    const TestAccessOptions& options)
 {
-    int nsecondary = (params.use_row ? ref->ncol() : ref->nrow());
-    auto refwork = (params.use_row ? ref->dense_row() : ref->dense_column());
+    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
     test_access_base<use_oracle_>(
-        params,
-        ptr, 
-        ref, 
-        [&](int i) -> auto { 
-            return fetch(refwork.get(), i, nsecondary);
-        },
+        matrix,
+        reference,
+        options,
+        nsecondary,
         [&](const auto& svec) -> auto {
             std::vector<Value_> output(nsecondary);
-            for (size_t i = 0; i < svec.index.size(); ++i) {
+            size_t nnz = svec.index.size();
+            for (size_t i = 0; i < nnz; ++i) {
                 output[svec.index[i]] = svec.value[i];
             }
             return output;
@@ -263,51 +305,52 @@ void test_full_access(
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_block_access(
-    const TestAccessParameters& params,
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref,
-    int start,
-    int end) 
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    double relative_start,
+    double relative_length,
+    const TestAccessOptions& options)
 {
-    int nsecondary = (params.use_row ? ref->ncol() : ref->nrow());
-    auto refwork = (params.use_row ? ref->dense_row() : ref->dense_column());
+    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    Index_ start = nsecondary * relative_start;
+    Index_ length = nsecondary * relative_length;
     test_access_base<use_oracle_>(
-        params,
-        ptr, 
-        ref, 
-        [&](int i) -> auto { 
-            auto raw_expected = fetch(refwork.get(), i, nsecondary);
-            return std::vector<Value_>(raw_expected.begin() + start, raw_expected.begin() + end);
-        }, 
+        matrix, 
+        reference, 
+        options,
+        length,
         [&](const auto& svec) -> auto {
-            std::vector<Value_> output(end - start);
-            for (size_t i = 0; i < svec.value.size(); ++i) {
+            std::vector<Value_> output(length);
+            size_t nnz = svec.index.size();
+            for (size_t i = 0; i < nnz; ++i) {
                 output[svec.index[i] - start] = svec.value[i];
             }
             return output;
         },
         start,
-        end - start
+        length
     );
 }
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_indexed_access(
-    const TestAccessParameters& params, 
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref,
-    int start,
-    int step)
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    double relative_start,
+    double probability,
+    const TestAccessOptions& options)
 {
-    int nsecondary = (params.use_row ? ref->ncol() : ref->nrow());
-    auto refwork = (params.use_row ? ref->dense_row() : ref->dense_column());
+    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    Index_ start = nsecondary * relative_start;
 
-    std::vector<Index_> indices;
+    std::vector<Index_> indices { start };
     {
-        int counter = start;
-        while (counter < nsecondary) {
-            indices.push_back(counter);
-            counter += step;
+        std::mt19937_64 rng(create_seed(matrix.nrow(), matrix.ncol(), options) + 999 * probability + 888 * start);
+        std::uniform_real_distribution udist;
+        for (Index_ i = start + 1; i < nsecondary; ++i) {
+            if (udist(rng) < probability) {
+                indices.push_back(i);
+            }
         }
     }
 
@@ -317,21 +360,14 @@ void test_indexed_access(
     }
 
     test_access_base<use_oracle_>(
-        params,
-        ptr, 
-        ref, 
-        [&](int i) -> auto { 
-            auto raw_expected = fetch(refwork.get(), i, nsecondary);
-            std::vector<Value_> expected;
-            expected.reserve(indices.size());
-            for (auto idx : indices) {
-                expected.push_back(raw_expected[idx]);
-            }
-            return expected;
-        }, 
+        matrix,
+        reference,
+        options,
+        static_cast<Index_>(indices.size()),
         [&](const auto& svec) -> auto {
             std::vector<Value_> expected(indices.size());
-            for (size_t i = 0, end = svec.value.size(); i < end; ++i) {
+            size_t nnz = svec.index.size();
+            for (size_t i = 0; i < nnz; ++i) {
                 expected[reposition[svec.index[i]]] = svec.value[i];
             }
             return expected;
@@ -341,71 +377,135 @@ void test_indexed_access(
 }
 
 }
+/**
+ * @endcond
+ */
 
-/********************************************************
- ********************************************************/
-
-// Finally, some user-visible functions that convert compile-time parameters to run-time
-// parameters, to make it easier to define parametrized tests across oracle/row status.
+/**
+ * Test access to the full extent of a row/column.
+ * Any discrepancies between `matrix` and `reference` will raise a GoogleTest error.
+ *
+ * @tparam Value_ Type of the data.
+ * @tparam Index_ Integer type for the row/column index.
+ *
+ * @param matrix Matrix for which to test access.
+ * @param reference Reference matrix containing the same values as `matrix`.
+ * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ * @param options Further options for testing.
+ */
 template<typename Value_, typename Index_>
 void test_full_access(
-    const TestAccessParameters& params, 
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref) 
+    const tatami::Matrix<Value_, Index_>& matrix,
+    const tatami::Matrix<Value_, Index_>& reference,
+    const TestAccessOptions& options)
 {
-    if (params.use_oracle) {
-        internal::test_full_access<true>(params, ptr, ref);
+    if (options.use_oracle) {
+        internal::test_full_access<true>(matrix, reference, options);
     } else {
-        internal::test_full_access<false>(params, ptr, ref);
+        internal::test_full_access<false>(matrix, reference, options);
     }
 }
 
+/**
+ * Test access to a contiguous block of a row/column.
+ * Any discrepancies between `matrix` and `reference` will raise a GoogleTest error.
+ *
+ * @tparam Value_ Type of the data.
+ * @tparam Index_ Integer type for the row/column index.
+ *
+ * @param matrix Matrix for which to test access.
+ * @param reference Reference matrix containing the same values as `matrix`.
+ * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ * @param relative_start Start of the block, as a proportion of the extent of the non-target dimension.
+ * The (floored) product of this value and the non-target extent is used as the index of the first row/column of the block.
+ * This should lie in `[0, 1)`.
+ * @param relative_length Length of the block, as a proportion of the extent of the non-target dimension.
+ * This should lie in `[0, 1)`, and the sum of `relative_start` and `relative_length` should be no greater than 1.
+ * The (floored) product of this value and the non-target extent is used as the number of rows/columns in the block.
+ * @param options Further options for testing.
+ */
 template<typename Value_, typename Index_>
 void test_block_access(
-    const TestAccessParameters& params,
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref,
-    int start,
-    int end) 
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    double relative_start,
+    double relative_length,
+    const TestAccessOptions& options)
 {
-    if (params.use_oracle) {
-        internal::test_block_access<true>(params, ptr, ref, start, end);
+    if (options.use_oracle) {
+        internal::test_block_access<true>(matrix, reference, relative_start, relative_length, options);
     } else {
-        internal::test_block_access<false>(params, ptr, ref, start, end);
+        internal::test_block_access<false>(matrix, reference, relative_start, relative_length, options);
     }
 }
 
+/**
+ * Test access to an indexed subset of a row/column.
+ * Any discrepancies between `matrix` and `reference` will raise a GoogleTest error.
+ *
+ * @tparam Value_ Type of the data.
+ * @tparam Index_ Integer type for the row/column index.
+ *
+ * @param matrix Matrix for which to test access.
+ * @param reference Reference matrix containing the same values as `matrix`.
+ * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ * @param relative_start Start of the indexed subset, as a proportion of the extent of the non-target dimension.
+ * The (floored) product of this value and the non-target extent is used as the index of the first row/column in the indexed subset.
+ * This should lie in `[0, 1)`.
+ * @param probability Probability of sampling rows/columns when simulating the indexed subset.
+ * This should lie in `[0, 1]`.
+ * Only rows/columns after the first index (as defined by `relative_start`) are considered.
+ * @param options Further options for testing.
+ */
 template<typename Value_, typename Index_>
 void test_indexed_access(
-    const TestAccessParameters& params,
-    const tatami::Matrix<Value_, Index_>* ptr, 
-    const tatami::Matrix<Value_, Index_>* ref,
-    int start,
-    int step)
+    const tatami::Matrix<Value_, Index_>& matrix,
+    const tatami::Matrix<Value_, Index_>& reference,
+    double relative_start,
+    double probability,
+    const TestAccessOptions& options)
 {
-    if (params.use_oracle) {
-        internal::test_indexed_access<true>(params, ptr, ref, start, step);
+    if (options.use_oracle) {
+        internal::test_indexed_access<true>(matrix, reference, relative_start, probability, options);
     } else {
-        internal::test_indexed_access<false>(params, ptr, ref, start, step);
+        internal::test_indexed_access<false>(matrix, reference, relative_start, probability, options);
     }
 }
 
-/********************************************************
- ********************************************************/
-
-// A couple of very simple helpers for just iterating through the matrix.
-template<class Matrix_, class Matrix2_>
-void test_simple_column_access(const Matrix_* ptr, const Matrix2_* ref) {
-    TestAccessParameters params;
-    params.use_row = false;
-    test_full_access(params, ptr, ref);
+/**
+ * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = false`.
+ * All other options are set to their defaults.
+ *
+ * @tparam Value_ Type of the data.
+ * @tparam Index_ Integer type for the row/column index.
+ *
+ * @param matrix Matrix for which to test access.
+ * @param reference Reference matrix containing the same values as `matrix`.
+ * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ */
+template<typename Value_, typename Index_>
+void test_simple_column_access(const tatami::Matrix<Value_, Index_>& matrix, const tatami::Matrix<Value_, Index_>& reference) {
+    TestAccessOptions options;
+    options.use_row = false;
+    test_full_access(matrix, reference, options);
 }
 
-template<class Matrix_, class Matrix2_>
-void test_simple_row_access(const Matrix_* ptr, const Matrix2_* ref) {
-    TestAccessParameters params;
-    params.use_row = true;
-    test_full_access(params, ptr, ref);
+/**
+ * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = true`.
+ * All other options are set to their defaults.
+ *
+ * @tparam Value_ Type of the data.
+ * @tparam Index_ Integer type for the row/column index.
+ *
+ * @param matrix Matrix for which to test access.
+ * @param reference Reference matrix containing the same values as `matrix`.
+ * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ */
+template<typename Value_, typename Index_>
+void test_simple_row_access(const tatami::Matrix<Value_, Index_>& matrix, const tatami::Matrix<Value_, Index_>& reference) {
+    TestAccessOptions options;
+    options.use_row = false;
+    test_full_access(matrix, reference, options);
 }
 
 }
