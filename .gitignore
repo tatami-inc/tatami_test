@@ -1,2 +1,5 @@
 *.swp
 build/
+docs/*.tag
+docs/html
+docs/latex

@@ -159,7 +159,7 @@ void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, 
 
 }
 /**
- * @cond
+ * @endcond
  */
 
 /**
