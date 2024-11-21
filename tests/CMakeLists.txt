@@ -5,6 +5,8 @@ add_executable(
     src/throws_error.cpp
     src/test_access.cpp
     src/test_unsorted_access.cpp
+    src/ReversedIndicesWrapper.cpp
+    src/ForcedOracleWrapper.cpp
 )
 
 target_link_libraries(
