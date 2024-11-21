@@ -73,8 +73,115 @@ $(function() {
   <div class="headertitle"><div class="title">Testing framework for tatami </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__2github_2workspace_2README"></a> This library contains functions to test the other <b>tatami</b> libraries. </p>
-</div></div><!-- PageDoc -->
+<div class="textblock"><p><a class="anchor" id="md__2github_2workspace_2README"></a> <img src="https://github.com/tatami-inc/tatami_test/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/tatami-inc/tatami_test/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/></p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Overview</h1>
+<p>This library contains functions to test the other <b>tatami</b> libraries. To include this in a project, just add the following chunk to the test-specific <code>CMakeLists.txt</code>:</p>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line"> </div>
+<div class="line">FetchContent_Declare(</div>
+<div class="line">  tatami_test</div>
+<div class="line">  GIT_REPOSITORY https://github.com/tatami-inc/tatami_test</div>
+<div class="line">  GIT_TAG master # or any version of interest</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line">FetchContent_MakeAvailable(tatami_test)</div>
+<div class="line"> </div>
+<div class="line">target_link_libraries(mylib INTERFACE tatami_test)</div>
+</div><!-- fragment --><p>This will automatically pull in <a href="https://github.com/google/googletest">GoogleTest</a> via <code>FetchContent</code> so downstream projects don't have to do it themselves. Then, to use the library, we just have to add the header:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;scran_tests/scran_tests.hpp&quot;</span></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
+Simulating data</h1>
+<p>We can simulate random data easily:</p>
+<div class="fragment"><div class="line"><a class="code hl_struct" href="structtatami__test_1_1SimulateVectorOptions.html">tatami_test::SimulateVectorOptions</a> opt;</div>
+<div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a> = 0.5;</div>
+<div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">lower</a> = 5;</div>
+<div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">upper</a> = 100;</div>
+<div class="line"><span class="keyword">auto</span> res = <a class="code hl_function" href="namespacetatami__test.html#ac9ba93b53ec8bb86ccd8fead7f2c4233">tatami_test::simulate_vector</a>(100, opt);</div>
+<div class="ttc" id="anamespacetatami__test_html_ac9ba93b53ec8bb86ccd8fead7f2c4233"><div class="ttname"><a href="namespacetatami__test.html#ac9ba93b53ec8bb86ccd8fead7f2c4233">tatami_test::simulate_vector</a></div><div class="ttdeci">std::vector&lt; Type_ &gt; simulate_vector(size_t length, const SimulateVectorOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:50</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html">tatami_test::SimulateVectorOptions</a></div><div class="ttdoc">Options for simulate_vector().</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:18</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a297d554e6333c808bdfd14b32175972e"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">tatami_test::SimulateVectorOptions::upper</a></div><div class="ttdeci">double upper</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:27</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a4af160216796b467c9f0e8d4d62b56f1"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">tatami_test::SimulateVectorOptions::density</a></div><div class="ttdeci">double density</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:32</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a4bc0678d456ffab766ca4e684c300d76"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">tatami_test::SimulateVectorOptions::lower</a></div><div class="ttdeci">double lower</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:22</div></div>
+</div><!-- fragment --><p>We can also simulate compressed sparse data to quickly create the corresponding sparse matrices:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> sparse_res = <a class="code hl_function" href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">tatami_test::simulate_compressed_sparse</a>(</div>
+<div class="line">    <span class="comment">/* primary = */</span> 100, </div>
+<div class="line">    <span class="comment">/* secondary = */</span> 500, </div>
+<div class="line">    <span class="comment">/* density = */</span> 0.1, </div>
+<div class="line">    <span class="comment">/* options = */</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a>()</div>
+<div class="line">);</div>
+<div class="ttc" id="anamespacetatami__test_html_a1316149a1e9095b6b4529ffb71ef4312"><div class="ttname"><a href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">tatami_test::simulate_compressed_sparse</a></div><div class="ttdeci">SimulateCompressedSparseResult&lt; Value_, Index_ &gt; simulate_compressed_sparse(size_t primary, size_t secondary, const SimulateCompressedSparseOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:77</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateCompressedSparseOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a></div><div class="ttdoc">Options for simulate_compressed_sparse().</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:13</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Testing data access</h1>
+<p>The workhorses of this library are the various <code>test_*_access()</code> functions. These test the extraction behavior of a <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclass by comparing it to a reference representation.</p>
+<div class="fragment"><div class="line"><a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1DenseRowMatrix.html">tatami::DenseRowMatrix&lt;double, int&gt;</a> dense(20, 5, std::move(res)); <span class="comment">// reference</span></div>
+<div class="line"><span class="keyword">auto</span> sparse = <a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a55a5de2537fc815c895528fea8a717f6">tatami::convert_to_compressed_sparse</a>(&amp;dense, <span class="keyword">true</span>); <span class="comment">// matrix to be tested</span></div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">tatami_test::TestAccessOptions</a> options;</div>
+<div class="line">options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">true</span>; <span class="comment">// test row access.</span></div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">tatami_test::test_full_access</a>(*sparse, dense, options);</div>
+<div class="ttc" id="aclasstatami_1_1DenseRowMatrix_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/classtatami_1_1DenseRowMatrix.html">tatami::DenseRowMatrix</a></div></div>
+<div class="ttc" id="anamespacetatami__test_html_afea1690d97476f2d8be2e04d28ce048c"><div class="ttname"><a href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">tatami_test::test_full_access</a></div><div class="ttdeci">void test_full_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:399</div></div>
+<div class="ttc" id="anamespacetatami_html_a55a5de2537fc815c895528fea8a717f6"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#a55a5de2537fc815c895528fea8a717f6">tatami::convert_to_compressed_sparse</a></div><div class="ttdeci">std::shared_ptr&lt; Matrix&lt; Value_, Index_ &gt; &gt; convert_to_compressed_sparse(const Matrix&lt; InputValue_, InputIndex_ &gt; *matrix, bool row, bool two_pass=false, int threads=1)</div></div>
+<div class="ttc" id="astructtatami__test_1_1TestAccessOptions_html"><div class="ttname"><a href="structtatami__test_1_1TestAccessOptions.html">tatami_test::TestAccessOptions</a></div><div class="ttdoc">Options for test_full_access() and friends.</div><div class="ttdef"><b>Definition</b> test_access.hpp:38</div></div>
+<div class="ttc" id="astructtatami__test_1_1TestAccessOptions_html_a69195a58cb2aaea730ff90a1dbe44bb7"><div class="ttname"><a href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">tatami_test::TestAccessOptions::use_row</a></div><div class="ttdeci">bool use_row</div><div class="ttdef"><b>Definition</b> test_access.hpp:48</div></div>
+</div><!-- fragment --><p>We can also test access of a contiguous block, defined as a proportion of the extent non-target dimension. In the chunk below, the columns are the target dimension to be extracted, so the block starts at 10% of the number of rows and has length equal to 50% of the number of rows.</p>
+<div class="fragment"><div class="line">options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">false</span>; <span class="comment">// test column access.</span></div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">tatami_test::test_block_access</a>(</div>
+<div class="line">    *sparse,</div>
+<div class="line">    dense,</div>
+<div class="line">    <span class="comment">/* relative_start = */</span> 0.1,</div>
+<div class="line">    <span class="comment">/* relative_length = */</span> 0.5,</div>
+<div class="line">    options</div>
+<div class="line">);</div>
+<div class="ttc" id="anamespacetatami__test_html_a142b6b606adaeec9c51a45e2db22ef0f"><div class="ttname"><a href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">tatami_test::test_block_access</a></div><div class="ttdeci">void test_block_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double relative_length, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:430</div></div>
+</div><!-- fragment --><p>A similar approach is used to test access for an indexed subset. We randomly sample elements in the non-target dimension for inclusion into the subset with the specified <code>probability</code>.</p>
+<div class="fragment"><div class="line"><a class="code hl_function" href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">tatami_test::test_indexed_access</a>(</div>
+<div class="line">    *sparse,</div>
+<div class="line">    dense,</div>
+<div class="line">    <span class="comment">/* relative_start = */</span> 0.1,</div>
+<div class="line">    <span class="comment">/* probability = */</span> 0.5,</div>
+<div class="line">    options</div>
+<div class="line">);</div>
+<div class="ttc" id="anamespacetatami__test_html_aa58922974821ab084b27f08829051616"><div class="ttname"><a href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">tatami_test::test_indexed_access</a></div><div class="ttdeci">void test_indexed_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double probability, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:463</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md4"></a>
+Seed wrappers for delayed operations</h1>
+<p>For <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses implementing delayed operations, we can test whether the operation correctly handles edge cases of seed behavior. For example, if the delayed operation needs to manipulate the indices during sparse extraction, can it handle seeds that might return unordered indices? We can test this via by wrapping the seed in a <code>ReversedIndicesWrapper</code> before applying the delayed operation, and then using <code>test_unsorted_*_access()</code> functions:</p>
+<div class="fragment"><div class="line"><span class="comment">// First, wrapping the seed.</span></div>
+<div class="line"><span class="keyword">auto</span> wrapped = std::make_shared&lt;tatami_test::ReversedIndicesWrapper&lt;double, int&gt; &gt;(sparse);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Applying the delayed operation that we want to test.</span></div>
+<div class="line"><span class="keyword">auto</span> subset = <a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a77fad1d2a2553899a7860521d6284f50">tatami::make_DelayedSubset</a>(wrapped, subset);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// And now testing access.</span></div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#a200be8429d1b577801821309f303b347">tatami_test::test_unsorted_full_access</a>(*subset, options);</div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#a60f759dbbe3b9cfa2f929c144d109320">tatami_test::test_unsorted_block_access</a>(*subset, 0.05, 0.3, options);</div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#aa9bc71bfba4f9790690f7631976439af">tatami_test::test_unsorted_indexed_access</a>(*subset, 0.2, 0.6, options);</div>
+<div class="ttc" id="anamespacetatami__test_html_a200be8429d1b577801821309f303b347"><div class="ttname"><a href="namespacetatami__test.html#a200be8429d1b577801821309f303b347">tatami_test::test_unsorted_full_access</a></div><div class="ttdeci">void test_unsorted_full_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_unsorted_access.hpp:178</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a60f759dbbe3b9cfa2f929c144d109320"><div class="ttname"><a href="namespacetatami__test.html#a60f759dbbe3b9cfa2f929c144d109320">tatami_test::test_unsorted_block_access</a></div><div class="ttdeci">void test_unsorted_block_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, double relative_start, double relative_length, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_unsorted_access.hpp:205</div></div>
+<div class="ttc" id="anamespacetatami__test_html_aa9bc71bfba4f9790690f7631976439af"><div class="ttname"><a href="namespacetatami__test.html#aa9bc71bfba4f9790690f7631976439af">tatami_test::test_unsorted_indexed_access</a></div><div class="ttdeci">void test_unsorted_indexed_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, double relative_start, double probability, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_unsorted_access.hpp:232</div></div>
+<div class="ttc" id="anamespacetatami_html_a77fad1d2a2553899a7860521d6284f50"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#a77fad1d2a2553899a7860521d6284f50">tatami::make_DelayedSubset</a></div><div class="ttdeci">std::shared_ptr&lt; Matrix&lt; Value_, Index_ &gt; &gt; make_DelayedSubset(std::shared_ptr&lt; const Matrix&lt; Value_, Index_ &gt; &gt; matrix, SubsetStorage_ subset, bool by_row)</div></div>
+</div><!-- fragment --><p>Another edge case is when a delayed operation's oracular extraction uses different code paths based on whether the seeds benefit from an oracle. We can test this behavior by forcing one or more seeds to declare that, yes, they do benefit from an oracle:</p>
+<div class="fragment"><div class="line"><span class="comment">// First, wrapping the seed.</span></div>
+<div class="line"><span class="keyword">auto</span> wrapped2 = std::make_shared&lt;tatami_test::ForcedOracleWrapper&lt;double, int&gt; &gt;(dense);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Applying the delayed operation that we want to test.</span></div>
+<div class="line"><span class="keyword">auto</span> bound = tatami::make_DelayedBind&lt;double, int&gt;({ wrapped2, sparse }, <span class="keyword">true</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// And now testing access.</span></div>
+<div class="line"><a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">tatami_test::test_full_access</a>(*sparse, dense, options);</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
+Other useful things</h1>
+<p>We can check that errors are thrown with the expected message:</p>
+<div class="fragment"><div class="line"><a class="code hl_function" href="namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6">tatami_test::throws_error</a>([&amp;]() {</div>
+<div class="line">    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;foobar&quot;</span>);</div>
+<div class="line">}, <span class="stringliteral">&quot;foobar&quot;</span>);</div>
+<div class="ttc" id="anamespacetatami__test_html_aa092fbf9c16bb002953e8594a2f9b3a6"><div class="ttname"><a href="namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6">tatami_test::throws_error</a></div><div class="ttdeci">void throws_error(Function_ fun, const std::string &amp;msg)</div><div class="ttdef"><b>Definition</b> throws_error.hpp:23</div></div>
+</div><!-- fragment --><p>We also provide a wrapper around the <code>fetch</code> + <code>copy_n</code> combination, which directly returns a vector of the desired row/column contents.</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> ext = dense-&gt;dense_column();</div>
+<div class="line"><span class="keyword">auto</span> column = fetch(*ext, 10, dense-&gt;nrow());</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

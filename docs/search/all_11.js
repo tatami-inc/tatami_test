@@ -17,10 +17,12 @@ var searchData=
   ['test_5funsorted_5findexed_5faccess_14',['test_unsorted_indexed_access',['../namespacetatami__test.html#aa9bc71bfba4f9790690f7631976439af',1,'tatami_test']]],
   ['testaccessoptions_15',['TestAccessOptions',['../structtatami__test_1_1TestAccessOptions.html',1,'tatami_test']]],
   ['testaccessorder_16',['TestAccessOrder',['../namespacetatami__test.html#a9441f51f38f3ecdda9630e3357dea497',1,'tatami_test']]],
-  ['testing_20framework_20for_20tatami_17',['Testing framework for tatami',['../index.html',1,'']]],
-  ['throws_5ferror_18',['throws_error',['../namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6',1,'tatami_test']]],
-  ['throws_5ferror_2ehpp_19',['throws_error.hpp',['../throws__error_8hpp.html',1,'']]],
-  ['total_20',['total',['https://tatami-inc.github.io/tatami/classtatami_1_1Oracle.html#a611f0c44f1b3de3ec065c91ada017808',1,'tatami::Oracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1FixedViewOracle.html#aa858ead22df2b721fd723a9509ac28f9',1,'tatami::FixedViewOracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1FixedVectorOracle.html#aee8f5bfa07d50e1b1689652543342572',1,'tatami::FixedVectorOracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html#aade9b656fa50f1b41f52486a70591d58',1,'tatami::ConsecutiveOracle::total()']]],
-  ['transpose_21',['transpose',['https://tatami-inc.github.io/tatami/namespacetatami.html#a07c1d1f96ea3a59d9f6106b17873d494',1,'tatami::transpose(const Input_ *input, size_t nrow, size_t ncol, size_t input_stride, Output_ *output, size_t output_stride)'],['https://tatami-inc.github.io/tatami/namespacetatami.html#a86be7b06c9d13b25f9ff04eed87430a7',1,'tatami::transpose(const Input_ *input, size_t nrow, size_t ncol, Output_ *output)']]],
-  ['transpose_2ehpp_22',['transpose.hpp',['https://tatami-inc.github.io/tatami/transpose_8hpp.html',1,'']]]
+  ['testing_20data_20access_17',['Testing data access',['../index.html#autotoc_md3',1,'']]],
+  ['testing_20framework_20for_20tatami_18',['Testing framework for tatami',['../index.html',1,'']]],
+  ['things_19',['Other useful things',['../index.html#autotoc_md5',1,'']]],
+  ['throws_5ferror_20',['throws_error',['../namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6',1,'tatami_test']]],
+  ['throws_5ferror_2ehpp_21',['throws_error.hpp',['../throws__error_8hpp.html',1,'']]],
+  ['total_22',['total',['https://tatami-inc.github.io/tatami/classtatami_1_1Oracle.html#a611f0c44f1b3de3ec065c91ada017808',1,'tatami::Oracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1FixedViewOracle.html#aa858ead22df2b721fd723a9509ac28f9',1,'tatami::FixedViewOracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1FixedVectorOracle.html#aee8f5bfa07d50e1b1689652543342572',1,'tatami::FixedVectorOracle::total()'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html#aade9b656fa50f1b41f52486a70591d58',1,'tatami::ConsecutiveOracle::total()']]],
+  ['transpose_23',['transpose',['https://tatami-inc.github.io/tatami/namespacetatami.html#a07c1d1f96ea3a59d9f6106b17873d494',1,'tatami::transpose(const Input_ *input, size_t nrow, size_t ncol, size_t input_stride, Output_ *output, size_t output_stride)'],['https://tatami-inc.github.io/tatami/namespacetatami.html#a86be7b06c9d13b25f9ff04eed87430a7',1,'tatami::transpose(const Input_ *input, size_t nrow, size_t ncol, Output_ *output)']]],
+  ['transpose_2ehpp_24',['transpose.hpp',['https://tatami-inc.github.io/tatami/transpose_8hpp.html',1,'']]]
 ];
