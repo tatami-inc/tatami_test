@@ -332,6 +332,20 @@ void test_block_access(
     );
 }
 
+template<typename Index_>
+std::vector<Index_> create_indexed_subset(Index_ nsecondary, double relative_start, double probability, uint64_t base_seed) {
+    Index_ start = nsecondary * relative_start;
+    std::vector<Index_> indices { start };
+    std::mt19937_64 rng(base_seed + 999 * probability + 888 * start);
+    std::uniform_real_distribution udist;
+    for (Index_ i = start + 1; i < nsecondary; ++i) {
+        if (udist(rng) < probability) {
+            indices.push_back(i);
+        }
+    }
+    return indices;
+}
+
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_indexed_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
@@ -341,19 +355,7 @@ void test_indexed_access(
     const TestAccessOptions& options)
 {
     Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    Index_ start = nsecondary * relative_start;
-
-    std::vector<Index_> indices { start };
-    {
-        std::mt19937_64 rng(create_seed(matrix.nrow(), matrix.ncol(), options) + 999 * probability + 888 * start);
-        std::uniform_real_distribution udist;
-        for (Index_ i = start + 1; i < nsecondary; ++i) {
-            if (udist(rng) < probability) {
-                indices.push_back(i);
-            }
-        }
-    }
-
+    auto indices = create_indexed_subset(nsecondary, relative_start, probability, create_seed(matrix.nrow(), matrix.ncol(), options));
     std::vector<size_t> reposition(nsecondary, -1);
     for (size_t i = 0, end = indices.size(); i < end; ++i) {
         reposition[indices[i]] = i;
@@ -475,6 +477,7 @@ void test_indexed_access(
 /**
  * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = false`.
  * All other options are set to their defaults.
+ * This is intended for quick testing of matrix access when a full parametrized test suite is not required.
  *
  * @tparam Value_ Type of the data.
  * @tparam Index_ Integer type for the row/column index.
@@ -493,6 +496,7 @@ void test_simple_column_access(const tatami::Matrix<Value_, Index_>& matrix, con
 /**
  * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = true`.
  * All other options are set to their defaults.
+ * This is intended for quick testing of matrix access when a full parametrized test suite is not required.
  *
  * @tparam Value_ Type of the data.
  * @tparam Index_ Integer type for the row/column index.
