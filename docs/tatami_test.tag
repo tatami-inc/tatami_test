@@ -38,6 +38,7 @@
     <includes id="simulate__vector_8hpp" name="simulate_vector.hpp" local="yes" import="no" module="no" objc="no">simulate_vector.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
     <includes id="test__unsorted__access_8hpp" name="test_unsorted_access.hpp" local="yes" import="no" module="no" objc="no">test_unsorted_access.hpp</includes>
+    <includes id="throws__error_8hpp" name="throws_error.hpp" local="yes" import="no" module="no" objc="no">throws_error.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
