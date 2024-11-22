@@ -8,7 +8,7 @@
 #include "simulate_compressed_sparse.hpp"
 #include "test_access.hpp"
 #include "test_unsorted_access.hpp"
-#include "throw_error.hpp"
+#include "throws_error.hpp"
 
 /**
  * @file tatami_test.hpp
