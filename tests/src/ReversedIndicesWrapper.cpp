@@ -3,9 +3,9 @@
 #include "tatami_test/ReversedIndicesWrapper.hpp"
 #include "tatami/tatami.hpp"
 
-class TestReversedIndicesWrapper : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
+class ReversedIndicesWrapperTest : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
 
-TEST_P(TestReversedIndicesWrapper, Parametrized) {
+TEST_P(ReversedIndicesWrapperTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     size_t NR = 152, NC = 198;
@@ -20,6 +20,6 @@ TEST_P(TestReversedIndicesWrapper, Parametrized) {
 
 INSTANTIATE_TEST_SUITE_P(
     ReversedIndicesWrapper,
-    TestReversedIndicesWrapper,
+    ReversedIndicesWrapperTest,
     tatami_test::standard_test_access_options_combinations()
 );

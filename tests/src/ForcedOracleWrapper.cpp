@@ -3,9 +3,9 @@
 #include "tatami_test/simulate_vector.hpp"
 #include "tatami/tatami.hpp"
 
-class TestForcedOracleWrapper : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
+class ForcedOracleWrapperTest : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
 
-TEST_P(TestForcedOracleWrapper, Parametrized) {
+TEST_P(ForcedOracleWrapperTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     size_t NR = 100, NC = 200;
@@ -21,6 +21,6 @@ TEST_P(TestForcedOracleWrapper, Parametrized) {
 
 INSTANTIATE_TEST_SUITE_P(
     ForcedOracleWrapper,
-    TestForcedOracleWrapper,
+    ForcedOracleWrapperTest,
     tatami_test::standard_test_access_options_combinations()
 );

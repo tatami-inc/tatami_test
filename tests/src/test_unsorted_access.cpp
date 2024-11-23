@@ -2,9 +2,9 @@
 #include "tatami_test/simulate_compressed_sparse.hpp"
 #include "tatami/tatami.hpp"
 
-class TestTestUnsortedAccess : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
+class TestUnsortedAccessTest : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
 
-TEST_P(TestTestUnsortedAccess, Parametrized) {
+TEST_P(TestUnsortedAccessTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     size_t NR = 100, NC = 200;
@@ -24,7 +24,7 @@ TEST_P(TestTestUnsortedAccess, Parametrized) {
 
 INSTANTIATE_TEST_SUITE_P(
     TestUnsortedAccess,
-    TestTestUnsortedAccess,
+    TestUnsortedAccessTest,
     tatami_test::standard_test_access_options_combinations()
 );
 

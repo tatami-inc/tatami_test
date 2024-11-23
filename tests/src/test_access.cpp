@@ -12,9 +12,9 @@ static std::vector<double> manual_transpose(size_t NR, size_t NC, const std::vec
     return transposed;
 }
 
-class TestTestAccess : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
+class TestAccessTest : public ::testing::TestWithParam<tatami_test::StandardTestAccessOptions> {};
 
-TEST_P(TestTestAccess, Parametrized) {
+TEST_P(TestAccessTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     size_t NR = 100, NC = 200;
@@ -34,7 +34,7 @@ TEST_P(TestTestAccess, Parametrized) {
     tatami_test::test_indexed_access(mat, ref, 0.7, 0.5, options);
 }
 
-TEST_P(TestTestAccess, Empty) {
+TEST_P(TestAccessTest, Empty) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     {
@@ -58,7 +58,7 @@ TEST_P(TestTestAccess, Empty) {
 
 INSTANTIATE_TEST_SUITE_P(
     TestAccess,
-    TestTestAccess,
+    TestAccessTest,
     tatami_test::standard_test_access_options_combinations()
 );
 
