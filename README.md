@@ -26,8 +26,10 @@ This will automatically pull in [GoogleTest](https://github.com/google/googletes
 Then, to use the library, we just have to add the header:
 
 ```cpp
-#include "scran_tests/scran_tests.hpp"
+#include "tatami_tests/tatami_tests.hpp"
 ```
+
+Check out the [reference documentation](https://tatami-inc.github.io/tatami_test/) for the available functionality.
 
 ## Simulating data
 
@@ -58,12 +60,17 @@ The workhorses of this library are the various `test_*_access()` functions.
 These test the extraction behavior of a `tatami::Matrix` subclass by comparing it to a reference representation.
 
 ```cpp
-tatami::DenseRowMatrix<double, int> dense(20, 5, std::move(res)); // reference
-auto sparse = tatami::convert_to_compressed_sparse(&dense, true); // matrix to be tested
+// reference representation:
+auto dense = std::shared_ptr<tatami::Matrix<double, int> >(
+    new tatami::DenseRowMatrix<double, int> >(20, 5, std::move(res)) 
+);
+
+// matrix to be tested:
+auto sparse = tatami::convert_to_compressed_sparse(dense.get(), true); 
 
 tatami_test::TestAccessOptions options;
 options.use_row = true; // test row access.
-tatami_test::test_full_access(*sparse, dense, options);
+tatami_test::test_full_access(*sparse, *dense, options);
 ```
 
 We can also test access of a contiguous block, defined as a proportion of the extent non-target dimension.
@@ -74,7 +81,7 @@ so the block starts at 10% of the number of rows and has length equal to 50% of 
 options.use_row = false; // test column access.
 tatami_test::test_block_access(
     *sparse,
-    dense,
+    *dense,
     /* relative_start = */ 0.1,
     /* relative_length = */ 0.5,
     options
@@ -87,7 +94,7 @@ We randomly sample elements in the non-target dimension for inclusion into the s
 ```cpp
 tatami_test::test_indexed_access(
     *sparse,
-    dense,
+    *dense,
     /* relative_start = */ 0.1,
     /* probability = */ 0.5,
     options
@@ -105,12 +112,13 @@ We can test this via by wrapping the seed in a `ReversedIndicesWrapper` before a
 auto wrapped = std::make_shared<tatami_test::ReversedIndicesWrapper<double, int> >(sparse);
 
 // Applying the delayed operation that we want to test.
-auto subset = tatami::make_DelayedSubset(wrapped, subset);
+std::vector<int> odds { 1, 3, 5, 7, 9 };
+auto submat = tatami::make_DelayedSubset<double, int>(wrapped, odds, true);
 
 // And now testing access.
-tatami_test::test_unsorted_full_access(*subset, options);
-tatami_test::test_unsorted_block_access(*subset, 0.05, 0.3, options);
-tatami_test::test_unsorted_indexed_access(*subset, 0.2, 0.6, options);
+tatami_test::test_unsorted_full_access(*submat, options);
+tatami_test::test_unsorted_block_access(*submat, 0.05, 0.3, options);
+tatami_test::test_unsorted_indexed_access(*submat, 0.2, 0.6, options);
 ```
 
 Another edge case is when a delayed operation's oracular extraction uses different code paths based on whether the seeds benefit from an oracle.
@@ -123,8 +131,9 @@ auto wrapped2 = std::make_shared<tatami_test::ForcedOracleWrapper<double, int> >
 // Applying the delayed operation that we want to test.
 auto bound = tatami::make_DelayedBind<double, int>({ wrapped2, sparse }, true);
 
-// And now testing access.
-tatami_test::test_full_access(*sparse, dense, options);
+// And now testing access against a reference implementation.
+auto ref = tatami::make_DelayedBind<double, int>({ dense, sparse }, true);
+tatami_test::test_full_access(*bound, *ref, options);
 ```
 
 ## Other useful things

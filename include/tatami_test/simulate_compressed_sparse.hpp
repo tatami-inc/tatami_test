@@ -5,6 +5,11 @@
 #include <vector>
 #include <cstdint>
 
+/**
+ * @file simulate_compressed_sparse.hpp
+ * @brief Simulate compressed sparse matrix contents.
+ */
+
 namespace tatami_test {
 
 /**
