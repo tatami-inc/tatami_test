@@ -22,6 +22,14 @@
     <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
+    <name>simulate_compressed_sparse.hpp</name>
+    <path>tatami_test/</path>
+    <filename>simulate__compressed__sparse_8hpp.html</filename>
+    <class kind="struct">tatami_test::SimulateCompressedSparseOptions</class>
+    <class kind="struct">tatami_test::SimulateCompressedSparseResult</class>
+    <namespace>tatami_test</namespace>
+  </compound>
+  <compound kind="file">
     <name>simulate_vector.hpp</name>
     <path>tatami_test/</path>
     <filename>simulate__vector_8hpp.html</filename>
@@ -36,6 +44,7 @@
     <includes id="ForcedOracleWrapper_8hpp" name="ForcedOracleWrapper.hpp" local="yes" import="no" module="no" objc="no">ForcedOracleWrapper.hpp</includes>
     <includes id="ReversedIndicesWrapper_8hpp" name="ReversedIndicesWrapper.hpp" local="yes" import="no" module="no" objc="no">ReversedIndicesWrapper.hpp</includes>
     <includes id="simulate__vector_8hpp" name="simulate_vector.hpp" local="yes" import="no" module="no" objc="no">simulate_vector.hpp</includes>
+    <includes id="simulate__compressed__sparse_8hpp" name="simulate_compressed_sparse.hpp" local="yes" import="no" module="no" objc="no">simulate_compressed_sparse.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
     <includes id="test__unsorted__access_8hpp" name="test_unsorted_access.hpp" local="yes" import="no" module="no" objc="no">test_unsorted_access.hpp</includes>
     <includes id="throws__error_8hpp" name="throws_error.hpp" local="yes" import="no" module="no" objc="no">throws_error.hpp</includes>

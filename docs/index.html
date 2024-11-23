@@ -13,6 +13,7 @@
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -90,7 +91,8 @@ Overview</h1>
 <div class="line">target_link_libraries(mylib INTERFACE tatami_test)</div>
 </div><!-- fragment --><p>This will automatically pull in <a href="https://github.com/google/googletest">GoogleTest</a> via <code>FetchContent</code> so downstream projects don't have to do it themselves. Then, to use the library, we just have to add the header:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;scran_tests/scran_tests.hpp&quot;</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md2"></a>
+</div><!-- fragment --><p>Check out the <a href="https://tatami-inc.github.io/tatami_test/">reference documentation</a> for the available functionality.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Simulating data</h1>
 <p>We can simulate random data easily:</p>
 <div class="fragment"><div class="line"><a class="code hl_struct" href="structtatami__test_1_1SimulateVectorOptions.html">tatami_test::SimulateVectorOptions</a> opt;</div>
@@ -110,8 +112,8 @@ Simulating data</h1>
 <div class="line">    <span class="comment">/* density = */</span> 0.1, </div>
 <div class="line">    <span class="comment">/* options = */</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a>()</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacetatami__test_html_a1316149a1e9095b6b4529ffb71ef4312"><div class="ttname"><a href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">tatami_test::simulate_compressed_sparse</a></div><div class="ttdeci">SimulateCompressedSparseResult&lt; Value_, Index_ &gt; simulate_compressed_sparse(size_t primary, size_t secondary, const SimulateCompressedSparseOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:77</div></div>
-<div class="ttc" id="astructtatami__test_1_1SimulateCompressedSparseOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a></div><div class="ttdoc">Options for simulate_compressed_sparse().</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:13</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a1316149a1e9095b6b4529ffb71ef4312"><div class="ttname"><a href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">tatami_test::simulate_compressed_sparse</a></div><div class="ttdeci">SimulateCompressedSparseResult&lt; Value_, Index_ &gt; simulate_compressed_sparse(size_t primary, size_t secondary, const SimulateCompressedSparseOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:82</div></div>
+<div class="ttc" id="astructtatami__test_1_1SimulateCompressedSparseOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a></div><div class="ttdoc">Options for simulate_compressed_sparse().</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:18</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
 Testing data access</h1>
 <p>The workhorses of this library are the various <code>test_*_access()</code> functions. These test the extraction behavior of a <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclass by comparing it to a reference representation.</p>

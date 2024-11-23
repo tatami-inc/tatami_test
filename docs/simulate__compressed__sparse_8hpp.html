@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>tatami_test: tatami_test/throws_error.hpp File Reference</title>
+<title>tatami_test: tatami_test/simulate_compressed_sparse.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -76,19 +76,30 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">throws_error.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">simulate_compressed_sparse.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Check that an error is thrown.  
+<p>Simulate compressed sparse matrix contents.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;string&gt;</code><br />
-<code>#include &lt;gtest/gtest.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;random&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 </div>
-<p><a href="throws__error_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="simulate__compressed__sparse_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">simulate_compressed_sparse()</a></code>.  <a href="structtatami__test_1_1SimulateCompressedSparseOptions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtatami__test_1_1SimulateCompressedSparseResult.html">tatami_test::SimulateCompressedSparseResult&lt; Value_, Index_ &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of <code><a class="el" href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">simulate_compressed_sparse()</a></code>.  <a href="structtatami__test_1_1SimulateCompressedSparseResult.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacetatami__test" id="r_namespacetatami__test"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html">tatami_test</a></td></tr>
@@ -97,12 +108,12 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa092fbf9c16bb002953e8594a2f9b3a6" id="r_aa092fbf9c16bb002953e8594a2f9b3a6"><td class="memTemplParams" colspan="2">template&lt;class Function_ &gt; </td></tr>
-<tr class="memitem:aa092fbf9c16bb002953e8594a2f9b3a6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6">tatami_test::throws_error</a> (Function_ fun, const std::string &amp;msg)</td></tr>
-<tr class="separator:aa092fbf9c16bb002953e8594a2f9b3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1316149a1e9095b6b4529ffb71ef4312" id="r_a1316149a1e9095b6b4529ffb71ef4312"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
+<tr class="memitem:a1316149a1e9095b6b4529ffb71ef4312"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structtatami__test_1_1SimulateCompressedSparseResult.html">SimulateCompressedSparseResult</a>&lt; Value_, Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#a1316149a1e9095b6b4529ffb71ef4312">tatami_test::simulate_compressed_sparse</a> (size_t primary, size_t secondary, const <a class="el" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">SimulateCompressedSparseOptions</a> &amp;options)</td></tr>
+<tr class="separator:a1316149a1e9095b6b4529ffb71ef4312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Check that an error is thrown. </p>
+<div class="textblock"><p>Simulate compressed sparse matrix contents. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
