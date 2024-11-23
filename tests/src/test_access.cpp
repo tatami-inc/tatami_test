@@ -34,6 +34,28 @@ TEST_P(TestTestAccess, Parametrized) {
     tatami_test::test_indexed_access(mat, ref, 0.7, 0.5, options);
 }
 
+TEST_P(TestTestAccess, Empty) {
+    auto options = tatami_test::convert_test_access_options(GetParam());
+
+    {
+        size_t NR = 10, NC = 0;
+        tatami::DenseMatrix<double, int> mat(NR, NC, std::vector<double>(), true);
+        tatami::DenseMatrix<double, int> ref(NR, NC, std::vector<double>(0), false);
+
+        tatami_test::test_block_access(mat, ref, 0, 0, options);
+        tatami_test::test_indexed_access(mat, ref, 0, 1, options);
+    }
+
+    {
+        size_t NR = 0, NC = 10;
+        tatami::DenseMatrix<double, int> mat(NR, NC, std::vector<double>(), true);
+        tatami::DenseMatrix<double, int> ref(NR, NC, std::vector<double>(), false);
+
+        tatami_test::test_block_access(mat, ref, 0, 0, options);
+        tatami_test::test_indexed_access(mat, ref, 0, 1, options);
+    }
+}
+
 INSTANTIATE_TEST_SUITE_P(
     TestAccess,
     TestTestAccess,

@@ -335,6 +335,10 @@ void test_block_access(
 template<typename Index_>
 std::vector<Index_> create_indexed_subset(Index_ nsecondary, double relative_start, double probability, uint64_t base_seed) {
     Index_ start = nsecondary * relative_start;
+    if (start >= nsecondary) {
+        return std::vector<Index_>();
+    }
+
     std::vector<Index_> indices { start };
     std::mt19937_64 rng(base_seed + 999 * probability + 888 * start);
     std::uniform_real_distribution udist;
