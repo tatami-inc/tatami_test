@@ -14,7 +14,13 @@ FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/d144031940543e15423a25ae5a8a74141044862f.zip
 )
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # For Windows: Prevent overriding the parent project's compiler/linker settings
+
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+# Avoid installing GoogleTest when installing this project.
+option(INSTALL_GTEST "Enable installation of googletest." OFF)
+
 FetchContent_MakeAvailable(googletest)
 target_link_libraries(tatami_test INTERFACE gtest_main)
 
