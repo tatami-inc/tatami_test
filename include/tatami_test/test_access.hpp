@@ -8,6 +8,7 @@
 #include "tatami/utils/FixedOracle.hpp"
 
 #include "fetch.hpp"
+#include "create_indexed_subset.hpp"
 
 #include <vector>
 #include <limits>
@@ -332,24 +333,6 @@ void test_block_access(
     );
 }
 
-template<typename Index_>
-std::vector<Index_> create_indexed_subset(Index_ nsecondary, double relative_start, double probability, uint64_t base_seed) {
-    Index_ start = nsecondary * relative_start;
-    if (start >= nsecondary) {
-        return std::vector<Index_>();
-    }
-
-    std::vector<Index_> indices { start };
-    std::mt19937_64 rng(base_seed + 999 * probability + 888 * start);
-    std::uniform_real_distribution udist;
-    for (Index_ i = start + 1; i < nsecondary; ++i) {
-        if (udist(rng) < probability) {
-            indices.push_back(i);
-        }
-    }
-    return indices;
-}
-
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_indexed_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
@@ -359,26 +342,36 @@ void test_indexed_access(
     const TestAccessOptions& options)
 {
     Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    auto indices = create_indexed_subset(nsecondary, relative_start, probability, create_seed(matrix.nrow(), matrix.ncol(), options));
+    auto index_ptr = create_indexed_subset(
+        nsecondary,
+        relative_start,
+        probability,
+        create_seed(matrix.nrow(), matrix.ncol(), options) + 999 * probability + 85 * relative_start
+    );
+
+    Index_ num_indices = index_ptr->size();
     std::vector<size_t> reposition(nsecondary, -1);
-    for (size_t i = 0, end = indices.size(); i < end; ++i) {
-        reposition[indices[i]] = i;
+    {
+        const auto& indices = *index_ptr;
+        for (Index_ i = 0; i < num_indices; ++i) {
+            reposition[indices[i]] = i;
+        }
     }
 
     test_access_base<use_oracle_>(
         matrix,
         reference,
         options,
-        static_cast<Index_>(indices.size()),
+        num_indices,
         [&](const auto& svec) -> auto {
-            std::vector<Value_> expected(indices.size());
+            std::vector<Value_> expected(num_indices);
             size_t nnz = svec.index.size();
             for (size_t i = 0; i < nnz; ++i) {
                 expected[reposition[svec.index[i]]] = svec.value[i];
             }
             return expected;
         },
-        indices
+        std::move(index_ptr)
     );
 }
 

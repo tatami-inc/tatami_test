@@ -8,6 +8,7 @@
 #include "tatami/utils/FixedOracle.hpp"
 
 #include "fetch.hpp"
+#include "create_indexed_subset.hpp"
 #include "test_access.hpp"
 
 #include <vector>
@@ -153,8 +154,14 @@ void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, do
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double probability, const TestAccessOptions& options) {
     Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
-    auto indices = create_indexed_subset(nsecondary, relative_start, probability, create_seed(matrix.nrow(), matrix.ncol(), options));
-    internal::test_unsorted_access_base<use_oracle_>(matrix, options, static_cast<Index_>(indices.size()), indices);
+    auto index_ptr = create_indexed_subset(
+        nsecondary,
+        relative_start,
+        probability,
+        create_seed(matrix.nrow(), matrix.ncol(), options) + 1001 * probability + 13 * relative_start
+    );
+    Index_ num_indices = index_ptr->size();
+    internal::test_unsorted_access_base<use_oracle_>(matrix, options, num_indices, std::move(index_ptr));
 }
 
 }
