@@ -122,6 +122,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a54feb6b327f414a31c236e6daf612de4" id="r_a54feb6b327f414a31c236e6daf612de4"><td class="memTemplParams" colspan="2">template&lt;typename Index_ &gt; </td></tr>
+<tr class="memitem:a54feb6b327f414a31c236e6daf612de4"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">create_indexed_subset</a> (Index_ extent, double relative_start, double probability, uint64_t seed)</td></tr>
+<tr class="separator:a54feb6b327f414a31c236e6daf612de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d16e7fd20aa749b8129a72e3bd92e2" id="r_ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
 <tr class="memitem:ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Value_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#ad8d16e7fd20aa749b8129a72e3bd92e2">fetch</a> (<a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1MyopicDenseExtractor.html">tatami::MyopicDenseExtractor</a>&lt; Value_, Index_ &gt; &amp;ext, Index_ i, size_t number)</td></tr>
 <tr class="separator:ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,6 +254,65 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The same options as a <code><a class="el" href="structtatami__test_1_1TestAccessOptions.html" title="Options for test_full_access() and friends.">TestAccessOptions</a></code> object. </dd></dl>
+
+</div>
+</div>
+<a id="a54feb6b327f414a31c236e6daf612de4" name="a54feb6b327f414a31c236e6daf612de4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54feb6b327f414a31c236e6daf612de4">&#9670;&#160;</a></span>create_indexed_subset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Index_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; Index_ &gt; tatami_test::create_indexed_subset </td>
+          <td>(</td>
+          <td class="paramtype">Index_&#160;</td>
+          <td class="paramname"><em>extent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>relative_start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>probability</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>seed</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a random subset of sorted and unique indices, typically corresponding to elements of the non-target dimension.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Index_</td><td>Integer type for the dimension elements.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extent</td><td>Extent of the non-target dimension. </td></tr>
+    <tr><td class="paramname">relative_start</td><td>Start of the indexed subset, as a proportion of the extent of the non-target dimension. The (floored) product of this value and <code>extent</code> is used as the index of the first element in the indexed subset. This should lie in <code>[0, 1)</code>. </td></tr>
+    <tr><td class="paramname">probability</td><td>Probability of sampling elements into the indexed subset. This should lie in <code>[0, 1]</code>. Only elements after the first index (as defined by <code>relative_start</code>) are considered. </td></tr>
+    <tr><td class="paramname">seed</td><td>Seed for the PRNG.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of indices of sampled elements. This will be empty if <code>extent = 0</code>, otherwise it is guaranteed to contain at least one element corresponding to <code>relative_start</code>. </dd></dl>
 
 </div>
 </div>

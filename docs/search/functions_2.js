@@ -12,5 +12,6 @@ var searchData=
   ['convert_5fto_5fdense_9',['convert_to_dense',['https://tatami-inc.github.io/tatami/namespacetatami.html#aab32e148c90b65402f17c7d835649a4b',1,'tatami::convert_to_dense(const Matrix&lt; InputValue_, InputIndex_ &gt; *matrix, bool row_major, StoredValue_ *store, int threads=1)'],['https://tatami-inc.github.io/tatami/namespacetatami.html#a085f9235a7b8b95611c0e9f6de860c5a',1,'tatami::convert_to_dense(const Matrix&lt; InputValue_, InputIndex_ &gt; *matrix, bool row_major, int threads=1)']]],
   ['convert_5fto_5ffragmented_5fsparse_10',['convert_to_fragmented_sparse',['https://tatami-inc.github.io/tatami/namespacetatami.html#a2a4c4e213ecc4225882b3cf8b21600e0',1,'tatami']]],
   ['copy_5fn_11',['copy_n',['https://tatami-inc.github.io/tatami/namespacetatami.html#ab52a806e3f13a68741a9e1f77dccab14',1,'tatami']]],
-  ['count_5fcompressed_5fsparse_5fnon_5fzeros_12',['count_compressed_sparse_non_zeros',['https://tatami-inc.github.io/tatami/namespacetatami.html#aedacbafb3041d3f5cafb2e87dacc1b7c',1,'tatami']]]
+  ['count_5fcompressed_5fsparse_5fnon_5fzeros_12',['count_compressed_sparse_non_zeros',['https://tatami-inc.github.io/tatami/namespacetatami.html#aedacbafb3041d3f5cafb2e87dacc1b7c',1,'tatami']]],
+  ['create_5findexed_5fsubset_13',['create_indexed_subset',['../namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4',1,'tatami_test']]]
 ];

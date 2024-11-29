@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.9.8">
   <compound kind="file">
+    <name>create_indexed_subset.hpp</name>
+    <path>tatami_test/</path>
+    <filename>create__indexed__subset_8hpp.html</filename>
+    <namespace>tatami_test</namespace>
+  </compound>
+  <compound kind="file">
     <name>fetch.hpp</name>
     <path>tatami_test/</path>
     <filename>fetch_8hpp.html</filename>
@@ -55,6 +61,7 @@
     <path>tatami_test/</path>
     <filename>test__access_8hpp.html</filename>
     <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
+    <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
     <class kind="struct">tatami_test::TestAccessOptions</class>
     <namespace>tatami_test</namespace>
   </compound>
@@ -63,6 +70,7 @@
     <path>tatami_test/</path>
     <filename>test__unsorted__access_8hpp.html</filename>
     <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
+    <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
@@ -276,6 +284,13 @@
       <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497abfec72bb37910c61f36b6c29a1f7ec31">FORWARD</enumvalue>
       <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a642e0b6684e6165e142c074f1cd8d55c">REVERSE</enumvalue>
       <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a170e02e86972c2be8559884cc3c12254">RANDOM</enumvalue>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Index_ &gt;</type>
+      <name>create_indexed_subset</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a54feb6b327f414a31c236e6daf612de4</anchor>
+      <arglist>(Index_ extent, double relative_start, double probability, uint64_t seed)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Value_ &gt;</type>

@@ -10,5 +10,6 @@ var searchData=
   ['convert_5fto_5fcompressed_5fsparse_2ehpp_7',['convert_to_compressed_sparse.hpp',['https://tatami-inc.github.io/tatami/convert__to__compressed__sparse_8hpp.html',1,'']]],
   ['convert_5fto_5fdense_2ehpp_8',['convert_to_dense.hpp',['https://tatami-inc.github.io/tatami/convert__to__dense_8hpp.html',1,'']]],
   ['convert_5fto_5ffragmented_5fsparse_2ehpp_9',['convert_to_fragmented_sparse.hpp',['https://tatami-inc.github.io/tatami/convert__to__fragmented__sparse_8hpp.html',1,'']]],
-  ['copy_2ehpp_10',['copy.hpp',['https://tatami-inc.github.io/tatami/copy_8hpp.html',1,'']]]
+  ['copy_2ehpp_10',['copy.hpp',['https://tatami-inc.github.io/tatami/copy_8hpp.html',1,'']]],
+  ['create_5findexed_5fsubset_2ehpp_11',['create_indexed_subset.hpp',['../create__indexed__subset_8hpp.html',1,'']]]
 ];
