@@ -122,9 +122,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a54feb6b327f414a31c236e6daf612de4" id="r_a54feb6b327f414a31c236e6daf612de4"><td class="memTemplParams" colspan="2">template&lt;typename Index_ &gt; </td></tr>
-<tr class="memitem:a54feb6b327f414a31c236e6daf612de4"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">create_indexed_subset</a> (Index_ extent, double relative_start, double probability, uint64_t seed)</td></tr>
-<tr class="separator:a54feb6b327f414a31c236e6daf612de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca390af20a3df4ca06769585e0a83e52" id="r_aca390af20a3df4ca06769585e0a83e52"><td class="memTemplParams" colspan="2">template&lt;typename Index_ &gt; </td></tr>
+<tr class="memitem:aca390af20a3df4ca06769585e0a83e52"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#abbb0bdf0b79fe19e504b49b43984f634">tatami::VectorPtr</a>&lt; Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">create_indexed_subset</a> (Index_ extent, double relative_start, double probability, uint64_t seed)</td></tr>
+<tr class="separator:aca390af20a3df4ca06769585e0a83e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d16e7fd20aa749b8129a72e3bd92e2" id="r_ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
 <tr class="memitem:ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Value_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#ad8d16e7fd20aa749b8129a72e3bd92e2">fetch</a> (<a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1MyopicDenseExtractor.html">tatami::MyopicDenseExtractor</a>&lt; Value_, Index_ &gt; &amp;ext, Index_ i, size_t number)</td></tr>
 <tr class="separator:ad8d16e7fd20aa749b8129a72e3bd92e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,8 +257,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a54feb6b327f414a31c236e6daf612de4" name="a54feb6b327f414a31c236e6daf612de4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54feb6b327f414a31c236e6daf612de4">&#9670;&#160;</a></span>create_indexed_subset()</h2>
+<a id="aca390af20a3df4ca06769585e0a83e52" name="aca390af20a3df4ca06769585e0a83e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca390af20a3df4ca06769585e0a83e52">&#9670;&#160;</a></span>create_indexed_subset()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,7 +266,7 @@ Functions</h2></td></tr>
 template&lt;typename Index_ &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; Index_ &gt; tatami_test::create_indexed_subset </td>
+          <td class="memname"><a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#abbb0bdf0b79fe19e504b49b43984f634">tatami::VectorPtr</a>&lt; Index_ &gt; tatami_test::create_indexed_subset </td>
           <td>(</td>
           <td class="paramtype">Index_&#160;</td>
           <td class="paramname"><em>extent</em>, </td>
@@ -312,7 +312,7 @@ template&lt;typename Index_ &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Vector of indices of sampled elements. This will be empty if <code>extent = 0</code>, otherwise it is guaranteed to contain at least one element corresponding to <code>relative_start</code>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to a vector of indices of sampled elements. The vector will be empty if <code>extent = 0</code>, otherwise it is guaranteed to contain at least one element corresponding to <code>relative_start</code>. </dd></dl>
 
 </div>
 </div>

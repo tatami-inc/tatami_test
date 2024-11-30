@@ -384,106 +384,110 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <span class="keyword">const</span> TestAccessOptions&amp; options)</div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>{</div>
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    Index_ nsecondary = (options.use_row ? reference.<a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a1f6fec43d5bae3f831841646bc02377b">ncol</a>() : reference.<a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a54fe7b4baf78069d35ff00357a1b6cc6">nrow</a>());</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keyword">auto</span> indices = <a class="code hl_function" href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">create_indexed_subset</a>(</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keyword">auto</span> index_ptr = <a class="code hl_function" href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">create_indexed_subset</a>(</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        nsecondary,</div>
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>        relative_start,</div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>        probability,</div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        create_seed(matrix.<a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a54fe7b4baf78069d35ff00357a1b6cc6">nrow</a>(), matrix.<a class="code hl_functionRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a1f6fec43d5bae3f831841646bc02377b">ncol</a>(), options) + 999 * probability + 85 * relative_start</div>
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    );</div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    std::vector&lt;size_t&gt; reposition(nsecondary, -1);</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0, end = indices.size(); i &lt; end; ++i) {</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>        reposition[indices[i]] = i;</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    }</div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    test_access_base&lt;use_oracle_&gt;(</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>        matrix,</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>        reference,</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>        options,</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>        <span class="keyword">static_cast&lt;</span>Index_<span class="keyword">&gt;</span>(indices.size()),</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        [&amp;](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; svec) -&gt; <span class="keyword">auto</span> {</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>            std::vector&lt;Value_&gt; expected(indices.size());</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>            size_t nnz = svec.index.size();</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>            for (size_t i = 0; i &lt; nnz; ++i) {</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>                expected[reposition[svec.index[i]]] = svec.value[i];</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>            }</div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            <span class="keywordflow">return</span> expected;</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        },</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        indices</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>    );</div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>}</div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span> </div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>}</div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00392" data-start="{" data-end="}">
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">  392</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix,</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>{</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>        internal::test_full_access&lt;true&gt;(matrix, reference, options);</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>        internal::test_full_access&lt;false&gt;(matrix, reference, options);</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    }</div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>}</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    Index_ num_indices = index_ptr-&gt;size();</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    std::vector&lt;size_t&gt; reposition(nsecondary, -1);</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    {</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; indices = *index_ptr;</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>        <span class="keywordflow">for</span> (Index_ i = 0; i &lt; num_indices; ++i) {</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>            reposition[indices[i]] = i;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>        }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    }</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    test_access_base&lt;use_oracle_&gt;(</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        matrix,</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>        reference,</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        options,</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        num_indices,</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        [&amp;](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; svec) -&gt; <span class="keyword">auto</span> {</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>            std::vector&lt;Value_&gt; expected(num_indices);</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>            <span class="keywordtype">size_t</span> nnz = svec.index.size();</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; nnz; ++i) {</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>                expected[reposition[svec.index[i]]] = svec.value[i];</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            }</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>            <span class="keywordflow">return</span> expected;</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        },</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        std::move(index_ptr)</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>    );</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>}</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>}</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00396" data-start="{" data-end="}">
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">  396</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix,</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>{</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>        internal::test_full_access&lt;true&gt;(matrix, reference, options);</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>        internal::test_full_access&lt;false&gt;(matrix, reference, options);</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    }</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>}</div>
 </div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span> </div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00423" data-start="{" data-end="}">
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">  423</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">test_block_access</a>(</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, </div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>    <span class="keywordtype">double</span> relative_start,</div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span>    <span class="keywordtype">double</span> relative_length,</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>{</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        internal::test_block_access&lt;true&gt;(matrix, reference, relative_start, relative_length, options);</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>        internal::test_block_access&lt;false&gt;(matrix, reference, relative_start, relative_length, options);</div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    }</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>}</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span> </div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00427" data-start="{" data-end="}">
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">  427</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">test_block_access</a>(</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, </div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>    <span class="keywordtype">double</span> relative_start,</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>    <span class="keywordtype">double</span> relative_length,</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>{</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>        internal::test_block_access&lt;true&gt;(matrix, reference, relative_start, relative_length, options);</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>        internal::test_block_access&lt;false&gt;(matrix, reference, relative_start, relative_length, options);</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    }</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>}</div>
 </div>
-<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span> </div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00456" data-start="{" data-end="}">
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">  456</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">test_indexed_access</a>(</div>
-<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix,</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>    <span class="keywordtype">double</span> relative_start,</div>
-<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>    <span class="keywordtype">double</span> probability,</div>
-<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
-<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>{</div>
-<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
-<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>        internal::test_indexed_access&lt;true&gt;(matrix, reference, relative_start, probability, options);</div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>        internal::test_indexed_access&lt;false&gt;(matrix, reference, relative_start, probability, options);</div>
-<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>    }</div>
-<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>}</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span> </div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00460" data-start="{" data-end="}">
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">  460</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">test_indexed_access</a>(</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix,</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>    <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference,</div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>    <span class="keywordtype">double</span> relative_start,</div>
+<div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>    <span class="keywordtype">double</span> probability,</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&amp; options)</div>
+<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>{</div>
+<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a5819b7ec7d7ae7cc841cb0b3a2512dcd">use_oracle</a>) {</div>
+<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>        internal::test_indexed_access&lt;true&gt;(matrix, reference, relative_start, probability, options);</div>
+<div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>        internal::test_indexed_access&lt;false&gt;(matrix, reference, relative_start, probability, options);</div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span>    }</div>
+<div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span>}</div>
 </div>
-<div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span> </div>
-<div class="line"><a id="l00482" name="l00482"></a><span class="lineno">  482</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00483" data-start="{" data-end="}">
-<div class="line"><a id="l00483" name="l00483"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">  483</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">test_simple_column_access</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference) {</div>
-<div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>    <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> options;</div>
-<div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span>    options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>    <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(matrix, reference, options);</div>
-<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>}</div>
+<div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span> </div>
+<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00487" data-start="{" data-end="}">
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">  487</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">test_simple_column_access</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference) {</div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>    <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> options;</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>    options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>    <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(matrix, reference, options);</div>
+<div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>}</div>
 </div>
-<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span> </div>
-<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00502" data-start="{" data-end="}">
-<div class="line"><a id="l00502" name="l00502"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">  502</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">test_simple_row_access</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference) {</div>
-<div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span>    <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> options;</div>
-<div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>    options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>    <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(matrix, reference, options);</div>
-<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>}</div>
+<div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span> </div>
+<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Value_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00506" data-start="{" data-end="}">
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">  506</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">test_simple_row_access</a>(<span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; matrix, <span class="keyword">const</span> <a class="code hl_classRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix&lt;Value_, Index_&gt;</a>&amp; reference) {</div>
+<div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>    <a class="code hl_struct" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> options;</div>
+<div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>    options.<a class="code hl_variable" href="structtatami__test_1_1TestAccessOptions.html#a69195a58cb2aaea730ff90a1dbe44bb7">use_row</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span>    <a class="code hl_function" href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">test_full_access</a>(matrix, reference, options);</div>
+<div class="line"><a id="l00510" name="l00510"></a><span class="lineno">  510</span>}</div>
 </div>
-<div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span> </div>
-<div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>}</div>
-<div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span> </div>
-<div class="line"><a id="l00510" name="l00510"></a><span class="lineno">  510</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00511" name="l00511"></a><span class="lineno">  511</span> </div>
+<div class="line"><a id="l00512" name="l00512"></a><span class="lineno">  512</span>}</div>
+<div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span> </div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aConsecutiveOracle_8hpp_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/ConsecutiveOracle_8hpp.html">ConsecutiveOracle.hpp</a></div></div>
 <div class="ttc" id="aFixedOracle_8hpp_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/FixedOracle_8hpp.html">FixedOracle.hpp</a></div></div>
 <div class="ttc" id="aclasstatami_1_1ConsecutiveOracle_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/classtatami_1_1ConsecutiveOracle.html">tatami::ConsecutiveOracle</a></div></div>
@@ -496,18 +500,18 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="aclasstatami_1_1Matrix_html_ac57d65707ce22d8c175e43a82b8c6b90"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#ac57d65707ce22d8c175e43a82b8c6b90">tatami::Matrix::is_sparse</a></div><div class="ttdeci">virtual bool is_sparse() const=0</div></div>
 <div class="ttc" id="acreate__indexed__subset_8hpp_html"><div class="ttname"><a href="create__indexed__subset_8hpp.html">create_indexed_subset.hpp</a></div><div class="ttdoc">Create an indexed subset of dimension elements.</div></div>
 <div class="ttc" id="afetch_8hpp_html"><div class="ttname"><a href="fetch_8hpp.html">fetch.hpp</a></div><div class="ttdoc">Fetch a row/column into a vector.</div></div>
-<div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:13</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a142b6b606adaeec9c51a45e2db22ef0f"><div class="ttname"><a href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">tatami_test::test_block_access</a></div><div class="ttdeci">void test_block_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double relative_length, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:423</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a54feb6b327f414a31c236e6daf612de4"><div class="ttname"><a href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">tatami_test::create_indexed_subset</a></div><div class="ttdeci">std::vector&lt; Index_ &gt; create_indexed_subset(Index_ extent, double relative_start, double probability, uint64_t seed)</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:33</div></div>
+<div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:15</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a142b6b606adaeec9c51a45e2db22ef0f"><div class="ttname"><a href="namespacetatami__test.html#a142b6b606adaeec9c51a45e2db22ef0f">tatami_test::test_block_access</a></div><div class="ttdeci">void test_block_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double relative_length, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:427</div></div>
 <div class="ttc" id="anamespacetatami__test_html_a78113992690d23f99b22438c9b1a61bc"><div class="ttname"><a href="namespacetatami__test.html#a78113992690d23f99b22438c9b1a61bc">tatami_test::StandardTestAccessOptions</a></div><div class="ttdeci">std::tuple&lt; bool, bool, TestAccessOrder, int &gt; StandardTestAccessOptions</div><div class="ttdef"><b>Definition</b> test_access.hpp:71</div></div>
 <div class="ttc" id="anamespacetatami__test_html_a9441f51f38f3ecdda9630e3357dea497"><div class="ttname"><a href="namespacetatami__test.html#a9441f51f38f3ecdda9630e3357dea497">tatami_test::TestAccessOrder</a></div><div class="ttdeci">TestAccessOrder</div><div class="ttdef"><b>Definition</b> test_access.hpp:34</div></div>
-<div class="ttc" id="anamespacetatami__test_html_aa58922974821ab084b27f08829051616"><div class="ttname"><a href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">tatami_test::test_indexed_access</a></div><div class="ttdeci">void test_indexed_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double probability, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:456</div></div>
-<div class="ttc" id="anamespacetatami__test_html_aa7122306c2b56cbe367065397a6db86b"><div class="ttname"><a href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">tatami_test::test_simple_row_access</a></div><div class="ttdeci">void test_simple_row_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</div><div class="ttdef"><b>Definition</b> test_access.hpp:502</div></div>
-<div class="ttc" id="anamespacetatami__test_html_ac2e64e45eb99ffaf7180c5b9fcfa6183"><div class="ttname"><a href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">tatami_test::test_simple_column_access</a></div><div class="ttdeci">void test_simple_column_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</div><div class="ttdef"><b>Definition</b> test_access.hpp:483</div></div>
+<div class="ttc" id="anamespacetatami__test_html_aa58922974821ab084b27f08829051616"><div class="ttname"><a href="namespacetatami__test.html#aa58922974821ab084b27f08829051616">tatami_test::test_indexed_access</a></div><div class="ttdeci">void test_indexed_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double probability, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:460</div></div>
+<div class="ttc" id="anamespacetatami__test_html_aa7122306c2b56cbe367065397a6db86b"><div class="ttname"><a href="namespacetatami__test.html#aa7122306c2b56cbe367065397a6db86b">tatami_test::test_simple_row_access</a></div><div class="ttdeci">void test_simple_row_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</div><div class="ttdef"><b>Definition</b> test_access.hpp:506</div></div>
+<div class="ttc" id="anamespacetatami__test_html_ac2e64e45eb99ffaf7180c5b9fcfa6183"><div class="ttname"><a href="namespacetatami__test.html#ac2e64e45eb99ffaf7180c5b9fcfa6183">tatami_test::test_simple_column_access</a></div><div class="ttdeci">void test_simple_column_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</div><div class="ttdef"><b>Definition</b> test_access.hpp:487</div></div>
+<div class="ttc" id="anamespacetatami__test_html_aca390af20a3df4ca06769585e0a83e52"><div class="ttname"><a href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">tatami_test::create_indexed_subset</a></div><div class="ttdeci">tatami::VectorPtr&lt; Index_ &gt; create_indexed_subset(Index_ extent, double relative_start, double probability, uint64_t seed)</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:35</div></div>
 <div class="ttc" id="anamespacetatami__test_html_ad1dc03cc54827ca6bd114bf31b1cd8f2"><div class="ttname"><a href="namespacetatami__test.html#ad1dc03cc54827ca6bd114bf31b1cd8f2">tatami_test::convert_test_access_options</a></div><div class="ttdeci">TestAccessOptions convert_test_access_options(const StandardTestAccessOptions &amp;x)</div><div class="ttdef"><b>Definition</b> test_access.hpp:80</div></div>
 <div class="ttc" id="anamespacetatami__test_html_ad8d16e7fd20aa749b8129a72e3bd92e2"><div class="ttname"><a href="namespacetatami__test.html#ad8d16e7fd20aa749b8129a72e3bd92e2">tatami_test::fetch</a></div><div class="ttdeci">std::vector&lt; Value_ &gt; fetch(tatami::MyopicDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, size_t number)</div><div class="ttdef"><b>Definition</b> fetch.hpp:46</div></div>
 <div class="ttc" id="anamespacetatami__test_html_afd66d2d9483c0249e2fb17df2973f428"><div class="ttname"><a href="namespacetatami__test.html#afd66d2d9483c0249e2fb17df2973f428">tatami_test::standard_test_access_options_combinations</a></div><div class="ttdeci">auto standard_test_access_options_combinations()</div><div class="ttdef"><b>Definition</b> test_access.hpp:93</div></div>
-<div class="ttc" id="anamespacetatami__test_html_afea1690d97476f2d8be2e04d28ce048c"><div class="ttname"><a href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">tatami_test::test_full_access</a></div><div class="ttdeci">void test_full_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:392</div></div>
+<div class="ttc" id="anamespacetatami__test_html_afea1690d97476f2d8be2e04d28ce048c"><div class="ttname"><a href="namespacetatami__test.html#afea1690d97476f2d8be2e04d28ce048c">tatami_test::test_full_access</a></div><div class="ttdeci">void test_full_access(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const TestAccessOptions &amp;options)</div><div class="ttdef"><b>Definition</b> test_access.hpp:396</div></div>
 <div class="ttc" id="anamespacetatami_html_aab9d426a238a93d02635b4172c725808"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#aab9d426a238a93d02635b4172c725808">tatami::MaybeOracle</a></div><div class="ttdeci">typename std::conditional&lt; oracle_, std::shared_ptr&lt; const Oracle&lt; Index_ &gt; &gt;, bool &gt;::type MaybeOracle</div></div>
 <div class="ttc" id="anamespacetatami_html_ab52a806e3f13a68741a9e1f77dccab14"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#ab52a806e3f13a68741a9e1f77dccab14">tatami::copy_n</a></div><div class="ttdeci">Value_ * copy_n(const Value_ *input, Size_ n, Value_ *output)</div></div>
 <div class="ttc" id="anew__extractor_8hpp_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/new__extractor_8hpp.html">new_extractor.hpp</a></div></div>

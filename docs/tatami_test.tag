@@ -286,10 +286,10 @@
       <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a170e02e86972c2be8559884cc3c12254">RANDOM</enumvalue>
     </member>
     <member kind="function">
-      <type>std::vector&lt; Index_ &gt;</type>
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>create_indexed_subset</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a54feb6b327f414a31c236e6daf612de4</anchor>
+      <anchor>aca390af20a3df4ca06769585e0a83e52</anchor>
       <arglist>(Index_ extent, double relative_start, double probability, uint64_t seed)</arglist>
     </member>
     <member kind="function">

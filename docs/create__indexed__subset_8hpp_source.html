@@ -90,35 +90,42 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;random&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="foldopen" id="foldopen00013" data-start="{" data-end="}">
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="namespacetatami__test.html">   13</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacetatami__test.html">tatami_test</a> {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Index_&gt;</div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="}">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">   33</a></span>std::vector&lt;Index_&gt; <a class="code hl_function" href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">create_indexed_subset</a>(Index_ extent, <span class="keywordtype">double</span> relative_start, <span class="keywordtype">double</span> probability, uint64_t seed) {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    Index_ start = extent * relative_start;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordflow">if</span> (start &gt;= extent) {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keywordflow">return</span> std::vector&lt;Index_&gt;();</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    }</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="codeRef" href="https://tatami-inc.github.io/tatami/tatami_8hpp.html">tatami/tatami.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="namespacetatami__test.html">   15</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacetatami__test.html">tatami_test</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="}">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">   35</a></span><a class="code hl_typedefRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#abbb0bdf0b79fe19e504b49b43984f634">tatami::VectorPtr&lt;Index_&gt;</a> <a class="code hl_function" href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">create_indexed_subset</a>(Index_ extent, <span class="keywordtype">double</span> relative_start, <span class="keywordtype">double</span> probability, uint64_t seed) {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">auto</span> ptr = <span class="keyword">new</span> std::vector&lt;Index_&gt;;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_typedefRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#abbb0bdf0b79fe19e504b49b43984f634">tatami::VectorPtr&lt;Index_&gt;</a> output(ptr);</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    std::vector&lt;Index_&gt; indices { start };</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::mt19937_64 rng(seed);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    std::uniform_real_distribution udist;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">for</span> (Index_ i = start + 1; i &lt; extent; ++i) {</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordflow">if</span> (udist(rng) &lt; probability) {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            indices.push_back(i);</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        }</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    }</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> indices;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
-</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
-</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    Index_ start = extent * relative_start;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordflow">if</span> (start &lt; extent) {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">auto</span>&amp; indices = *ptr;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        indices.push_back(start);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        std::mt19937_64 rng(seed);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        std::uniform_real_distribution udist;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">for</span> (Index_ i = start + 1; i &lt; extent; ++i) {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <span class="keywordflow">if</span> (udist(rng) &lt; probability) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                indices.push_back(i);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            }</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    }</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:13</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a54feb6b327f414a31c236e6daf612de4"><div class="ttname"><a href="namespacetatami__test.html#a54feb6b327f414a31c236e6daf612de4">tatami_test::create_indexed_subset</a></div><div class="ttdeci">std::vector&lt; Index_ &gt; create_indexed_subset(Index_ extent, double relative_start, double probability, uint64_t seed)</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:33</div></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordflow">return</span> output;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>
+</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>}</div>
+</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:15</div></div>
+<div class="ttc" id="anamespacetatami__test_html_aca390af20a3df4ca06769585e0a83e52"><div class="ttname"><a href="namespacetatami__test.html#aca390af20a3df4ca06769585e0a83e52">tatami_test::create_indexed_subset</a></div><div class="ttdeci">tatami::VectorPtr&lt; Index_ &gt; create_indexed_subset(Index_ extent, double relative_start, double probability, uint64_t seed)</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:35</div></div>
+<div class="ttc" id="anamespacetatami_html_abbb0bdf0b79fe19e504b49b43984f634"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#abbb0bdf0b79fe19e504b49b43984f634">tatami::VectorPtr</a></div><div class="ttdeci">std::shared_ptr&lt; const std::vector&lt; Index_ &gt; &gt; VectorPtr</div></div>
+<div class="ttc" id="atatami_8hpp_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/tatami_8hpp.html">tatami.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
