@@ -10,7 +10,20 @@ TEST_P(ReversedIndicesWrapperTest, Parametrized) {
 
     size_t NR = 152, NC = 198;
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
-    auto mat = std::make_shared<tatami::CompressedSparseMatrix<double, int> >(NR, NC, std::move(simulated.data), std::move(simulated.index), std::move(simulated.indptr), true);
+    auto mat = std::make_shared<tatami::CompressedSparseMatrix<
+        double,
+        int,
+        decltype(simulated.data),
+        decltype(simulated.index),
+        decltype(simulated.indptr)
+    > >(
+        NR,
+        NC,
+        std::move(simulated.data),
+        std::move(simulated.index),
+        std::move(simulated.indptr),
+        true
+    );
     tatami_test::ReversedIndicesWrapper<double, int> wrapped(std::move(mat));
 
     tatami_test::test_unsorted_full_access(wrapped, options);

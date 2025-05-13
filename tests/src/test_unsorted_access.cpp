@@ -9,7 +9,20 @@ TEST_P(TestUnsortedAccessTest, Parametrized) {
 
     size_t NR = 100, NC = 200;
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
-    tatami::CompressedSparseMatrix<double, int> mat(NR, NC, std::move(simulated.data), std::move(simulated.index), std::move(simulated.indptr), true);
+    tatami::CompressedSparseMatrix<
+        double,
+        int,
+        decltype(simulated.data),
+        decltype(simulated.index),
+        decltype(simulated.indptr)
+    > mat(
+        NR,
+        NC,
+        std::move(simulated.data),
+        std::move(simulated.index),
+        std::move(simulated.indptr),
+        true
+    );
 
     tatami_test::test_unsorted_full_access(mat, options);
 
@@ -33,7 +46,20 @@ TEST(TestUnsortedAccess, HandlesNaN) {
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
     simulated.data.front() = std::numeric_limits<double>::quiet_NaN();
     simulated.data.back() = std::numeric_limits<double>::quiet_NaN();
-    tatami::CompressedSparseMatrix<double, int> mat(NR, NC, std::move(simulated.data), std::move(simulated.index), std::move(simulated.indptr), true);
+    tatami::CompressedSparseMatrix<
+        double,
+        int,
+        decltype(simulated.data),
+        decltype(simulated.index),
+        decltype(simulated.indptr)
+    > mat(
+        NR,
+        NC,
+        std::move(simulated.data),
+        std::move(simulated.index),
+        std::move(simulated.indptr),
+        true
+    );
 
     tatami_test::TestAccessOptions options;
     options.use_row = true;

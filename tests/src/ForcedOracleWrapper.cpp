@@ -10,7 +10,7 @@ TEST_P(ForcedOracleWrapperTest, Parametrized) {
 
     size_t NR = 100, NC = 200;
     auto simulated = tatami_test::simulate_vector<double>(NR * NC, tatami_test::SimulateVectorOptions());
-    auto mat = std::make_shared<tatami::DenseMatrix<double, int> >(NR, NC, simulated, true);
+    auto mat = std::make_shared<tatami::DenseMatrix<double, int, decltype(simulated)> >(NR, NC, simulated, true);
     tatami_test::ForcedOracleWrapper<double, int> wrapped(mat); 
     EXPECT_TRUE(wrapped.uses_oracle(true));
 
