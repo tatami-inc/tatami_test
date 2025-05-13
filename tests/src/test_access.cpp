@@ -88,3 +88,41 @@ TEST(TestAccess, HandlesNaN) {
     tatami_test::test_simple_column_access(mat, ref);
 }
 
+class SimulateTestAccessSequenceTest : public ::testing::TestWithParam<int> {};
+
+TEST_P(SimulateTestAccessSequenceTest, Forward) {
+    auto jump = GetParam();
+    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, [&]{
+        tatami_test::TestAccessOptions options;
+        options.use_row = true;
+        options.jump = jump;
+        return options;
+    }());
+    EXPECT_LT(simulated.front(), jump);
+    for (std::size_t i = 1; i < simulated.size(); ++i) {
+        EXPECT_EQ(simulated[i] - simulated[i-1], jump);
+    }
+    EXPECT_GE(simulated.back() + jump, 10);
+}
+
+TEST_P(SimulateTestAccessSequenceTest, Reverse) {
+    auto jump = GetParam();
+    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, [&]{
+        tatami_test::TestAccessOptions options;
+        options.use_row = false;
+        options.order = tatami_test::TestAccessOrder::REVERSE;
+        options.jump = jump;
+        return options;
+    }());
+    EXPECT_LT(simulated.back(), jump);
+    for (std::size_t i = 1; i < simulated.size(); ++i) {
+        EXPECT_EQ(simulated[i - 1] - simulated[i], jump);
+    }
+    EXPECT_GE(simulated.front() + jump, 20);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    TestAccess,
+    SimulateTestAccessSequenceTest,
+    ::testing::Values(1,2,3,4,5,6,7)
+);

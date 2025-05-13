@@ -16,6 +16,7 @@
 #include <cmath>
 #include <memory>
 #include <cstdint>
+#include <type_traits>
 
 /**
  * @file test_access.hpp
@@ -132,18 +133,24 @@ std::vector<Index_> simulate_test_access_sequence(Index_ NR, Index_ NC, const Te
     std::vector<Index_> sequence;
     auto limit = (options.use_row ? NR : NC);
 
+    std::mt19937_64 rng(create_seed(NR, NC, options));
+    Index_ start = rng() % options.jump;
+    if (start < limit) {
+        while (1) {
+            sequence.push_back(start);
+            Index_ remainder = limit - start;
+            // Make sure this comparison involves two unsigned integers to avoid GCC warnings.
+            if (static_cast<typename std::make_unsigned<Index_>::type>(remainder) <= static_cast<typename std::make_unsigned<int>::type>(options.jump)) {
+                break;
+            }
+            start += options.jump;
+        }
+    }
+
     if (options.order == TestAccessOrder::REVERSE) {
-        for (int i = limit; i > 0; i -= options.jump) {
-            sequence.push_back(i - 1);
-        }
-    } else {
-        for (int i = 0; i < limit; i += options.jump) {
-            sequence.push_back(i);
-        }
-        if (options.order == TestAccessOrder::RANDOM) {
-            std::mt19937_64 rng(create_seed(NR, NC, options));
-            std::shuffle(sequence.begin(), sequence.end(), rng);
-        }
+        std::reverse(sequence.begin(), sequence.end());
+    } else if (options.order == TestAccessOrder::RANDOM) {
+        std::shuffle(sequence.begin(), sequence.end(), rng);
     }
 
     return sequence;
