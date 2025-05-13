@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['check_5fsparse_0',['check_sparse',['../structtatami__test_1_1TestAccessOptions.html#ada12c5cca227834bd6e3c1a8c456bc35',1,'tatami_test::TestAccessOptions']]]
+  ['check_0',['check',['https://tatami-inc.github.io/tatami/structtatami_1_1CompressedSparseMatrixOptions.html#a88f4bdb918e8ce35bf07e6a16c464bfc',1,'tatami::CompressedSparseMatrixOptions::check'],['https://tatami-inc.github.io/tatami/structtatami_1_1FragmentedSparseMatrixOptions.html#ad0bd65e9fafe7060867db6e048b1919d',1,'tatami::FragmentedSparseMatrixOptions::check']]],
+  ['check_5fsparse_1',['check_sparse',['../structtatami__test_1_1TestAccessOptions.html#ada12c5cca227834bd6e3c1a8c456bc35',1,'tatami_test::TestAccessOptions']]]
 ];

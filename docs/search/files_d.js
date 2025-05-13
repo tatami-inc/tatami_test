@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['tatami_2ehpp_0',['tatami.hpp',['https://tatami-inc.github.io/tatami/tatami_8hpp.html',1,'']]],
-  ['tatami_5ftest_2ehpp_1',['tatami_test.hpp',['../tatami__test_8hpp.html',1,'']]],
-  ['test_5faccess_2ehpp_2',['test_access.hpp',['../test__access_8hpp.html',1,'']]],
-  ['test_5funsorted_5faccess_2ehpp_3',['test_unsorted_access.hpp',['../test__unsorted__access_8hpp.html',1,'']]],
-  ['throws_5ferror_2ehpp_4',['throws_error.hpp',['../throws__error_8hpp.html',1,'']]],
-  ['transpose_2ehpp_5',['transpose.hpp',['https://tatami-inc.github.io/tatami/transpose_8hpp.html',1,'']]]
+  ['simulate_5fcompressed_5fsparse_2ehpp_0',['simulate_compressed_sparse.hpp',['../simulate__compressed__sparse_8hpp.html',1,'']]],
+  ['simulate_5fvector_2ehpp_1',['simulate_vector.hpp',['../simulate__vector_8hpp.html',1,'']]],
+  ['somenumericarray_2ehpp_2',['SomeNumericArray.hpp',['https://tatami-inc.github.io/tatami/SomeNumericArray_8hpp.html',1,'']]],
+  ['sparserange_2ehpp_3',['SparseRange.hpp',['https://tatami-inc.github.io/tatami/SparseRange_8hpp.html',1,'']]],
+  ['sparsifiedwrapper_2ehpp_4',['SparsifiedWrapper.hpp',['https://tatami-inc.github.io/tatami/SparsifiedWrapper_8hpp.html',1,'']]],
+  ['substitute_5fhelpers_2ehpp_5',['substitute_helpers.hpp',['https://tatami-inc.github.io/tatami/substitute__helpers_8hpp.html',1,'']]]
 ];

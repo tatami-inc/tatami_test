@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.8">
+<tagfile doxygen_version="1.12.0">
   <compound kind="file">
     <name>create_indexed_subset.hpp</name>
     <path>tatami_test/</path>
@@ -85,7 +85,7 @@
     <filename>classtatami__test_1_1ForcedOracleWrapper.html</filename>
     <templarg>typename Value_</templarg>
     <templarg>typename Index_</templarg>
-    <base>Matrix&lt; Value_, Index_ &gt;</base>
+    <base>tatami::Matrix&lt; Value_, Index_ &gt;</base>
     <member kind="function">
       <type></type>
       <name>ForcedOracleWrapper</name>
@@ -99,7 +99,7 @@
     <filename>classtatami__test_1_1ReversedIndicesWrapper.html</filename>
     <templarg>typename Value_</templarg>
     <templarg>typename Index_</templarg>
-    <base>Matrix&lt; Value_, Index_ &gt;</base>
+    <base>tatami::Matrix&lt; Value_, Index_ &gt;</base>
     <member kind="function">
       <type></type>
       <name>ReversedIndicesWrapper</name>

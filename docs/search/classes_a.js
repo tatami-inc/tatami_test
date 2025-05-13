@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['reversedindiceswrapper_0',['ReversedIndicesWrapper',['../classtatami__test_1_1ReversedIndicesWrapper.html',1,'tatami_test']]]
+  ['retrievecompressedsparsecontentsoptions_0',['RetrieveCompressedSparseContentsOptions',['https://tatami-inc.github.io/tatami/structtatami_1_1RetrieveCompressedSparseContentsOptions.html',1,'tatami']]],
+  ['retrievefragmentedsparsecontentsoptions_1',['RetrieveFragmentedSparseContentsOptions',['https://tatami-inc.github.io/tatami/structtatami_1_1RetrieveFragmentedSparseContentsOptions.html',1,'tatami']]],
+  ['reversedindiceswrapper_2',['ReversedIndicesWrapper',['../classtatami__test_1_1ReversedIndicesWrapper.html',1,'tatami_test']]]
 ];
