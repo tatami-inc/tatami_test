@@ -42,6 +42,20 @@ TEST(SimulateVector, Dense) {
         }());
         EXPECT_NE(res, res2);
     }
+
+    {
+        auto res = tatami_test::simulate_vector<double>(1000, []{ 
+            tatami_test::SimulateVectorOptions opt;
+            opt.seed = 12345;
+            return opt;
+        }());
+        auto res2 = tatami_test::simulate_vector<double>(50, 20, []{ 
+            tatami_test::SimulateVectorOptions opt;
+            opt.seed = 12345;
+            return opt;
+        }());
+        EXPECT_EQ(res, res2);
+    }
 }
 
 TEST(SimulateVector, Sparse) {

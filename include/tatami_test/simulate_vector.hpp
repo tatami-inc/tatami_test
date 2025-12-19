@@ -45,13 +45,15 @@ struct SimulateVectorOptions {
  * Simulate a vector of values from a uniform distribution.
  *
  * @tparam Type_ Type of value to be simulated.
+ * @tparam Length_ Integer type of the length of the output vector.
+ *
  * @param length Length of the array of values to simulate.
  * @param options Simulation options.
  *
  * @return Vector of simulated values.
  */
-template<typename Type_>
-std::vector<Type_> simulate_vector(std::size_t length, const SimulateVectorOptions& options) {
+template<typename Type_, typename Length_>
+std::vector<Type_> simulate_vector(const Length_ length, const SimulateVectorOptions& options) {
     auto output = sanisizer::create<std::vector<Type_> >(length);
     RngEngine rng(options.seed);
     std::uniform_real_distribution<> unif(options.lower, options.upper);
@@ -70,6 +72,23 @@ std::vector<Type_> simulate_vector(std::size_t length, const SimulateVectorOptio
     }
 
     return output;
+}
+
+/**
+ * Overload of `simulate_vector()` for simulating the contents of a dense random matrix. 
+ *
+ * @tparam Type_ Type of value to be simulated.
+ * @tparam Index_ Integer type of the dimension extents.
+ *
+ * @param nrow Number of rows in the matrix.
+ * @param ncol Number of columns in the matrix.
+ * @param options Simulation options.
+ *
+ * @return Vector of simulated values of length equal to the product of `nrow` and `ncol`.
+ */
+template<typename Type_, typename Index_>
+std::vector<Type_> simulate_vector(const Index_ nrow, const Index_ ncol, const SimulateVectorOptions& options) {
+    return simulate_vector<Type_>(sanisizer::product<typename std::vector<Type_>::size_type>(nrow, ncol), options);
 }
 
 /**
