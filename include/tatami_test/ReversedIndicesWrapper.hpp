@@ -25,7 +25,7 @@ public:
 
 #ifdef TATAMI_STRICT_SIGNATURES
     template<typename ... Args_>
-    ReversedIndicesExtractor(Args_...) = delete;
+    ReversedIndicesExtractor(std::unique_ptr<tatami::SparseExtractor<oracle_, Value_, Index_> >, Args_...) = delete;
 #endif
 
 private:
@@ -78,15 +78,11 @@ public:
      * @cond
      */
 #ifdef TATAMI_STRICT_SIGNATURES
-    ReversedIndicesWrapper(std::shared_ptr<tatami::Matrix<Value_, Index_> > matrix) : ReversedIndicesWrapper(std::move(matrix)) {}
-
-    template<typename ... Args_>
-    ReversedIndicesWrapper(Args_...) = delete;
+    // Not much to do here, we want to accept pointers to subclasses so casts are okay.
 #endif
     /**
      * @endcond
      */
-
 
 private:
     std::shared_ptr<const tatami::Matrix<Value_, Index_> > my_matrix;

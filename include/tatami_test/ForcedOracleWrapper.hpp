@@ -37,10 +37,7 @@ public:
      * @cond
      */
 #ifdef TATAMI_STRICT_SIGNATURES
-    ForcedOracleWrapper(std::shared_ptr<tatami::Matrix<Value_, Index_> > matrix) : ForcedOracleWrapper(std::move(matrix)) {}
-
-    template<typename ... Args_>
-    ForcedOracleWrapper(Args_...) = delete;
+    // Not much to do here, we want to accept pointers to subclasses so casts are okay.
 #endif
     /**
      * @endcond
