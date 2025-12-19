@@ -113,7 +113,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of <code><a class="el" href="#aa076a2922437c462af9449a06534e494">simulate_compressed_sparse()</a></code>.  <a href="structtatami__test_1_1SimulateCompressedSparseResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a301137d980d40a2378b3d958dff0be95">simulate_vector()</a></code>.  <a href="structtatami__test_1_1SimulateVectorOptions.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a510a5abf30fd00f9a634b4374903157f">simulate_vector()</a></code>.  <a href="structtatami__test_1_1SimulateVectorOptions.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtatami__test_1_1SparseVector.html">SparseVector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sparse vector.  <a href="structtatami__test_1_1SparseVector.html#details">More...</a><br /></td></tr>
@@ -159,9 +159,12 @@ Functions</h2></td></tr>
 <tr class="memitem:aa076a2922437c462af9449a06534e494" id="r_aa076a2922437c462af9449a06534e494"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
 <tr class="memitem:aa076a2922437c462af9449a06534e494"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structtatami__test_1_1SimulateCompressedSparseResult.html">SimulateCompressedSparseResult</a>&lt; Value_, Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#aa076a2922437c462af9449a06534e494">simulate_compressed_sparse</a> (const Index_ primary, const Index_ secondary, const <a class="el" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">SimulateCompressedSparseOptions</a> &amp;options)</td></tr>
 <tr class="separator:aa076a2922437c462af9449a06534e494"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a301137d980d40a2378b3d958dff0be95" id="r_a301137d980d40a2378b3d958dff0be95"><td class="memTemplParams" colspan="2">template&lt;typename Type_ &gt; </td></tr>
-<tr class="memitem:a301137d980d40a2378b3d958dff0be95"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Type_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a301137d980d40a2378b3d958dff0be95">simulate_vector</a> (std::size_t length, const <a class="el" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a> &amp;options)</td></tr>
-<tr class="separator:a301137d980d40a2378b3d958dff0be95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a510a5abf30fd00f9a634b4374903157f" id="r_a510a5abf30fd00f9a634b4374903157f"><td class="memTemplParams" colspan="2">template&lt;typename Type_ , typename Length_ &gt; </td></tr>
+<tr class="memitem:a510a5abf30fd00f9a634b4374903157f"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Type_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a510a5abf30fd00f9a634b4374903157f">simulate_vector</a> (const Length_ length, const <a class="el" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a> &amp;options)</td></tr>
+<tr class="separator:a510a5abf30fd00f9a634b4374903157f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c33db162521e2a547b39aae979a7b46" id="r_a5c33db162521e2a547b39aae979a7b46"><td class="memTemplParams" colspan="2">template&lt;typename Type_ , typename Index_ &gt; </td></tr>
+<tr class="memitem:a5c33db162521e2a547b39aae979a7b46"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Type_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a5c33db162521e2a547b39aae979a7b46">simulate_vector</a> (const Index_ nrow, const Index_ ncol, const <a class="el" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a> &amp;options)</td></tr>
+<tr class="separator:a5c33db162521e2a547b39aae979a7b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1dc03cc54827ca6bd114bf31b1cd8f2" id="r_ad1dc03cc54827ca6bd114bf31b1cd8f2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1dc03cc54827ca6bd114bf31b1cd8f2">convert_test_access_options</a> (const <a class="el" href="#a78113992690d23f99b22438c9b1a61bc">StandardTestAccessOptions</a> &amp;x)</td></tr>
 <tr class="separator:ad1dc03cc54827ca6bd114bf31b1cd8f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd66d2d9483c0249e2fb17df2973f428" id="r_afd66d2d9483c0249e2fb17df2973f428"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd66d2d9483c0249e2fb17df2973f428">standard_test_access_options_combinations</a> ()</td></tr>
@@ -564,18 +567,63 @@ template&lt;typename Value_ , typename Index_ &gt; </div>
 
 </div>
 </div>
-<a id="a301137d980d40a2378b3d958dff0be95" name="a301137d980d40a2378b3d958dff0be95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a301137d980d40a2378b3d958dff0be95">&#9670;&#160;</a></span>simulate_vector()</h2>
+<a id="a5c33db162521e2a547b39aae979a7b46" name="a5c33db162521e2a547b39aae979a7b46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c33db162521e2a547b39aae979a7b46">&#9670;&#160;</a></span>simulate_vector() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Type_ &gt; </div>
+template&lt;typename Type_ , typename Index_ &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt; Type_ &gt; tatami_test::simulate_vector </td>
           <td>(</td>
-          <td class="paramtype">std::size_t</td>          <td class="paramname"><span class="paramname"><em>length</em></span>, </td>
+          <td class="paramtype">const Index_</td>          <td class="paramname"><span class="paramname"><em>nrow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Index_</td>          <td class="paramname"><span class="paramname"><em>ncol</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Overload of <code><a class="el" href="#a510a5abf30fd00f9a634b4374903157f">simulate_vector()</a></code> for simulating the contents of a dense random matrix.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Type_</td><td>Type of value to be simulated. </td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the dimension extents.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">nrow</td><td>Number of rows in the matrix. </td></tr>
+    <tr><td class="paramname">ncol</td><td>Number of columns in the matrix. </td></tr>
+    <tr><td class="paramname">options</td><td>Simulation options.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of simulated values of length equal to the product of <code>nrow</code> and <code>ncol</code>. </dd></dl>
+
+</div>
+</div>
+<a id="a510a5abf30fd00f9a634b4374903157f" name="a510a5abf30fd00f9a634b4374903157f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a510a5abf30fd00f9a634b4374903157f">&#9670;&#160;</a></span>simulate_vector() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Type_ , typename Length_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; Type_ &gt; tatami_test::simulate_vector </td>
+          <td>(</td>
+          <td class="paramtype">const Length_</td>          <td class="paramname"><span class="paramname"><em>length</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -588,6 +636,7 @@ template&lt;typename Type_ &gt; </div>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Type_</td><td>Type of value to be simulated. </td></tr>
+    <tr><td class="paramname">Length_</td><td>Integer type of the length of the output vector.</td></tr>
   </table>
   </dd>
 </dl>

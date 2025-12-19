@@ -118,39 +118,46 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>};</div>
 </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Type_&gt;</div>
-<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a301137d980d40a2378b3d958dff0be95">   54</a></span>std::vector&lt;Type_&gt; <a class="code hl_function" href="namespacetatami__test.html#a301137d980d40a2378b3d958dff0be95">simulate_vector</a>(std::size_t length, <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a>&amp; options) {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">auto</span> output = sanisizer::create&lt;std::vector&lt;Type_&gt; &gt;(length);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_typedef" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">RngEngine</a> rng(options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a83ac7134dd316308c639aad7e35c5d22">seed</a>);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    std::uniform_real_distribution&lt;&gt; unif(options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">lower</a>, options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">upper</a>);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a> == 1) {</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; v : output) {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            v = unif(rng);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        std::uniform_real_distribution&lt;&gt; nonzero(0.0, 1.0);</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; v : output) {</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            <span class="keywordflow">if</span> (nonzero(rng) &lt;= options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a>) {</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                v = unif(rng);</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            }</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        }</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    }</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">return</span> output;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Type_, <span class="keyword">typename</span> Length_&gt;</div>
+<div class="foldopen" id="foldopen00056" data-start="{" data-end="}">
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">   56</a></span>std::vector&lt;Type_&gt; <a class="code hl_function" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">simulate_vector</a>(<span class="keyword">const</span> Length_ length, <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">auto</span> output = sanisizer::create&lt;std::vector&lt;Type_&gt; &gt;(length);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_typedef" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">RngEngine</a> rng(options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a83ac7134dd316308c639aad7e35c5d22">seed</a>);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::uniform_real_distribution&lt;&gt; unif(options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">lower</a>, options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">upper</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a> == 1) {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; v : output) {</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            v = unif(rng);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        std::uniform_real_distribution&lt;&gt; nonzero(0.0, 1.0);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; v : output) {</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            <span class="keywordflow">if</span> (nonzero(rng) &lt;= options.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a>) {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                v = unif(rng);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        }</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    }</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordflow">return</span> output;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>}</div>
 </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">#ifndef TATAMI_STRICT_SIGNATURES</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args_&gt;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#a301137d980d40a2378b3d958dff0be95">simulate_vector</a>(Args_...) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>}</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Type_, <span class="keyword">typename</span> Index_&gt;</div>
+<div class="foldopen" id="foldopen00090" data-start="{" data-end="}">
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a5c33db162521e2a547b39aae979a7b46">   90</a></span>std::vector&lt;Type_&gt; <a class="code hl_function" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">simulate_vector</a>(<span class="keyword">const</span> Index_ nrow, <span class="keyword">const</span> Index_ ncol, <span class="keyword">const</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateVectorOptions.html">SimulateVectorOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">simulate_vector&lt;Type_&gt;</a>(sanisizer::product&lt;<span class="keyword">typename</span> std::vector&lt;Type_&gt;::size_type&gt;(nrow, ncol), options);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>}</div>
+</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="preprocessor">#ifndef TATAMI_STRICT_SIGNATURES</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args_&gt;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">simulate_vector</a>(Args_...) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>}</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:16</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a301137d980d40a2378b3d958dff0be95"><div class="ttname"><a href="namespacetatami__test.html#a301137d980d40a2378b3d958dff0be95">tatami_test::simulate_vector</a></div><div class="ttdeci">std::vector&lt; Type_ &gt; simulate_vector(std::size_t length, const SimulateVectorOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:54</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a510a5abf30fd00f9a634b4374903157f"><div class="ttname"><a href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">tatami_test::simulate_vector</a></div><div class="ttdeci">std::vector&lt; Type_ &gt; simulate_vector(const Length_ length, const SimulateVectorOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:56</div></div>
 <div class="ttc" id="anamespacetatami__test_html_a5c588365e28155cfa9d18ac9d6452cc2"><div class="ttname"><a href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">tatami_test::RngEngine</a></div><div class="ttdeci">std::mt19937_64 RngEngine</div><div class="ttdef"><b>Definition</b> utils.hpp:26</div></div>
 <div class="ttc" id="anamespacetatami__test_html_a6bdf707f9d2b9be18d6dee82f017c16b"><div class="ttname"><a href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">tatami_test::SeedType</a></div><div class="ttdeci">RngEngine::result_type SeedType</div><div class="ttdef"><b>Definition</b> utils.hpp:32</div></div>
 <div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html">tatami_test::SimulateVectorOptions</a></div><div class="ttdoc">Options for simulate_vector().</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:22</div></div>

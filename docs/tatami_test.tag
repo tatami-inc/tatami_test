@@ -353,8 +353,15 @@
       <type>std::vector&lt; Type_ &gt;</type>
       <name>simulate_vector</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a301137d980d40a2378b3d958dff0be95</anchor>
-      <arglist>(std::size_t length, const SimulateVectorOptions &amp;options)</arglist>
+      <anchor>a510a5abf30fd00f9a634b4374903157f</anchor>
+      <arglist>(const Length_ length, const SimulateVectorOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Type_ &gt;</type>
+      <name>simulate_vector</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a5c33db162521e2a547b39aae979a7b46</anchor>
+      <arglist>(const Index_ nrow, const Index_ ncol, const SimulateVectorOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>TestAccessOptions</type>

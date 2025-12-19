@@ -5,7 +5,7 @@ var searchData=
   ['seedtype_2',['SeedType',['../namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b',1,'tatami_test']]],
   ['simulate_5fcompressed_5fsparse_3',['simulate_compressed_sparse',['../namespacetatami__test.html#aa076a2922437c462af9449a06534e494',1,'tatami_test']]],
   ['simulate_5fcompressed_5fsparse_2ehpp_4',['simulate_compressed_sparse.hpp',['../simulate__compressed__sparse_8hpp.html',1,'']]],
-  ['simulate_5fvector_5',['simulate_vector',['../namespacetatami__test.html#a301137d980d40a2378b3d958dff0be95',1,'tatami_test']]],
+  ['simulate_5fvector_5',['simulate_vector',['../namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f',1,'tatami_test::simulate_vector(const Length_ length, const SimulateVectorOptions &amp;options)'],['../namespacetatami__test.html#a5c33db162521e2a547b39aae979a7b46',1,'tatami_test::simulate_vector(const Index_ nrow, const Index_ ncol, const SimulateVectorOptions &amp;options)']]],
   ['simulate_5fvector_2ehpp_6',['simulate_vector.hpp',['../simulate__vector_8hpp.html',1,'']]],
   ['simulatecompressedsparseoptions_7',['SimulateCompressedSparseOptions',['../structtatami__test_1_1SimulateCompressedSparseOptions.html',1,'tatami_test']]],
   ['simulatecompressedsparseresult_8',['SimulateCompressedSparseResult',['../structtatami__test_1_1SimulateCompressedSparseResult.html',1,'tatami_test']]],
