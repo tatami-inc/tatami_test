@@ -4,6 +4,7 @@
     <name>create_indexed_subset.hpp</name>
     <path>tatami_test/</path>
     <filename>create__indexed__subset_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
@@ -31,6 +32,7 @@
     <name>simulate_compressed_sparse.hpp</name>
     <path>tatami_test/</path>
     <filename>simulate__compressed__sparse_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::SimulateCompressedSparseOptions</class>
     <class kind="struct">tatami_test::SimulateCompressedSparseResult</class>
     <namespace>tatami_test</namespace>
@@ -39,6 +41,7 @@
     <name>simulate_vector.hpp</name>
     <path>tatami_test/</path>
     <filename>simulate__vector_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::SimulateVectorOptions</class>
     <namespace>tatami_test</namespace>
   </compound>
@@ -60,8 +63,8 @@
     <name>test_access.hpp</name>
     <path>tatami_test/</path>
     <filename>test__access_8hpp.html</filename>
-    <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
     <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::TestAccessOptions</class>
     <namespace>tatami_test</namespace>
   </compound>
@@ -69,7 +72,6 @@
     <name>test_unsorted_access.hpp</name>
     <path>tatami_test/</path>
     <filename>test__unsorted__access_8hpp.html</filename>
-    <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
     <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
     <namespace>tatami_test</namespace>
@@ -78,6 +80,12 @@
     <name>throws_error.hpp</name>
     <path>tatami_test/</path>
     <filename>throws__error_8hpp.html</filename>
+    <namespace>tatami_test</namespace>
+  </compound>
+  <compound kind="file">
+    <name>utils.hpp</name>
+    <path>tatami_test/</path>
+    <filename>utils_8hpp.html</filename>
     <namespace>tatami_test</namespace>
   </compound>
   <compound kind="class">
@@ -133,10 +141,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>uint64_t</type>
+      <type>SeedType</type>
       <name>seed</name>
       <anchorfile>structtatami__test_1_1SimulateCompressedSparseOptions.html</anchorfile>
-      <anchor>ac7e8a56b94c7b6b4c0f77873e8e07125</anchor>
+      <anchor>a7aae8258e29cea76e6a1cdb2d49edec1</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -160,10 +168,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; size_t &gt;</type>
+      <type>std::vector&lt; std::size_t &gt;</type>
       <name>indptr</name>
       <anchorfile>structtatami__test_1_1SimulateCompressedSparseResult.html</anchorfile>
-      <anchor>a636035fbd75f7e04b1e87bdddcc3b12f</anchor>
+      <anchor>a958f6659005379da6e5aa0a5db91181c</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -192,10 +200,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>uint64_t</type>
+      <type>SeedType</type>
       <name>seed</name>
       <anchorfile>structtatami__test_1_1SimulateVectorOptions.html</anchorfile>
-      <anchor>a57429c082b3847c8565b246abf646405</anchor>
+      <anchor>a83ac7134dd316308c639aad7e35c5d22</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -275,6 +283,20 @@
       <anchor>a78113992690d23f99b22438c9b1a61bc</anchor>
       <arglist></arglist>
     </member>
+    <member kind="typedef">
+      <type>std::mt19937_64</type>
+      <name>RngEngine</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a5c588365e28155cfa9d18ac9d6452cc2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>RngEngine::result_type</type>
+      <name>SeedType</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a6bdf707f9d2b9be18d6dee82f017c16b</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="enumeration">
       <type></type>
       <name>TestAccessOrder</name>
@@ -289,50 +311,50 @@
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>create_indexed_subset</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>aca390af20a3df4ca06769585e0a83e52</anchor>
-      <arglist>(Index_ extent, double relative_start, double probability, uint64_t seed)</arglist>
+      <anchor>a2e5c1d145e445abaacd7288399d0a598</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double probability, const SeedType seed)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Value_ &gt;</type>
       <name>fetch</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>ad8d16e7fd20aa749b8129a72e3bd92e2</anchor>
-      <arglist>(tatami::MyopicDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, size_t number)</arglist>
+      <anchor>a67eb6169ca54e92cc30b4561f9cbaf18</anchor>
+      <arglist>(tatami::MyopicDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, std::size_t number)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Value_ &gt;</type>
       <name>fetch</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a4cc1a599ae4cc2c287443ade5f2e12fa</anchor>
-      <arglist>(tatami::OracularDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, size_t number)</arglist>
+      <anchor>afcf21ccbd5e11a3ebee4192ba9f32b2d</anchor>
+      <arglist>(tatami::OracularDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, std::size_t number)</arglist>
     </member>
     <member kind="function">
       <type>SparseVector&lt; Value_, Index_ &gt;</type>
       <name>fetch</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a02534506720e19a7bcbc06cce2545168</anchor>
-      <arglist>(tatami::MyopicSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, size_t number)</arglist>
+      <anchor>a9c02bdbebec60640a968aaf28594a2df</anchor>
+      <arglist>(tatami::MyopicSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, std::size_t number)</arglist>
     </member>
     <member kind="function">
       <type>SparseVector&lt; Value_, Index_ &gt;</type>
       <name>fetch</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>ac6dfae8859457279e7050486bd67687a</anchor>
-      <arglist>(tatami::OracularSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, size_t number)</arglist>
+      <anchor>a78cedbe93c84e5133cb5b136f72b236e</anchor>
+      <arglist>(tatami::OracularSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, std::size_t number)</arglist>
     </member>
     <member kind="function">
       <type>SimulateCompressedSparseResult&lt; Value_, Index_ &gt;</type>
       <name>simulate_compressed_sparse</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a1316149a1e9095b6b4529ffb71ef4312</anchor>
-      <arglist>(size_t primary, size_t secondary, const SimulateCompressedSparseOptions &amp;options)</arglist>
+      <anchor>aa076a2922437c462af9449a06534e494</anchor>
+      <arglist>(const Index_ primary, const Index_ secondary, const SimulateCompressedSparseOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Type_ &gt;</type>
       <name>simulate_vector</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>ac9ba93b53ec8bb86ccd8fead7f2c4233</anchor>
-      <arglist>(size_t length, const SimulateVectorOptions &amp;options)</arglist>
+      <anchor>a301137d980d40a2378b3d958dff0be95</anchor>
+      <arglist>(std::size_t length, const SimulateVectorOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>TestAccessOptions</type>
