@@ -3,7 +3,11 @@
 
 #include <random>
 #include <vector>
-#include <cstdint>
+#include <cstddef>
+
+#include "sanisizer/sanisizer.hpp"
+
+#include "utils.hpp"
 
 /**
  * @file simulate_compressed_sparse.hpp
@@ -34,7 +38,7 @@ struct SimulateCompressedSparseOptions {
     /**
      * Seed for the PRNG.
      */
-    uint64_t seed = 1234567890;
+    SeedType seed = sanisizer::cap<SeedType>(1234567890);
 };
 
 /**
@@ -63,7 +67,7 @@ struct SimulateCompressedSparseResult {
      * This contains positions on `index` that define the start and end of each primary dimension element.
      * Specifically, the stretch of entries in `index` from `[indptr[i], indptr[i+1])` contains non-zero elements for the primary dimension element `i`.
      */
-    std::vector<size_t> indptr;
+    std::vector<std::size_t> indptr;
 };
 
 /**
@@ -79,16 +83,16 @@ struct SimulateCompressedSparseResult {
  * @return Simulated values that can be used to construct a compressed sparse matrix.
  */
 template<typename Value_, typename Index_>
-SimulateCompressedSparseResult<Value_, Index_> simulate_compressed_sparse(size_t primary, size_t secondary, const SimulateCompressedSparseOptions& options) {
-    std::mt19937_64 rng(options.seed);
+SimulateCompressedSparseResult<Value_, Index_> simulate_compressed_sparse(const Index_ primary, const Index_ secondary, const SimulateCompressedSparseOptions& options) {
+    RngEngine rng(options.seed);
     std::uniform_real_distribution<> nonzero(0.0, 1.0);
     std::uniform_real_distribution<> unif(options.lower, options.upper);
 
     SimulateCompressedSparseResult<Value_, Index_> output;
-    output.indptr.resize(primary + 1);
-    for (size_t p = 0; p < primary; ++p) {
-        size_t idx = output.indptr[p];
-        for (size_t s = 0; s < secondary; ++s) {
+    output.indptr.resize(sanisizer::sum<I<decltype(output.indptr.size())> >(primary, 1));
+    for (I<decltype(primary)> p = 0; p < primary; ++p) {
+        auto idx = output.indptr[p];
+        for (I<decltype(secondary)> s = 0; s < secondary; ++s) {
             if (nonzero(rng) < options.density) {
                 output.data.push_back(unif(rng));
                 output.index.push_back(s);
@@ -100,6 +104,17 @@ SimulateCompressedSparseResult<Value_, Index_> simulate_compressed_sparse(size_t
 
     return output;
 }
+
+/**
+ * @cond
+ */
+#ifdef TATAMI_STRICT_SIGNATURES
+template<typename... Args_>
+void simulate_compressed_sparse(Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

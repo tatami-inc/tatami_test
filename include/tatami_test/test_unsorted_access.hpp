@@ -3,18 +3,17 @@
 
 #include <gtest/gtest.h>
 
-#include "tatami/utils/new_extractor.hpp"
-#include "tatami/utils/ConsecutiveOracle.hpp"
-#include "tatami/utils/FixedOracle.hpp"
-
-#include "fetch.hpp"
-#include "create_indexed_subset.hpp"
-#include "test_access.hpp"
-
 #include <vector>
 #include <limits>
 #include <random>
 #include <cmath>
+
+#include "tatami/utils/new_extractor.hpp"
+#include "tatami/utils/ConsecutiveOracle.hpp"
+#include "tatami/utils/FixedOracle.hpp"
+
+#include "create_indexed_subset.hpp"
+#include "test_access.hpp"
 
 /**
  * @file test_unsorted_access.hpp
@@ -29,9 +28,9 @@ namespace tatami_test {
 namespace internal {
 
 template<bool use_oracle_, typename Value_, typename Index_, typename ...Args_>
-void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options, Index_ extent, Args_... args) {
-    auto NR = matrix.nrow();
-    auto NC = matrix.ncol();
+void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options, const Index_ extent, Args_... args) {
+    const auto NR = matrix.nrow();
+    const auto NC = matrix.ncol();
 
     auto sequence = simulate_test_access_sequence(NR, NC, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
@@ -40,99 +39,130 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
     tatami::Options opt;
     opt.sparse_ordered_index = false;
     auto swork_uns = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
-
     opt.sparse_extract_index = false;
     auto swork_uns_v = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
-
     opt.sparse_extract_value = false;
     auto swork_uns_n = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
-
     opt.sparse_extract_index = true;
     auto swork_uns_i = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
 
-    // Looping over rows/columns and checking extraction for various unsorted combinations.
-    for (auto i : sequence) {
-        auto observed = [&]() {
-            if constexpr(use_oracle_) {
-                return fetch(*swork, extent);
-            } else {
-                return fetch(*swork, i, extent);
-            }
-        }();
+    sanisizer::as_size_type<std::vector<Value_> >(extent);
+    std::vector<Value_> mat_vbuffer(extent), mat_vstore1(extent), mat_vstore2(extent); 
+    sanisizer::as_size_type<std::vector<Index_> >(extent);
+    std::vector<Index_> mat_ibuffer(extent), mat_istore1(extent), mat_istore2(extent);
 
-        auto observed_uns = [&]() {
-            if constexpr(use_oracle_) {
-                return fetch(*swork_uns, extent);
-            } else {
-                return fetch(*swork_uns, i, extent);
-            }
-        }();
+    std::vector<std::pair<Index_, Value_> > collected;
+    std::vector<Value_> sorted_v;
+    std::vector<Index_> sorted_i;
 
+    for (const auto i : sequence) {
+        // Regular sparse retrieval.
         {
-            // Poor man's zip + unzip.
-            std::vector<std::pair<Index_, Value_> > collected;
-            collected.reserve(observed.value.size());
-            for (Index_ i = 0, end = observed_uns.value.size(); i < end; ++i) {
+            std::fill(mat_ibuffer.begin(), mat_ibuffer.end(), 0);
+            std::fill(mat_vbuffer.begin(), mat_vbuffer.end(), 0);
+            const auto vbuf = mat_vbuffer.data();
+            const auto ibuf = mat_ibuffer.data();
+
+            auto observed = [&]() {
+                if constexpr(use_oracle_) {
+                    return swork->fetch(vbuf, ibuf);
+                } else {
+                    return swork->fetch(i, vbuf, ibuf);
+                }
+            }();
+
+            mat_vstore1.clear();
+            mat_vstore1.insert(mat_vstore1.end(), observed.value, observed.value + observed.number);
+            mat_istore1.clear();
+            mat_istore1.insert(mat_istore1.end(), observed.index, observed.index + observed.number);
+        }
+
+        // Unsorted sparse retrieval with both values and indices.
+        {
+            std::fill(mat_ibuffer.begin(), mat_ibuffer.end(), 0);
+            std::fill(mat_vbuffer.begin(), mat_vbuffer.end(), 0);
+            const auto vbuf = mat_vbuffer.data();
+            const auto ibuf = mat_ibuffer.data();
+
+            auto observed_uns = [&]() {
+                if constexpr(use_oracle_) {
+                    return swork_uns->fetch(vbuf, ibuf);
+                } else {
+                    return swork_uns->fetch(i, vbuf, ibuf);
+                }
+            }();
+
+            // Poor man's zip + unzip with sorting.
+            collected.clear();
+            for (I<decltype(observed_uns.number)> i = 0; i < observed_uns.number; ++i) {
                 collected.emplace_back(observed_uns.index[i], observed_uns.value[i]);
             }
             std::sort(collected.begin(), collected.end());
-
-            std::vector<Value_> sorted_v;
-            std::vector<Index_> sorted_i;
-            sorted_v.reserve(collected.size());
-            sorted_i.reserve(collected.size());
+            sorted_i.clear();
+            sorted_v.clear();
             for (const auto& p : collected) {
                 sorted_i.push_back(p.first);
                 sorted_v.push_back(p.second);
             }
+            ASSERT_EQ(mat_istore1, sorted_i);
+            compare_vectors(mat_vstore1, sorted_v, "unsorted sparse");
 
-            ASSERT_EQ(observed.index, sorted_i);
-            compare_vectors(observed.value, sorted_v, "unsorted sparse");
+            mat_vstore1.clear();
+            mat_vstore1.insert(mat_vstore1.end(), observed_uns.value, observed_uns.value + observed_uns.number);
+            mat_istore1.clear();
+            mat_istore1.insert(mat_istore1.end(), observed_uns.index, observed_uns.index + observed_uns.number);
         }
 
+        // Unsorted sparse retrieval with indices.
         {
-            std::vector<int> indices(extent);
+            std::fill(mat_ibuffer.begin(), mat_ibuffer.end(), 0);
+            const auto ibuf = mat_ibuffer.data();
+
             auto observed_i = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_i->fetch(NULL, indices.data());
+                    return swork_uns_i->fetch(static_cast<Value_*>(NULL), ibuf);
                 } else {
-                    return swork_uns_i->fetch(i, NULL, indices.data());
+                    return swork_uns_i->fetch(i, static_cast<Value_*>(NULL), ibuf);
                 }
             }();
-            ASSERT_TRUE(observed_i.value == NULL);
 
-            tatami::copy_n(observed_i.index, observed_i.number, indices.data());
-            indices.resize(observed_i.number);
-            ASSERT_EQ(observed_uns.index, indices);
+            ASSERT_TRUE(observed_i.value == NULL);
+            mat_istore2.clear();
+            mat_istore2.insert(mat_istore2.end(), observed_i.index, observed_i.index + observed_i.number);
+            ASSERT_EQ(mat_istore1, mat_istore2);
         }
 
+        // Unsorted sparse retrieval with values.
         {
-            std::vector<double> values(extent);
+            std::fill(mat_vbuffer.begin(), mat_vbuffer.end(), 0);
+            const auto vbuf = mat_vbuffer.data();
+
             auto observed_v = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_v->fetch(values.data(), NULL);
+                    return swork_uns_v->fetch(vbuf, static_cast<Index_*>(NULL));
                 } else {
-                    return swork_uns_v->fetch(i, values.data(), NULL);
+                    return swork_uns_v->fetch(i, vbuf, static_cast<Index_*>(NULL));
                 }
             }();
-            ASSERT_TRUE(observed_v.index == NULL);
 
-            tatami::copy_n(observed_v.value, observed_v.number, values.data());
-            values.resize(observed_v.number);
-            compare_vectors(observed_uns.value, values, "unsorted sparse, values only");
+            ASSERT_TRUE(observed_v.index == NULL);
+            mat_vstore2.clear();
+            mat_vstore2.insert(mat_vstore2.end(), observed_v.value, observed_v.value + observed_v.number);
+            compare_vectors(mat_vstore1, mat_vstore2, "unsorted sparse, values only");
         }
 
         {
             auto observed_n = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_n->fetch(NULL, NULL);
+                    return swork_uns_n->fetch(static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
                 } else {
-                    return swork_uns_n->fetch(i, NULL, NULL);
+                    return swork_uns_n->fetch(i, static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
                 }
             }();
+
             ASSERT_TRUE(observed_n.value == NULL);
             ASSERT_TRUE(observed_n.index == NULL);
-            ASSERT_EQ(observed.value.size(), observed_n.number);
+            ASSERT_EQ(mat_vstore1.size(), observed_n.number);
         }
     }
 }
@@ -153,16 +183,34 @@ void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, do
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double probability, const TestAccessOptions& options) {
-    Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
+    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
     auto index_ptr = create_indexed_subset(
         nsecondary,
         relative_start,
         probability,
-        create_seed(matrix.nrow(), matrix.ncol(), options) + 1001 * probability + 13 * relative_start
+        static_cast<SeedType>(
+            create_seed(matrix.nrow(), matrix.ncol(), options)
+            + static_cast<SeedType>(1001 * probability)
+            + static_cast<SeedType>(13 * relative_start)
+        )
     );
-    Index_ num_indices = index_ptr->size();
+    const Index_ num_indices = index_ptr->size();
     internal::test_unsorted_access_base<use_oracle_>(matrix, options, num_indices, std::move(index_ptr));
 }
+
+#ifndef TATAMI_STRICT_SIGNATURES
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+#endif
 
 }
 /**
@@ -243,6 +291,23 @@ void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, 
         internal::test_unsorted_indexed_access<false>(matrix, relative_start, probability, options);
     }
 }
+
+/**
+ * @cond
+ */
+#ifndef TATAMI_STRICT_SIGNATURES
+template<typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

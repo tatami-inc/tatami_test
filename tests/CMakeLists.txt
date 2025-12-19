@@ -20,6 +20,13 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/tatami-inc/tatami
   GIT_TAG master # ^3.0.0
 )
+
+FetchContent_Declare(
+  sanisizer
+  GIT_REPOSITORY https://github.com/LTLA/sanisizer
+  GIT_TAG master # ^0.1.0
+)
+
 FetchContent_MakeAvailable(tatami)
 target_link_libraries(libtest tatami)
 

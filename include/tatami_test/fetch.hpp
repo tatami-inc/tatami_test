@@ -1,11 +1,12 @@
 #ifndef TATAMI_TEST_FETCH_HPP
 #define TATAMI_TEST_FETCH_HPP
 
+#include <vector>
+#include <cstddef>
+
 #include "tatami/base/Extractor.hpp"
 #include "tatami/base/SparseRange.hpp"
 #include "tatami/utils/copy.hpp"
-
-#include <vector>
 
 /**
  * @file fetch.hpp
@@ -17,16 +18,12 @@ namespace tatami_test {
 /**
  * @cond
  */
-namespace internal {
-
 template<typename Value_, typename Index_>
 void trim_sparse(const tatami::SparseRange<Value_, Index_>& raw, std::vector<Value_>& output_v, std::vector<Index_>& output_i) {
     tatami::copy_n(raw.value, raw.number, output_v.data());
     output_v.resize(raw.number);
     tatami::copy_n(raw.index, raw.number, output_i.data());
     output_i.resize(raw.number);
-}
-
 }
 /**
  * @endcond
@@ -43,7 +40,7 @@ void trim_sparse(const tatami::SparseRange<Value_, Index_>& raw, std::vector<Val
  * @return Vector of length `number`, containing the extracted values from row/column `i`.
  */
 template<typename Value_, typename Index_>
-std::vector<Value_> fetch(tatami::MyopicDenseExtractor<Value_, Index_>& ext, Index_ i, size_t number) {
+std::vector<Value_> fetch(tatami::MyopicDenseExtractor<Value_, Index_>& ext, Index_ i, std::size_t number) {
     std::vector<Value_> output(number);
     auto raw = ext.fetch(i, output.data());
     tatami::copy_n(raw, output.size(), output.data());
@@ -60,7 +57,7 @@ std::vector<Value_> fetch(tatami::MyopicDenseExtractor<Value_, Index_>& ext, Ind
  * @return Vector of length `number`, containing the extracted values from the next row/column. 
  */
 template<typename Value_, typename Index_>
-std::vector<Value_> fetch(tatami::OracularDenseExtractor<Value_, Index_>& ext, size_t number) {
+std::vector<Value_> fetch(tatami::OracularDenseExtractor<Value_, Index_>& ext, std::size_t number) {
     std::vector<Value_> output(number);
     auto raw = ext.fetch(output.data());
     tatami::copy_n(raw, output.size(), output.data());
@@ -105,10 +102,10 @@ struct SparseVector {
  * @return Sparse vector containing up to `number` extracted values from row/column `i`.
  */
 template<typename Value_, typename Index_>
-SparseVector<Value_, Index_> fetch(tatami::MyopicSparseExtractor<Value_, Index_>& ext, Index_ i, size_t number) {
+SparseVector<Value_, Index_> fetch(tatami::MyopicSparseExtractor<Value_, Index_>& ext, Index_ i, std::size_t number) {
     SparseVector<Value_, Index_> output(number);
     auto raw = ext.fetch(i, output.value.data(), output.index.data());
-    internal::trim_sparse(raw, output.value, output.index);
+    trim_sparse(raw, output.value, output.index);
     return output;
 }
 
@@ -122,12 +119,32 @@ SparseVector<Value_, Index_> fetch(tatami::MyopicSparseExtractor<Value_, Index_>
  * @return Sparse vector containing up to `number` extracted values from the next row/column.
  */
 template<typename Value_, typename Index_>
-SparseVector<Value_, Index_> fetch(tatami::OracularSparseExtractor<Value_, Index_>& ext, size_t number) {
+SparseVector<Value_, Index_> fetch(tatami::OracularSparseExtractor<Value_, Index_>& ext, std::size_t number) {
     SparseVector<Value_, Index_> output(number);
     auto raw = ext.fetch(output.value.data(), output.index.data());
-    internal::trim_sparse(raw, output.value, output.index);
+    trim_sparse(raw, output.value, output.index);
     return output;
 }
+
+/**
+ * @cond
+ */
+#ifdef TATAMI_STRICT_SIGNATURES
+template<typename Value_, typename Index_, typename ... Args_>
+void fetch(tatami::MyopicDenseExtractor<Value_, Index_>& ext, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void fetch(tatami::OracularDenseExtractor<Value_, Index_>& ext, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void fetch(tatami::MyopicSparseExtractor<Value_, Index_>& ext, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void fetch(tatami::OracularSparseExtractor<Value_, Index_>& ext, Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

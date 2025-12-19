@@ -2,10 +2,10 @@
 #include "tatami_test/simulate_vector.hpp"
 #include "tatami/tatami.hpp"
 
-static std::vector<double> manual_transpose(size_t NR, size_t NC, const std::vector<double>& contents) {
+static std::vector<double> manual_transpose(std::size_t NR, std::size_t NC, const std::vector<double>& contents) {
     std::vector<double> transposed(NR * NC);
-    for (size_t r = 0; r < NR; ++r) {
-        for (size_t c = 0; c < NC; ++c) {
+    for (std::size_t r = 0; r < NR; ++r) {
+        for (std::size_t c = 0; c < NC; ++c) {
             transposed[c * NR + r] = contents[r * NC + c];
         }
     }
@@ -25,11 +25,11 @@ TEST_P(TestAccessTest, Parametrized) {
 
     tatami_test::test_full_access(mat, ref, options);
 
-    tatami_test::test_block_access(mat, ref, 0, 0.7, options);
+    tatami_test::test_block_access(mat, ref, 0.0, 0.7, options);
     tatami_test::test_block_access(mat, ref, 0.27, 0.6, options);
     tatami_test::test_block_access(mat, ref, 0.51, 0.4, options);
 
-    tatami_test::test_indexed_access(mat, ref, 0, 0.1, options);
+    tatami_test::test_indexed_access(mat, ref, 0.0, 0.1, options);
     tatami_test::test_indexed_access(mat, ref, 0.3, 0.2, options);
     tatami_test::test_indexed_access(mat, ref, 0.7, 0.5, options);
 }
@@ -42,8 +42,8 @@ TEST_P(TestAccessTest, Empty) {
         tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(), true);
         tatami::DenseMatrix<double, int, std::vector<double> > ref(NR, NC, std::vector<double>(0), false);
 
-        tatami_test::test_block_access(mat, ref, 0, 0, options);
-        tatami_test::test_indexed_access(mat, ref, 0, 1, options);
+        tatami_test::test_block_access(mat, ref, 0.0, 0.0, options);
+        tatami_test::test_indexed_access(mat, ref, 0.0, 1.0, options);
     }
 
     {
@@ -51,8 +51,8 @@ TEST_P(TestAccessTest, Empty) {
         tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(), true);
         tatami::DenseMatrix<double, int, std::vector<double> > ref(NR, NC, std::vector<double>(), false);
 
-        tatami_test::test_block_access(mat, ref, 0, 0, options);
-        tatami_test::test_indexed_access(mat, ref, 0, 1, options);
+        tatami_test::test_block_access(mat, ref, 0.0, 0.0, options);
+        tatami_test::test_indexed_access(mat, ref, 0.0, 1.0, options);
     }
 }
 

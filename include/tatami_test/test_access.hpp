@@ -3,13 +3,6 @@
 
 #include <gtest/gtest.h>
 
-#include "tatami/utils/new_extractor.hpp"
-#include "tatami/utils/ConsecutiveOracle.hpp"
-#include "tatami/utils/FixedOracle.hpp"
-
-#include "fetch.hpp"
-#include "create_indexed_subset.hpp"
-
 #include <vector>
 #include <limits>
 #include <random>
@@ -17,6 +10,13 @@
 #include <memory>
 #include <cstdint>
 #include <type_traits>
+
+#include "tatami/utils/new_extractor.hpp"
+#include "tatami/utils/ConsecutiveOracle.hpp"
+#include "tatami/utils/FixedOracle.hpp"
+
+#include "create_indexed_subset.hpp"
+#include "utils.hpp"
 
 /**
  * @file test_access.hpp
@@ -107,9 +107,9 @@ namespace internal {
 
 template<typename Value_>
 void compare_vectors(const std::vector<Value_>& expected, const std::vector<Value_>& observed, const std::string& context) {
-    size_t n_expected = expected.size();
+    const auto n_expected = expected.size();
     ASSERT_EQ(n_expected, observed.size()) << "mismatch in vector length (" << context << ")";
-    for (size_t i = 0; i < n_expected; ++i) {
+    for (I<decltype(n_expected)> i = 0; i < n_expected; ++i) {
         auto expected_val = expected[i], observed_val = observed[i];
         if (std::isnan(expected_val)) {
             EXPECT_EQ(std::isnan(expected_val), std::isnan(observed_val)) << "mismatching NaNs at position " << i << " (" << context << ")";
@@ -119,28 +119,33 @@ void compare_vectors(const std::vector<Value_>& expected, const std::vector<Valu
     }
 }
 
+template<typename Value_>
+void compare_vectors(const std::vector<Value_>& expected, const std::vector<Value_>& observed, const char* context) {
+    compare_vectors(expected, observed, std::string(context));
+}
+
 template<typename Index_>
-uint64_t create_seed(Index_ NR, Index_ NC, const TestAccessOptions& options) {
-    uint64_t seed = static_cast<uint64_t>(NR) * static_cast<uint64_t>(NC);
-    seed += 13 * static_cast<uint64_t>(options.use_row);
-    seed += 57 * static_cast<uint64_t>(options.order);
-    seed += 101 * static_cast<uint64_t>(options.jump);
+SeedType create_seed(const Index_ NR, const Index_ NC, const TestAccessOptions& options) {
+    SeedType seed = static_cast<SeedType>(NR) * static_cast<SeedType>(NC);
+    seed += 13 * static_cast<SeedType>(options.use_row);
+    seed += 57 * static_cast<SeedType>(options.order);
+    seed += 101 * static_cast<SeedType>(options.jump);
     return seed;
 }
 
 template<typename Index_>
-std::vector<Index_> simulate_test_access_sequence(Index_ NR, Index_ NC, const TestAccessOptions& options) {
+std::vector<Index_> simulate_test_access_sequence(const Index_ NR, const Index_ NC, const TestAccessOptions& options) {
     std::vector<Index_> sequence;
-    auto limit = (options.use_row ? NR : NC);
+    const auto limit = (options.use_row ? NR : NC);
 
-    std::mt19937_64 rng(create_seed(NR, NC, options));
+    RngEngine rng(create_seed(NR, NC, options));
     Index_ start = rng() % options.jump;
     if (start < limit) {
         while (1) {
             sequence.push_back(start);
-            Index_ remainder = limit - start;
+            const Index_ remainder = limit - start;
             // Make sure this comparison involves two unsigned integers to avoid GCC warnings.
-            if (static_cast<typename std::make_unsigned<Index_>::type>(remainder) <= static_cast<typename std::make_unsigned<int>::type>(options.jump)) {
+            if (sanisizer::is_less_than_or_equal(remainder, options.jump)) {
                 break;
             }
             start += options.jump;
@@ -176,115 +181,150 @@ void test_access_base(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference, 
     const TestAccessOptions& options, 
-    Index_ extent,
-    SparseExpand_ sparse_expand, 
-    Args_... args) 
-{
-    auto NR = matrix.nrow();
+    const Index_ extent,
+    const SparseExpand_ sparse_expand, 
+    Args_... args
+) {
+    const auto NR = matrix.nrow();
     ASSERT_EQ(NR, reference.nrow());
-    auto NC = matrix.ncol();
+    const auto NC = matrix.ncol();
     ASSERT_EQ(NC, reference.ncol());
 
     auto refwork = (options.use_row ? reference.dense_row(args...) : reference.dense_column(args...));
 
     auto sequence = simulate_test_access_sequence(NR, NC, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
-
     auto pwork = tatami::new_extractor<false, use_oracle_>(&matrix, options.use_row, oracle, args...);
-    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args...);
 
+    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args...);
     tatami::Options opt;
     opt.sparse_extract_index = false;
     auto swork_v = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
-
     opt.sparse_extract_value = false;
     auto swork_n = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
-
     opt.sparse_extract_index = true;
     auto swork_i = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
 
-    size_t sparse_counter = 0;
+    sanisizer::as_size_type<std::vector<Value_> >(extent);
+    std::vector<Value_> mat_dense_buffer(extent), ref_dense_buffer(extent), mat_vbuffer(extent), mat_vstore1(extent), mat_vstore2(extent); 
+    sanisizer::as_size_type<std::vector<Index_> >(extent);
+    std::vector<Index_> mat_ibuffer(extent), mat_istore1(extent), mat_istore2(extent);
+    bool has_sparse = false;
 
-    // Looping over rows/columns and checking extraction against the reference.
-    for (auto i : sequence) {
-        auto expected = fetch(*refwork, i, extent);
-
-        // Checking dense retrieval first.
+    for (const auto i : sequence) {
         {
-            auto observed = [&]() {
-                if constexpr(use_oracle_) {
-                    return fetch(*pwork, extent);
-                } else {
-                    return fetch(*pwork, i, extent);
-                }
-            }();
-            compare_vectors(expected, observed, "dense retrieval");
+            std::fill(ref_dense_buffer.begin(), ref_dense_buffer.end(), 0);
+            const auto ref_buf = ref_dense_buffer.data();
+            const auto ref_ptr = refwork->fetch(i, ref_buf);
+            tatami::copy_n(ref_ptr, extent, ref_buf);
         }
 
-        // Various flavors of sparse retrieval.
+        // Dense retrieval. 
         {
-            auto observed = [&]() {
+            std::fill(mat_dense_buffer.begin(), mat_dense_buffer.end(), 0);
+            const auto mat_buf = mat_dense_buffer.data();
+            const auto mat_ptr = [&]() {
                 if constexpr(use_oracle_) {
-                    return fetch(*swork, extent);
+                    return pwork->fetch(mat_buf);
                 } else {
-                    return fetch(*swork, i, extent);
+                    return pwork->fetch(i, mat_buf);
                 }
             }();
-            compare_vectors(expected, sparse_expand(observed), "sparse retrieval");
+            tatami::copy_n(mat_ptr, extent, mat_buf);
+            compare_vectors(ref_dense_buffer, mat_dense_buffer, "dense retrieval");
+        }
 
-            sparse_counter += observed.value.size();
-            {
-                bool is_increasing = true;
-                for (size_t i = 1; i < observed.index.size(); ++i) {
-                    if (observed.index[i] <= observed.index[i-1]) {
-                        is_increasing = false;
-                        break;
-                    }
+        // Sparse retrieval with both values and indices.
+        {
+            std::fill(mat_vbuffer.begin(), mat_vbuffer.end(), 0);
+            std::fill(mat_ibuffer.begin(), mat_ibuffer.end(), 0);
+            const auto vbuf = mat_vbuffer.data();
+            const auto ibuf = mat_ibuffer.data();
+
+            const auto observed = [&]() {
+                if constexpr(use_oracle_) {
+                    return swork->fetch(vbuf, ibuf);
+                } else {
+                    return swork->fetch(i, vbuf, ibuf);
                 }
-                ASSERT_TRUE(is_increasing);
+            }();
+            compare_vectors(ref_dense_buffer, sparse_expand(observed), "sparse retrieval");
+
+            if (!has_sparse && sanisizer::is_less_than(observed.number, extent)) {
+                has_sparse = true;
             }
 
-            std::vector<Index_> indices(extent);
+            bool is_increasing = true;
+            for (I<decltype(observed.number)> i = 1; i < observed.number; ++i) {
+                if (observed.index[i] <= observed.index[i-1]) {
+                    is_increasing = false;
+                    break;
+                }
+            }
+            ASSERT_TRUE(is_increasing);
+
+            mat_vstore1.clear();
+            mat_vstore1.insert(mat_vstore1.end(), observed.value, observed.value + observed.number);
+            mat_istore1.clear();
+            mat_istore1.insert(mat_istore1.end(), observed.index, observed.index + observed.number);
+        }
+
+        // Sparse retrieval with indices only.
+        {
+            std::fill(mat_ibuffer.begin(), mat_ibuffer.end(), 0);
+            const auto ibuf = mat_ibuffer.data();
+
             auto observed_i = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_i->fetch(NULL, indices.data());
+                    return swork_i->fetch(static_cast<Value_*>(NULL), ibuf);
                 } else {
-                    return swork_i->fetch(i, NULL, indices.data());
+                    return swork_i->fetch(i, static_cast<Value_*>(NULL), ibuf);
                 }
             }();
-            ASSERT_TRUE(observed_i.value == NULL);
-            tatami::copy_n(observed_i.index, observed_i.number, indices.data());
-            indices.resize(observed_i.number);
-            ASSERT_EQ(observed.index, indices);
 
-            std::vector<Value_> values(extent);
+            ASSERT_TRUE(observed_i.value == NULL);
+            mat_istore2.clear();
+            mat_istore2.insert(mat_istore2.end(), observed_i.index, observed_i.index + observed_i.number);
+            ASSERT_EQ(mat_istore1, mat_istore2);
+        }
+
+        // Sparse retrieval with values only.
+        {
+            std::fill(mat_vbuffer.begin(), mat_vbuffer.end(), 0);
+            const auto vbuf = mat_vbuffer.data();
+
             auto observed_v = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_v->fetch(values.data(), NULL);
+                    return swork_v->fetch(vbuf, static_cast<Index_*>(NULL));
                 } else {
-                    return swork_v->fetch(i, values.data(), NULL);
+                    return swork_v->fetch(i, vbuf, static_cast<Index_*>(NULL));
                 }
             }();
-            ASSERT_TRUE(observed_v.index == NULL);
-            tatami::copy_n(observed_v.value, observed_v.number, values.data());
-            values.resize(observed_v.number);
-            compare_vectors(values, observed.value, "sparse retrieval with values only");
 
+            ASSERT_TRUE(observed_v.index == NULL);
+            mat_vstore2.clear();
+            mat_vstore2.insert(mat_vstore2.end(), observed_v.value, observed_v.value + observed_v.number);
+            compare_vectors(mat_vstore1, mat_vstore2, "sparse retrieval with values only");
+        }
+
+        // Sparse retrieval with neither indices or values.
+        {
             auto observed_n = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_n->fetch(NULL, NULL);
+                    return swork_n->fetch(static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
                 } else {
-                    return swork_n->fetch(i, NULL, NULL);
+                    return swork_n->fetch(i, static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
                 }
             }();
+
             ASSERT_TRUE(observed_n.value == NULL);
             ASSERT_TRUE(observed_n.index == NULL);
-            ASSERT_EQ(observed.value.size(), observed_n.number);
+            ASSERT_EQ(mat_vstore1.size(), observed_n.number);
         } 
     }
 
     if (options.check_sparse && matrix.is_sparse()) {
-        EXPECT_TRUE(sparse_counter < static_cast<size_t>(NR) * static_cast<size_t>(NC));
+        EXPECT_TRUE(has_sparse);
     }
 }
 
@@ -292,21 +332,22 @@ template<bool use_oracle_, typename Value_, typename Index_>
 void test_full_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference,
-    const TestAccessOptions& options)
-{
-    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    const TestAccessOptions& options
+) {
+    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    auto expected = sanisizer::create<std::vector<Value_> >(nsecondary);
+
     test_access_base<use_oracle_>(
         matrix,
         reference,
         options,
         nsecondary,
-        [&](const auto& svec) -> auto {
-            std::vector<Value_> output(nsecondary);
-            size_t nnz = svec.index.size();
-            for (size_t i = 0; i < nnz; ++i) {
-                output[svec.index[i]] = svec.value[i];
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
+                expected[svec.index[i]] = svec.value[i];
             }
-            return output;
+            return expected;
         }
     );
 }
@@ -315,25 +356,26 @@ template<bool use_oracle_, typename Value_, typename Index_>
 void test_block_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference,
-    double relative_start,
-    double relative_length,
-    const TestAccessOptions& options)
-{
-    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    Index_ start = nsecondary * relative_start;
-    Index_ length = nsecondary * relative_length;
+    const double relative_start,
+    const double relative_length,
+    const TestAccessOptions& options
+) {
+    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    const Index_ start = nsecondary * relative_start;
+    const Index_ length = nsecondary * relative_length;
+    auto expected = sanisizer::create<std::vector<Value_> >(length);
+
     test_access_base<use_oracle_>(
         matrix, 
         reference, 
         options,
         length,
-        [&](const auto& svec) -> auto {
-            std::vector<Value_> output(length);
-            size_t nnz = svec.index.size();
-            for (size_t i = 0; i < nnz; ++i) {
-                output[svec.index[i] - start] = svec.value[i];
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
+                expected[svec.index[i] - start] = svec.value[i];
             }
-            return output;
+            return expected;
         },
         start,
         length
@@ -344,20 +386,25 @@ template<bool use_oracle_, typename Value_, typename Index_>
 void test_indexed_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference,
-    double relative_start,
-    double probability,
-    const TestAccessOptions& options)
-{
-    Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    const double relative_start,
+    const double probability,
+    const TestAccessOptions& options
+) {
+    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
     auto index_ptr = create_indexed_subset(
         nsecondary,
         relative_start,
         probability,
-        create_seed(matrix.nrow(), matrix.ncol(), options) + 999 * probability + 85 * relative_start
+        static_cast<SeedType>(
+            create_seed(matrix.nrow(), matrix.ncol(), options)
+            + static_cast<SeedType>(999 * probability)
+            + static_cast<SeedType>(85 * relative_start)
+        )
     );
 
-    Index_ num_indices = index_ptr->size();
-    std::vector<size_t> reposition(nsecondary, -1);
+    const Index_ num_indices = index_ptr->size();
+    constexpr std::size_t placeholder = -1;
+    auto reposition = sanisizer::create<std::vector<std::size_t> >(nsecondary, placeholder);
     {
         const auto& indices = *index_ptr;
         for (Index_ i = 0; i < num_indices; ++i) {
@@ -365,15 +412,16 @@ void test_indexed_access(
         }
     }
 
+    auto expected = sanisizer::create<std::vector<Value_> >(num_indices);
+
     test_access_base<use_oracle_>(
         matrix,
         reference,
         options,
         num_indices,
-        [&](const auto& svec) -> auto {
-            std::vector<Value_> expected(num_indices);
-            size_t nnz = svec.index.size();
-            for (size_t i = 0; i < nnz; ++i) {
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
                 expected[reposition[svec.index[i]]] = svec.value[i];
             }
             return expected;
@@ -381,6 +429,32 @@ void test_indexed_access(
         std::move(index_ptr)
     );
 }
+
+#ifndef TATAMI_STRICT_SIGNATURES
+template<typename ... Args_>
+void compare_vectors(Args_...) = delete;
+
+template<typename ... Args_>
+void create_seed(Args_...) = delete;
+
+template<typename ... Args_>
+void simulate_test_access_sequence(Args_...) = delete;
+
+template<bool use_oracle_, typename ... Args_>
+void create_oracle(Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_access_base(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_full_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_block_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
+void test_indexed_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+#endif
 
 }
 /**
@@ -515,6 +589,23 @@ void test_simple_row_access(const tatami::Matrix<Value_, Index_>& matrix, const 
     options.use_row = false;
     test_full_access(matrix, reference, options);
 }
+
+/**
+ * @cond
+ */
+#ifndef TATAMI_STRICT_SIGNATURES
+template<typename Value_, typename Index_, typename ... Args_>
+void test_full_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void test_block_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+
+template<typename Value_, typename Index_, typename ... Args_>
+void test_indexed_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <random>
-#include <cstdint>
 
 #include "tatami/tatami.hpp"
+
+#include "utils.hpp"
 
 /**
  * @file create_indexed_subset.hpp
@@ -32,25 +33,37 @@ namespace tatami_test {
  * The vector will be empty if `extent = 0`, otherwise it is guaranteed to contain at least one element corresponding to `relative_start`.
  */
 template<typename Index_>
-tatami::VectorPtr<Index_> create_indexed_subset(Index_ extent, double relative_start, double probability, uint64_t seed) {
+tatami::VectorPtr<Index_> create_indexed_subset(const Index_ extent, const double relative_start, const double probability, const SeedType seed) {
     auto ptr = new std::vector<Index_>;
     tatami::VectorPtr<Index_> output(ptr);
 
     Index_ start = extent * relative_start;
-    if (start < extent) {
-        auto& indices = *ptr;
-        indices.push_back(start);
-        std::mt19937_64 rng(seed);
-        std::uniform_real_distribution udist;
-        for (Index_ i = start + 1; i < extent; ++i) {
-            if (udist(rng) < probability) {
-                indices.push_back(i);
-            }
+    if (start >= extent) {
+        return output;
+    }
+
+    ptr->push_back(start);
+    RngEngine rng(seed);
+    std::uniform_real_distribution udist;
+    for (Index_ i = start + 1; i < extent; ++i) {
+        if (udist(rng) < probability) {
+            ptr->push_back(i);
         }
     }
 
     return output;
 }
+
+/**
+ * @cond
+ */
+#ifndef TATAMI_STRICT_SIGNATURES
+template<typename ... Args_>
+void create_indexed_subset(Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

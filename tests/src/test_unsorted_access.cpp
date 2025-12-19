@@ -26,11 +26,11 @@ TEST_P(TestUnsortedAccessTest, Parametrized) {
 
     tatami_test::test_unsorted_full_access(mat, options);
 
-    tatami_test::test_unsorted_block_access(mat, 0, 0.7, options);
+    tatami_test::test_unsorted_block_access(mat, 0.0, 0.7, options);
     tatami_test::test_unsorted_block_access(mat, 0.27, 0.6, options);
     tatami_test::test_unsorted_block_access(mat, 0.51, 0.4, options);
 
-    tatami_test::test_unsorted_indexed_access(mat, 0, 0.1, options);
+    tatami_test::test_unsorted_indexed_access(mat, 0.0, 0.1, options);
     tatami_test::test_unsorted_indexed_access(mat, 0.3, 0.2, options);
     tatami_test::test_unsorted_indexed_access(mat, 0.7, 0.5, options);
 }

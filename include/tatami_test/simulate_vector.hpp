@@ -3,7 +3,11 @@
 
 #include <random>
 #include <vector>
-#include <cstdint>
+#include <cstddef>
+
+#include "sanisizer/sanisizer.hpp"
+
+#include "utils.hpp"
 
 /**
  * @file simulate_vector.hpp
@@ -34,7 +38,7 @@ struct SimulateVectorOptions {
     /**
      * Seed for the PRNG.
      */
-    uint64_t seed = 1234567890;
+    SeedType seed = 1234567890;
 };
 
 /**
@@ -47,9 +51,9 @@ struct SimulateVectorOptions {
  * @return Vector of simulated values.
  */
 template<typename Type_>
-std::vector<Type_> simulate_vector(size_t length, const SimulateVectorOptions& options) {
-    std::vector<Type_> output(length);
-    std::mt19937_64 rng(options.seed);
+std::vector<Type_> simulate_vector(std::size_t length, const SimulateVectorOptions& options) {
+    auto output = sanisizer::create<std::vector<Type_> >(length);
+    RngEngine rng(options.seed);
     std::uniform_real_distribution<> unif(options.lower, options.upper);
 
     if (options.density == 1) {
@@ -67,6 +71,17 @@ std::vector<Type_> simulate_vector(size_t length, const SimulateVectorOptions& o
 
     return output;
 }
+
+/**
+ * @cond
+ */
+#ifndef TATAMI_STRICT_SIGNATURES
+template<typename... Args_>
+void simulate_vector(Args_...) = delete;
+#endif
+/**
+ * @endcond
+ */
 
 }
 

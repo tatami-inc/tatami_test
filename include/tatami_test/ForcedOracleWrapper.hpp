@@ -1,11 +1,11 @@
 #ifndef TATAMI_TEST_FORCED_ORACLE_WRAPPER_HPP
 #define TATAMI_TEST_FORCED_ORACLE_WRAPPER_HPP
 
-#include "tatami/base/Matrix.hpp"
-#include "tatami/utils/copy.hpp"
-
 #include <algorithm>
 #include <memory>
+
+#include "tatami/base/Matrix.hpp"
+#include "tatami/utils/copy.hpp"
 
 /**
  * @file ForcedOracleWrapper.hpp
@@ -32,6 +32,19 @@ public:
      * This is typically the seed matrix that would otherwise be directly used in a delayed operation.
      */
     ForcedOracleWrapper(std::shared_ptr<const tatami::Matrix<Value_, Index_> > matrix) : my_matrix(std::move(matrix)) {}
+
+    /**
+     * @cond
+     */
+#ifdef TATAMI_STRICT_SIGNATURES
+    ForcedOracleWrapper(std::shared_ptr<tatami::Matrix<Value_, Index_> > matrix) : ForcedOracleWrapper(std::move(matrix)) {}
+
+    template<typename ... Args_>
+    ForcedOracleWrapper(Args_...) = delete;
+#endif
+    /**
+     * @endcond
+     */
 
 private:
     std::shared_ptr<const tatami::Matrix<Value_, Index_> > my_matrix;
@@ -66,54 +79,108 @@ public:
     }
 
 public:
-    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(bool row, const tatami::Options& opt) const { 
+    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(
+        const bool row,
+        const tatami::Options& opt
+    ) const { 
         return my_matrix->dense(row, opt); 
     }
 
-    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(bool row, Index_ bs, Index_ bl, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(
+        const bool row,
+        Index_ bs,
+        Index_ bl,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->dense(row, bs, bl, opt);
     }
 
-    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(bool row, tatami::VectorPtr<Index_> idx, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::MyopicDenseExtractor<Value_, Index_> > dense(
+        bool row,
+        tatami::VectorPtr<Index_> idx,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->dense(row, std::move(idx), opt);
     }
 
 public:
-    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(bool row, const tatami::Options& opt) const { 
+    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        const tatami::Options& opt
+    ) const { 
         return my_matrix->sparse(row, opt); 
     }
 
-    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(bool row, Index_ bs, Index_ bl, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        const Index_ bs,
+        const Index_ bl,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->sparse(row, bs, bl, opt);
     }
 
-    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(bool row, tatami::VectorPtr<Index_> idx, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::MyopicSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        tatami::VectorPtr<Index_> idx,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->sparse(row, std::move(idx), opt);
     }
 
 public:
-    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, const tatami::Options& opt) const { 
+    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        const tatami::Options& opt
+    ) const { 
         return my_matrix->dense(row, std::move(ora), opt); 
     }
 
-    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, Index_ bs, Index_ bl, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        const Index_ bs,
+        const Index_ bl,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->dense(row, std::move(ora), bs, bl, opt);
     }
 
-    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, tatami::VectorPtr<Index_> idx, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::OracularDenseExtractor<Value_, Index_> > dense(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        tatami::VectorPtr<Index_> idx,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->dense(row, std::move(ora), std::move(idx), opt);
     }
 
 public:
-    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, const tatami::Options& opt) const { 
+    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        const tatami::Options& opt
+    ) const { 
         return my_matrix->sparse(row, std::move(ora), opt); 
     }
 
-    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, Index_ bs, Index_ bl, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        const Index_ bs,
+        const Index_ bl,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->sparse(row, std::move(ora), bs, bl, opt);
     }
 
-    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(bool row, std::shared_ptr<const tatami::Oracle<Index_> > ora, tatami::VectorPtr<Index_> idx, const tatami::Options& opt) const {
+    std::unique_ptr<tatami::OracularSparseExtractor<Value_, Index_> > sparse(
+        const bool row,
+        std::shared_ptr<const tatami::Oracle<Index_> > ora,
+        tatami::VectorPtr<Index_> idx,
+        const tatami::Options& opt
+    ) const {
         return my_matrix->sparse(row, std::move(ora), std::move(idx), opt);
     }
 };
