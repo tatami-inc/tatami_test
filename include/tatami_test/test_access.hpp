@@ -166,9 +166,9 @@ tatami::MaybeOracle<use_oracle_, Index_> create_oracle(const std::vector<Index_>
     if constexpr(use_oracle_) {
         std::shared_ptr<tatami::Oracle<Index_> > oracle;
         if (options.jump == 1 && options.order == TestAccessOrder::FORWARD) {
-            oracle.reset(new tatami::ConsecutiveOracle<Index_>(0, sequence.size()));
+            oracle.reset(new tatami::ConsecutiveOracle<Index_>(0, sanisizer::Cast(sequence.size())));
         } else {
-            oracle.reset(new tatami::FixedViewOracle<Index_>(sequence.data(), sequence.size()));
+            oracle.reset(new tatami::FixedViewOracle<Index_>(sequence.data(), sanisizer::Cast(sequence.size())));
         }
         return oracle;
     } else {
@@ -215,7 +215,7 @@ void test_access_base(
         {
             std::fill(ref_dense_buffer.begin(), ref_dense_buffer.end(), 0);
             const auto ref_buf = ref_dense_buffer.data();
-            const auto ref_ptr = refwork->fetch(i, ref_buf);
+            const auto ref_ptr = refwork->fetch(Fix(i), ref_buf);
             tatami::copy_n(ref_ptr, extent, ref_buf);
         }
 
@@ -227,7 +227,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return pwork->fetch(mat_buf);
                 } else {
-                    return pwork->fetch(i, mat_buf);
+                    return pwork->fetch(Fix(i), mat_buf);
                 }
             }();
             tatami::copy_n(mat_ptr, extent, mat_buf);
@@ -245,7 +245,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return swork->fetch(vbuf, ibuf);
                 } else {
-                    return swork->fetch(i, vbuf, ibuf);
+                    return swork->fetch(Fix(i), vbuf, ibuf);
                 }
             }();
             compare_vectors(ref_dense_buffer, sparse_expand(observed), "sparse retrieval");
@@ -276,9 +276,9 @@ void test_access_base(
 
             auto observed_i = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_i->fetch(static_cast<Value_*>(NULL), ibuf);
+                    return swork_i->fetch(NULL, ibuf);
                 } else {
-                    return swork_i->fetch(i, static_cast<Value_*>(NULL), ibuf);
+                    return swork_i->fetch(Fix(i), NULL, ibuf);
                 }
             }();
 
@@ -295,9 +295,9 @@ void test_access_base(
 
             auto observed_v = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_v->fetch(vbuf, static_cast<Index_*>(NULL));
+                    return swork_v->fetch(vbuf, NULL);
                 } else {
-                    return swork_v->fetch(i, vbuf, static_cast<Index_*>(NULL));
+                    return swork_v->fetch(Fix(i), vbuf, NULL);
                 }
             }();
 
@@ -311,9 +311,9 @@ void test_access_base(
         {
             auto observed_n = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_n->fetch(static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
+                    return swork_n->fetch(NULL, NULL);
                 } else {
-                    return swork_n->fetch(i, static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
+                    return swork_n->fetch(Fix(i), NULL, NULL);
                 }
             }();
 
@@ -430,32 +430,6 @@ void test_indexed_access(
     );
 }
 
-#ifndef TATAMI_STRICT_SIGNATURES
-template<typename ... Args_>
-void compare_vectors(Args_...) = delete;
-
-template<typename ... Args_>
-void create_seed(Args_...) = delete;
-
-template<typename ... Args_>
-void simulate_test_access_sequence(Args_...) = delete;
-
-template<bool use_oracle_, typename ... Args_>
-void create_oracle(Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_access_base(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_full_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_block_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_indexed_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-#endif
-
 }
 /**
  * @endcond
@@ -477,8 +451,8 @@ template<typename Value_, typename Index_>
 void test_full_access(
     const tatami::Matrix<Value_, Index_>& matrix,
     const tatami::Matrix<Value_, Index_>& reference,
-    const TestAccessOptions& options)
-{
+    const TestAccessOptions& options
+) {
     if (options.use_oracle) {
         internal::test_full_access<true>(matrix, reference, options);
     } else {
@@ -510,8 +484,8 @@ void test_block_access(
     const tatami::Matrix<Value_, Index_>& reference,
     double relative_start,
     double relative_length,
-    const TestAccessOptions& options)
-{
+    const TestAccessOptions& options
+) {
     if (options.use_oracle) {
         internal::test_block_access<true>(matrix, reference, relative_start, relative_length, options);
     } else {
@@ -543,8 +517,8 @@ void test_indexed_access(
     const tatami::Matrix<Value_, Index_>& reference,
     double relative_start,
     double probability,
-    const TestAccessOptions& options)
-{
+    const TestAccessOptions& options
+) {
     if (options.use_oracle) {
         internal::test_indexed_access<true>(matrix, reference, relative_start, probability, options);
     } else {
@@ -589,23 +563,6 @@ void test_simple_row_access(const tatami::Matrix<Value_, Index_>& matrix, const 
     options.use_row = false;
     test_full_access(matrix, reference, options);
 }
-
-/**
- * @cond
- */
-#ifndef TATAMI_STRICT_SIGNATURES
-template<typename Value_, typename Index_, typename ... Args_>
-void test_full_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void test_block_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void test_indexed_access(const tatami::Matrix<Value_, Index_>&, const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-#endif
-/**
- * @endcond
- */
 
 }
 

@@ -7,6 +7,8 @@
 #include "tatami/base/Matrix.hpp"
 #include "tatami/utils/copy.hpp"
 
+#include "utils.hpp"
+
 /**
  * @file ReversedIndicesWrapper.hpp
  * @brief Reverse sparse indices during extraction.
@@ -23,18 +25,13 @@ public:
     ReversedIndicesExtractor(std::unique_ptr<tatami::SparseExtractor<oracle_, Value_, Index_> > host, const bool must_sort) : 
         my_host(std::move(host)), my_must_sort(must_sort) {}
 
-#ifdef TATAMI_STRICT_SIGNATURES
-    template<typename ... Args_>
-    ReversedIndicesExtractor(std::unique_ptr<tatami::SparseExtractor<oracle_, Value_, Index_> >, Args_...) = delete;
-#endif
-
 private:
     std::unique_ptr<tatami::SparseExtractor<oracle_, Value_, Index_> > my_host;
     bool my_must_sort;
 
 public:
     tatami::SparseRange<Value_, Index_> fetch(Index_ i, Value_* vbuffer, Index_* ibuffer) {
-        auto range = my_host->fetch(i, vbuffer, ibuffer);
+        auto range = my_host->fetch(Fix(i), vbuffer, ibuffer);
         if (!my_must_sort) {
             if (range.value) {
                 tatami::copy_n(range.value, range.number, vbuffer);
@@ -73,16 +70,6 @@ public:
      * This is typically the seed matrix that would otherwise be directly used in a delayed operation.
      */
     ReversedIndicesWrapper(std::shared_ptr<const tatami::Matrix<Value_, Index_> > matrix) : my_matrix(std::move(matrix)) {}
-
-    /**
-     * @cond
-     */
-#ifdef TATAMI_STRICT_SIGNATURES
-    // Not much to do here, we want to accept pointers to subclasses so casts are okay.
-#endif
-    /**
-     * @endcond
-     */
 
 private:
     std::shared_ptr<const tatami::Matrix<Value_, Index_> > my_matrix;

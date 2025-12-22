@@ -91,17 +91,6 @@ std::vector<Type_> simulate_vector(const Index_ nrow, const Index_ ncol, const S
     return simulate_vector<Type_>(sanisizer::product<typename std::vector<Type_>::size_type>(nrow, ncol), options);
 }
 
-/**
- * @cond
- */
-#ifndef TATAMI_STRICT_SIGNATURES
-template<typename... Args_>
-void simulate_vector(Args_...) = delete;
-#endif
-/**
- * @endcond
- */
-
 }
 
 #endif

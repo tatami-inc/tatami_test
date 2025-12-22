@@ -7,6 +7,8 @@
 #include "tatami/base/Matrix.hpp"
 #include "tatami/utils/copy.hpp"
 
+#include "utils.hpp"
+
 /**
  * @file ForcedOracleWrapper.hpp
  * @brief Forcibly use oracular extraction.
@@ -32,16 +34,6 @@ public:
      * This is typically the seed matrix that would otherwise be directly used in a delayed operation.
      */
     ForcedOracleWrapper(std::shared_ptr<const tatami::Matrix<Value_, Index_> > matrix) : my_matrix(std::move(matrix)) {}
-
-    /**
-     * @cond
-     */
-#ifdef TATAMI_STRICT_SIGNATURES
-    // Not much to do here, we want to accept pointers to subclasses so casts are okay.
-#endif
-    /**
-     * @endcond
-     */
 
 private:
     std::shared_ptr<const tatami::Matrix<Value_, Index_> > my_matrix;

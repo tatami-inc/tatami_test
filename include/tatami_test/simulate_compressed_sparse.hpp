@@ -105,17 +105,6 @@ SimulateCompressedSparseResult<Value_, Index_> simulate_compressed_sparse(const 
     return output;
 }
 
-/**
- * @cond
- */
-#ifdef TATAMI_STRICT_SIGNATURES
-template<typename... Args_>
-void simulate_compressed_sparse(Args_...) = delete;
-#endif
-/**
- * @endcond
- */
-
 }
 
 #endif

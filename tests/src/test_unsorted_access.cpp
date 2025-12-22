@@ -7,7 +7,7 @@ class TestUnsortedAccessTest : public ::testing::TestWithParam<tatami_test::Stan
 TEST_P(TestUnsortedAccessTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
-    size_t NR = 100, NC = 200;
+    const int NR = 100, NC = 200;
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
     tatami::CompressedSparseMatrix<
         double,
@@ -42,7 +42,7 @@ INSTANTIATE_TEST_SUITE_P(
 );
 
 TEST(TestUnsortedAccess, HandlesNaN) {
-    size_t NR = 100, NC = 200;
+    const int NR = 100, NC = 200;
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
     simulated.data.front() = std::numeric_limits<double>::quiet_NaN();
     simulated.data.back() = std::numeric_limits<double>::quiet_NaN();

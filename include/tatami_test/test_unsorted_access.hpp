@@ -67,7 +67,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork->fetch(vbuf, ibuf);
                 } else {
-                    return swork->fetch(i, vbuf, ibuf);
+                    return swork->fetch(Fix(i), vbuf, ibuf);
                 }
             }();
 
@@ -88,7 +88,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork_uns->fetch(vbuf, ibuf);
                 } else {
-                    return swork_uns->fetch(i, vbuf, ibuf);
+                    return swork_uns->fetch(Fix(i), vbuf, ibuf);
                 }
             }();
 
@@ -120,9 +120,9 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
 
             auto observed_i = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_i->fetch(static_cast<Value_*>(NULL), ibuf);
+                    return swork_uns_i->fetch(NULL, ibuf);
                 } else {
-                    return swork_uns_i->fetch(i, static_cast<Value_*>(NULL), ibuf);
+                    return swork_uns_i->fetch(Fix(i), NULL, ibuf);
                 }
             }();
 
@@ -139,9 +139,9 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
 
             auto observed_v = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_v->fetch(vbuf, static_cast<Index_*>(NULL));
+                    return swork_uns_v->fetch(vbuf, NULL);
                 } else {
-                    return swork_uns_v->fetch(i, vbuf, static_cast<Index_*>(NULL));
+                    return swork_uns_v->fetch(Fix(i), vbuf, NULL);
                 }
             }();
 
@@ -154,9 +154,9 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
         {
             auto observed_n = [&]() {
                 if constexpr(use_oracle_) {
-                    return swork_uns_n->fetch(static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
+                    return swork_uns_n->fetch(NULL, NULL);
                 } else {
-                    return swork_uns_n->fetch(i, static_cast<Value_*>(NULL), static_cast<Index_*>(NULL));
+                    return swork_uns_n->fetch(Fix(i), NULL, NULL);
                 }
             }();
 
@@ -169,15 +169,15 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options) {
-    Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
+    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
     internal::test_unsorted_access_base<use_oracle_>(matrix, options, nsecondary);
 }
 
 template<bool use_oracle_, typename Value_, typename Index_>
 void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double relative_length, const TestAccessOptions& options) {
-    Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
-    Index_ start = nsecondary * relative_start;
-    Index_ length = nsecondary * relative_length;
+    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
+    const Index_ start = nsecondary * relative_start;
+    const Index_ length = nsecondary * relative_length;
     internal::test_unsorted_access_base<use_oracle_>(matrix, options, nsecondary, start, length);
 }
 
@@ -197,20 +197,6 @@ void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, 
     const Index_ num_indices = index_ptr->size();
     internal::test_unsorted_access_base<use_oracle_>(matrix, options, num_indices, std::move(index_ptr));
 }
-
-#ifndef TATAMI_STRICT_SIGNATURES
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<bool use_oracle_, typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-#endif
 
 }
 /**
@@ -291,23 +277,6 @@ void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, 
         internal::test_unsorted_indexed_access<false>(matrix, relative_start, probability, options);
     }
 }
-
-/**
- * @cond
- */
-#ifndef TATAMI_STRICT_SIGNATURES
-template<typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>&, Args_...) = delete;
-#endif
-/**
- * @endcond
- */
 
 }
 

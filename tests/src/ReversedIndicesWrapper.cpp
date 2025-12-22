@@ -8,7 +8,7 @@ class ReversedIndicesWrapperTest : public ::testing::TestWithParam<tatami_test::
 TEST_P(ReversedIndicesWrapperTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
-    size_t NR = 152, NC = 198;
+    const int NR = 152, NC = 198;
     auto simulated = tatami_test::simulate_compressed_sparse<double, int>(NR, NC, tatami_test::SimulateCompressedSparseOptions());
     auto mat = std::make_shared<tatami::CompressedSparseMatrix<
         double,

@@ -42,28 +42,17 @@ tatami::VectorPtr<Index_> create_indexed_subset(const Index_ extent, const doubl
         return output;
     }
 
-    ptr->push_back(start);
+    ptr->push_back(Fix(start));
     RngEngine rng(seed);
     std::uniform_real_distribution udist;
     for (Index_ i = start + 1; i < extent; ++i) {
         if (udist(rng) < probability) {
-            ptr->push_back(i);
+            ptr->push_back(Fix(i));
         }
     }
 
     return output;
 }
-
-/**
- * @cond
- */
-#ifndef TATAMI_STRICT_SIGNATURES
-template<typename ... Args_>
-void create_indexed_subset(Args_...) = delete;
-#endif
-/**
- * @endcond
- */
 
 }
 

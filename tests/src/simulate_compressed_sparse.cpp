@@ -5,7 +5,7 @@
 
 TEST(SimulateCompressedSparse, Basic) {
     {
-        size_t primary = 20, secondary = 50;
+        const int primary = 20, secondary = 50;
         auto res = tatami_test::simulate_compressed_sparse<double, int>(primary, secondary, []{ 
             tatami_test::SimulateCompressedSparseOptions opt;
             opt.lower = 0;
@@ -21,11 +21,11 @@ TEST(SimulateCompressedSparse, Basic) {
             EXPECT_LE(x, 10);
         }
 
-        for (size_t p = 0; p < primary; ++p) {
+        for (int p = 0; p < primary; ++p) {
             auto pstart = res.indptr[p], pend = res.indptr[p + 1];
             EXPECT_TRUE(std::is_sorted(res.index.begin() + pstart, res.index.begin() + pend));
 
-            for (size_t s = pstart; s < pend; ++s) {
+            for (auto s = pstart; s < pend; ++s) {
                 EXPECT_GE(res.index[s], 0);
                 EXPECT_LT(res.index[s], secondary);
             }
@@ -33,7 +33,7 @@ TEST(SimulateCompressedSparse, Basic) {
     }
 
     {
-        size_t primary = 40, secondary = 25;
+        int primary = 40, secondary = 25;
         auto res = tatami_test::simulate_compressed_sparse<double, int>(primary, secondary, []{ 
             tatami_test::SimulateCompressedSparseOptions opt;
             opt.lower = -100;
@@ -49,11 +49,11 @@ TEST(SimulateCompressedSparse, Basic) {
             EXPECT_LE(x, -20);
         }
 
-        for (size_t p = 0; p < primary; ++p) {
+        for (int p = 0; p < primary; ++p) {
             auto pstart = res.indptr[p], pend = res.indptr[p + 1];
             EXPECT_TRUE(std::is_sorted(res.index.begin() + pstart, res.index.begin() + pend));
 
-            for (size_t s = pstart; s < pend; ++s) {
+            for (auto s = pstart; s < pend; ++s) {
                 EXPECT_GE(res.index[s], 0);
                 EXPECT_LT(res.index[s], secondary);
             }
@@ -61,7 +61,7 @@ TEST(SimulateCompressedSparse, Basic) {
     }
 
     {
-        size_t primary = 30, secondary = 40;
+        const int primary = 30, secondary = 40;
         auto res = tatami_test::simulate_compressed_sparse<double, int>(primary, secondary, []{ 
             tatami_test::SimulateCompressedSparseOptions opt;
             opt.seed = 12345;

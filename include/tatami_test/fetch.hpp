@@ -126,26 +126,6 @@ SparseVector<Value_, Index_> fetch(tatami::OracularSparseExtractor<Value_, Index
     return output;
 }
 
-/**
- * @cond
- */
-#ifdef TATAMI_STRICT_SIGNATURES
-template<typename Value_, typename Index_, typename ... Args_>
-void fetch(tatami::MyopicDenseExtractor<Value_, Index_>& ext, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void fetch(tatami::OracularDenseExtractor<Value_, Index_>& ext, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void fetch(tatami::MyopicSparseExtractor<Value_, Index_>& ext, Args_...) = delete;
-
-template<typename Value_, typename Index_, typename ... Args_>
-void fetch(tatami::OracularSparseExtractor<Value_, Index_>& ext, Args_...) = delete;
-#endif
-/**
- * @endcond
- */
-
 }
 
 #endif

@@ -17,8 +17,8 @@ class TestAccessTest : public ::testing::TestWithParam<tatami_test::StandardTest
 TEST_P(TestAccessTest, Parametrized) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
-    size_t NR = 100, NC = 200;
-    auto simulated = tatami_test::simulate_vector<double>(NR * NC, tatami_test::SimulateVectorOptions());
+    const int NR = 100, NC = 200;
+    auto simulated = tatami_test::simulate_vector<double>(NR, NC, tatami_test::SimulateVectorOptions());
     tatami::DenseMatrix<double, int, decltype(simulated)> mat(NR, NC, simulated, true);
     auto transposed = manual_transpose(NR, NC, simulated); // Manual transposition for comparison.
     tatami::DenseMatrix<double, int, decltype(simulated)> ref(NR, NC, transposed, false);
@@ -38,7 +38,7 @@ TEST_P(TestAccessTest, Empty) {
     auto options = tatami_test::convert_test_access_options(GetParam());
 
     {
-        size_t NR = 10, NC = 0;
+        const int NR = 10, NC = 0;
         tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(), true);
         tatami::DenseMatrix<double, int, std::vector<double> > ref(NR, NC, std::vector<double>(0), false);
 
@@ -47,7 +47,7 @@ TEST_P(TestAccessTest, Empty) {
     }
 
     {
-        size_t NR = 0, NC = 10;
+        const int NR = 0, NC = 10;
         tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(), true);
         tatami::DenseMatrix<double, int, std::vector<double> > ref(NR, NC, std::vector<double>(), false);
 
@@ -63,8 +63,8 @@ INSTANTIATE_TEST_SUITE_P(
 );
 
 TEST(TestAccess, Simple) {
-    size_t NR = 199, NC = 99;
-    auto simulated = tatami_test::simulate_vector<double>(NR * NC, tatami_test::SimulateVectorOptions());
+    const int NR = 199, NC = 99;
+    auto simulated = tatami_test::simulate_vector<double>(NR, NC, tatami_test::SimulateVectorOptions());
     tatami::DenseMatrix<double, int, decltype(simulated)> mat(NR, NC, simulated, true);
     auto transposed = manual_transpose(NR, NC, simulated); // Manual transposition for comparison.
     tatami::DenseMatrix<double, int, decltype(simulated)> ref(NR, NC, transposed, false);
@@ -74,7 +74,7 @@ TEST(TestAccess, Simple) {
 }
 
 TEST(TestAccess, HandlesNaN) {
-    size_t NR = 57, NC = 243;
+    const int NR = 57, NC = 243;
     auto simulated = tatami_test::simulate_vector<double>(NR * NC, tatami_test::SimulateVectorOptions());
     simulated.front() = std::numeric_limits<double>::quiet_NaN();
     simulated[1000] = std::numeric_limits<double>::quiet_NaN();
