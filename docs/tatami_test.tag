@@ -18,6 +18,7 @@
     <name>ForcedOracleWrapper.hpp</name>
     <path>tatami_test/</path>
     <filename>ForcedOracleWrapper_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="class">tatami_test::ForcedOracleWrapper</class>
     <namespace>tatami_test</namespace>
   </compound>
@@ -25,6 +26,7 @@
     <name>ReversedIndicesWrapper.hpp</name>
     <path>tatami_test/</path>
     <filename>ReversedIndicesWrapper_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="class">tatami_test::ReversedIndicesWrapper</class>
     <namespace>tatami_test</namespace>
   </compound>
