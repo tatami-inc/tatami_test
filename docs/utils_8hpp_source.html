@@ -106,18 +106,21 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Input_&gt;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">using </span>I = std::remove_reference_t&lt;std::remove_cv_t&lt;Input_&gt; &gt;;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Input_&gt; </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">using </span>Fix = sanisizer::Exact&lt;Input_&gt;;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">   31</a></span><span class="keyword">typedef</span> std::mt19937_64 <a class="code hl_typedef" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">RngEngine</a>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">   36</a></span><span class="keyword">typedef</span> <span class="keyword">typename</span> RngEngine::result_type <a class="code hl_typedef" href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>}</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// Alias deduction isn&#39;t supported until C++20.</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Input_&gt; </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">auto</span> Fix(Input_ x) {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordflow">return</span> sanisizer::Exact(x);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">   34</a></span><span class="keyword">typedef</span> std::mt19937_64 <a class="code hl_typedef" href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">RngEngine</a>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">   39</a></span><span class="keyword">typedef</span> <span class="keyword">typename</span> RngEngine::result_type <a class="code hl_typedef" href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>}</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="anamespacetatami__test_html"><div class="ttname"><a href="namespacetatami__test.html">tatami_test</a></div><div class="ttdoc">Utilities for testing tatami libraries.</div><div class="ttdef"><b>Definition</b> create_indexed_subset.hpp:16</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a5c588365e28155cfa9d18ac9d6452cc2"><div class="ttname"><a href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">tatami_test::RngEngine</a></div><div class="ttdeci">std::mt19937_64 RngEngine</div><div class="ttdef"><b>Definition</b> utils.hpp:31</div></div>
-<div class="ttc" id="anamespacetatami__test_html_a6bdf707f9d2b9be18d6dee82f017c16b"><div class="ttname"><a href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">tatami_test::SeedType</a></div><div class="ttdeci">RngEngine::result_type SeedType</div><div class="ttdef"><b>Definition</b> utils.hpp:36</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a5c588365e28155cfa9d18ac9d6452cc2"><div class="ttname"><a href="namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2">tatami_test::RngEngine</a></div><div class="ttdeci">std::mt19937_64 RngEngine</div><div class="ttdef"><b>Definition</b> utils.hpp:34</div></div>
+<div class="ttc" id="anamespacetatami__test_html_a6bdf707f9d2b9be18d6dee82f017c16b"><div class="ttname"><a href="namespacetatami__test.html#a6bdf707f9d2b9be18d6dee82f017c16b">tatami_test::SeedType</a></div><div class="ttdeci">RngEngine::result_type SeedType</div><div class="ttdef"><b>Definition</b> utils.hpp:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
