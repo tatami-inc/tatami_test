@@ -10,6 +10,7 @@
 #include <memory>
 #include <cstdint>
 #include <type_traits>
+#include <cassert>
 
 #include "tatami/utils/new_extractor.hpp"
 #include "tatami/utils/ConsecutiveOracle.hpp"
@@ -435,6 +436,7 @@ void test_access(
     const Index_ length,
     const TestAccessOptions& options
 ) {
+    assert(check_block(matrix, use_row, start, length));
     auto expected = sanisizer::create<std::vector<Value_> >(length);
     internal::test_access(
         matrix, 
@@ -478,6 +480,7 @@ void test_access(
     const tatami::VectorPtr<Index_>& indices_ptr,
     const TestAccessOptions& options
 ) {
+    assert(check_indices(matrix, use_row, indices_ptr));
     const Index_ num_indices = indices_ptr->size();
     constexpr std::size_t placeholder = -1;
     const Index_ nsecondary = (use_row ? reference.ncol() : reference.nrow());

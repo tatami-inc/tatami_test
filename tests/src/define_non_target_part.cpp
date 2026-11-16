@@ -54,3 +54,35 @@ TEST(DefineNonTargetBlock, Basic) {
     EXPECT_EQ(block.first, int(0.2 * NC));
     EXPECT_EQ(block.second, int(0.6 * NC));
 }
+
+TEST(CheckBlock, Basic) {
+    const int NR = 52, NC = 31;
+    tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(NR * NC), true);
+    EXPECT_TRUE(tatami_test::check_block(mat, true, 0, 10));
+    EXPECT_TRUE(tatami_test::check_block(mat, false, 20, 30));
+
+    EXPECT_FALSE(tatami_test::check_block(mat, true, -1, 30));
+    EXPECT_FALSE(tatami_test::check_block(mat, true, 0, -1));
+    EXPECT_FALSE(tatami_test::check_block(mat, true, NR, 30));
+    EXPECT_FALSE(tatami_test::check_block(mat, true, NR - 10, 30));
+
+    tatami::DenseMatrix<double, int, std::vector<double> > empty(0, 0, std::vector<double>(), true);
+    EXPECT_TRUE(tatami_test::check_block(empty, false, 0, 0));
+}
+
+static tatami::VectorPtr<int> create_indices(std::vector<int> payload) {
+    return std::shared_ptr<std::vector<int> >(new std::vector<int>(std::move(payload)));
+}
+
+TEST(CheckIndices, Basic) {
+    const int NR = 48, NC = 82;
+    tatami::DenseMatrix<double, int, std::vector<double> > mat(NR, NC, std::vector<double>(NR * NC), true);
+    EXPECT_TRUE(tatami_test::check_indices(mat, true, create_indices({ 0, 20, 40, 60, 80 })));
+    EXPECT_TRUE(tatami_test::check_indices(mat, false, create_indices({ 0, 10, 20, 30, 40 })));
+    EXPECT_TRUE(tatami_test::check_indices(mat, true, create_indices({})));
+
+    EXPECT_FALSE(tatami_test::check_indices(mat, true, {}));
+    EXPECT_FALSE(tatami_test::check_indices(mat, true, create_indices({ -1, 30 })));
+    EXPECT_FALSE(tatami_test::check_indices(mat, true, create_indices({ 21, 10 })));
+    EXPECT_FALSE(tatami_test::check_indices(mat, false, create_indices({ 21, 30, 60 })));
+}

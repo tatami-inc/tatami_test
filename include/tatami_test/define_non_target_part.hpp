@@ -8,6 +8,7 @@
 #include <cassert>
 
 #include "tatami/base/Matrix.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 #include "utils.hpp"
 
@@ -189,6 +190,47 @@ std::pair<Index_, Index_> define_non_target_block(
     const Index_ nsecondary = (use_row ? matrix.ncol() : matrix.nrow());
     return define_non_target_block(nsecondary, relative_start, relative_length);
 }
+
+/** 
+ * @cond
+ */
+template<typename Value_, typename Index_>
+bool check_block(const tatami::Matrix<Value_, Index_>& matrix, bool use_row, Index_ start, Index_ length) {
+    const Index_ nsecondary = (use_row ? matrix.ncol() : matrix.nrow());
+    return start >= 0 && 
+        (start < nsecondary || (nsecondary == 0 && start == 0)) &&
+        length >= 0
+        && sanisizer::is_less_than_or_equal(length, nsecondary - start);
+}
+
+template<typename Value_, typename Index_>
+bool check_indices(const tatami::Matrix<Value_, Index_>& matrix, bool use_row, const tatami::VectorPtr<Index_>& indices_ptr) {
+    if (!indices_ptr) {
+        return false;
+    }
+
+    const auto num_indices = indices_ptr->size();
+    if (num_indices == 0) {
+        return true;
+    }
+
+    auto previous = indices_ptr->front();
+    if (previous < 0) {
+        return false;
+    }
+
+    for (I<decltype(num_indices)> i = 1; i < num_indices; ++i) {
+        if ((*indices_ptr)[i] <= previous) {
+            return false;
+        }
+        previous = (*indices_ptr)[i];
+    }
+    const Index_ nsecondary = (use_row ? matrix.ncol() : matrix.nrow());
+    return indices_ptr->back() < nsecondary;
+}
+/** 
+* @cond
+*/
 
 }
 

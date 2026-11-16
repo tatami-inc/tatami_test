@@ -7,6 +7,7 @@
 #include <limits>
 #include <random>
 #include <cmath>
+#include <cassert>
 
 #include "tatami/utils/new_extractor.hpp"
 #include "tatami/utils/ConsecutiveOracle.hpp"
@@ -224,6 +225,7 @@ void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bo
  */
 template<typename Value_, typename Index_>
 void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, Index_ start, Index_ length, const TestAccessOptions& options) {
+    assert(check_block(matrix, use_row, start, length));
     internal::test_unsorted_access(matrix, use_row, options, length, start, length);
 }
 
@@ -247,6 +249,7 @@ void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bo
  */
 template<typename Value_, typename Index_>
 void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, const tatami::VectorPtr<Index_>& indices_ptr, const TestAccessOptions& options) {
+    assert(check_indices(matrix, use_row, indices_ptr));
     internal::test_unsorted_access(matrix, use_row, options, static_cast<Index_>(indices_ptr->size()), indices_ptr);
 }
 
