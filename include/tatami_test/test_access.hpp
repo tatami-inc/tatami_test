@@ -76,18 +76,49 @@ struct TestAccessOptions {
 };
 
 /**
- * Contents of `TestAccessOptions` as a tuple.
- * This is required for GoogleTest's parametrized generators, see `standard_test_access_options_combinations()`.
+ * Combination of `TestAccessOptions` parameters, specifically:
+ *
+ * 1. `bool` for `TestAccessOptions::use_oracle`.
+ * 2. `TestAccessOrder` for `TestAccessOptions::order`.
+ * 3. `int` for `TestAccessOptions::jump`.
+ *
+ * This is required for GoogleTest's parametrized generators, see `define_test_access_options_combinations()`.
  */
-typedef std::tuple<bool, bool, TestAccessOrder, int> StandardTestAccessOptions;
+typedef std::tuple<bool, TestAccessOrder, int> TestAccessOptionsCombination;
 
 /**
- * Convert from tuple-like options into a `TestAccessOptions` object.
+ * Convert from a tuple of parameters combinations into a `TestAccessOptions` object.
  * This allows `TEST_P` bodies to easily convert the `GetParam()`-supplied tuple into options for `test_access()`. 
  *
  * @param x Options as a tuple.
  * @return The same options as a `TestAccessOptions` object.
  */
+inline TestAccessOptions convert_to_test_access_options(const TestAccessOptionsCombination& x) {
+    TestAccessOptions output;
+    output.use_oracle = std::get<0>(x);
+    output.order = std::get<1>(x);
+    output.jump = std::get<2>(x);
+    return output;
+}
+
+/**
+ * @return A parametrized GoogleTest generator for all `TestAccessOptionsCombination` combinations.
+ * This should be used inside a `INSTANTIATE_TEST_SUITE_P` macro, which ensures that `GetParam()` in the `TEST_P` body returns a `StandardTestAccessOptions` instance.
+ */
+inline auto combine_test_access_options() {
+    return ::testing::Combine(
+        ::testing::Values(true, false), /* whether to use an oracle. */
+        ::testing::Values(TestAccessOrder::FORWARD, TestAccessOrder::REVERSE, TestAccessOrder::RANDOM), /* access order. */
+        ::testing::Values(1, 3) /* jump between rows/columns. */
+    );
+}
+
+/**
+ * @cond
+ */
+// Back-compatibility only.
+typedef std::tuple<bool, bool, TestAccessOrder, int> StandardTestAccessOptions;
+
 inline TestAccessOptions convert_test_access_options(const StandardTestAccessOptions& x) {
     TestAccessOptions output;
     output.use_row = std::get<0>(x);
@@ -97,10 +128,6 @@ inline TestAccessOptions convert_test_access_options(const StandardTestAccessOpt
     return output;
 }
 
-/**
- * @return A parametrized GoogleTest generator for all `TestAccessOptions` combinations.
- * This should be used inside a `INSTANTIATE_TEST_SUITE_P` macro, which ensures that `GetParam()` in the `TEST_P` body returns a `StandardTestAccessOptions` instance.
- */
 inline auto standard_test_access_options_combinations() {
     return ::testing::Combine(
         ::testing::Values(true, false), /* whether to access the rows. */
@@ -109,6 +136,9 @@ inline auto standard_test_access_options_combinations() {
         ::testing::Values(1, 3) /* jump between rows/columns. */
     );
 }
+/**
+ * @endcond
+ */
 
 /**
  * Create a seed from the `test_access()` options.
