@@ -280,10 +280,10 @@
     <class kind="struct">tatami_test::SparseVector</class>
     <class kind="struct">tatami_test::TestAccessOptions</class>
     <member kind="typedef">
-      <type>std::tuple&lt; bool, bool, TestAccessOrder, int &gt;</type>
-      <name>StandardTestAccessOptions</name>
+      <type>std::tuple&lt; bool, TestAccessOrder, int &gt;</type>
+      <name>TestAccessOptionsCombination</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a78113992690d23f99b22438c9b1a61bc</anchor>
+      <anchor>a0c0dc8dd2621f46c0771b400d50a4276</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
@@ -396,16 +396,16 @@
     </member>
     <member kind="function">
       <type>TestAccessOptions</type>
-      <name>convert_test_access_options</name>
+      <name>convert_to_test_access_options</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>ad1dc03cc54827ca6bd114bf31b1cd8f2</anchor>
-      <arglist>(const StandardTestAccessOptions &amp;x)</arglist>
+      <anchor>a4a9ef1c756f87a9b583abb86cebe6121</anchor>
+      <arglist>(const TestAccessOptionsCombination &amp;x)</arglist>
     </member>
     <member kind="function">
       <type>auto</type>
-      <name>standard_test_access_options_combinations</name>
+      <name>combine_test_access_options</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>afd66d2d9483c0249e2fb17df2973f428</anchor>
+      <anchor>a7ced20d10827c3892757b16ccf23725c</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
