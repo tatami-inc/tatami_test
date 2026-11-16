@@ -60,7 +60,7 @@ public:
  * The aim is to enable testing of `tatami::Matrix` subclasses that implement delayed operations on an existing "seed" matrix,
  * where we may wish to check that the delayed operation handles unordered sparse extraction correctly.
  * To do so, we wrap the seed in a `ReversedIndicesWrapper`, which is then used in the delayed operation;
- * the resulting matrix can then be tested with `test_unsorted_full_access()` and friends.
+ * the resulting matrix can then be tested with `test_unsorted_access()`. 
  */
 template<typename Value_, typename Index_>
 class ReversedIndicesWrapper final : public tatami::Matrix<Value_, Index_> {

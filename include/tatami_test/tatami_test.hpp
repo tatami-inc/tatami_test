@@ -2,6 +2,7 @@
 #define TATAMI_TEST_TATAMI_TEST_HPP
 
 #include "fetch.hpp"
+#include "define_non_target_part.hpp"
 #include "ForcedOracleWrapper.hpp"
 #include "ReversedIndicesWrapper.hpp"
 #include "simulate_vector.hpp"

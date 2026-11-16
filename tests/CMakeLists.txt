@@ -3,6 +3,7 @@ add_executable(
     src/simulate_vector.cpp
     src/simulate_compressed_sparse.cpp
     src/throws_error.cpp
+    src/define_non_target_part.cpp
     src/test_access.cpp
     src/test_unsorted_access.cpp
     src/ReversedIndicesWrapper.cpp

@@ -88,16 +88,29 @@ TEST(TestAccess, HandlesNaN) {
     tatami_test::test_simple_column_access(mat, ref);
 }
 
+TEST(TestAccess, ManualSeed) {
+    const int NR = 31, NC = 21;
+    auto simulated = tatami_test::simulate_vector<double>(NR * NC, tatami_test::SimulateVectorOptions());
+    tatami::DenseMatrix<double, int, decltype(simulated)> mat(NR, NC, simulated, true);
+    auto transposed = manual_transpose(NR, NC, simulated); // Manual transposition for comparison.
+    tatami::DenseMatrix<double, int, decltype(transposed)> ref(NR, NC, transposed, false);
+
+    tatami_test::TestAccessOptions opt;
+    opt.seed = 1234;
+    opt.order = tatami_test::TestAccessOrder::RANDOM;
+    tatami_test::test_access(mat, ref, true, opt); 
+}
+
 class SimulateTestAccessSequenceTest : public ::testing::TestWithParam<int> {};
 
 TEST_P(SimulateTestAccessSequenceTest, Forward) {
     auto jump = GetParam();
-    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, [&]{
+    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, true, [&]{
         tatami_test::TestAccessOptions options;
-        options.use_row = true;
         options.jump = jump;
         return options;
     }());
+
     EXPECT_LT(simulated.front(), jump);
     for (std::size_t i = 1; i < simulated.size(); ++i) {
         EXPECT_EQ(simulated[i] - simulated[i-1], jump);
@@ -107,13 +120,13 @@ TEST_P(SimulateTestAccessSequenceTest, Forward) {
 
 TEST_P(SimulateTestAccessSequenceTest, Reverse) {
     auto jump = GetParam();
-    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, [&]{
+    auto simulated = tatami_test::internal::simulate_test_access_sequence(10, 20, false, [&]{
         tatami_test::TestAccessOptions options;
-        options.use_row = false;
         options.order = tatami_test::TestAccessOrder::REVERSE;
         options.jump = jump;
         return options;
     }());
+
     EXPECT_LT(simulated.back(), jump);
     for (std::size_t i = 1; i < simulated.size(); ++i) {
         EXPECT_EQ(simulated[i - 1] - simulated[i], jump);

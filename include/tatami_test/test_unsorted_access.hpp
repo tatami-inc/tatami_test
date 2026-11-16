@@ -12,7 +12,7 @@
 #include "tatami/utils/ConsecutiveOracle.hpp"
 #include "tatami/utils/FixedOracle.hpp"
 
-#include "create_indexed_subset.hpp"
+#include "define_non_target_part.hpp"
 #include "test_access.hpp"
 
 /**
@@ -28,28 +28,28 @@ namespace tatami_test {
 namespace internal {
 
 template<bool use_oracle_, typename Value_, typename Index_, typename ...Args_>
-void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options, const Index_ extent, Args_... args) {
+void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, const TestAccessOptions& options, const Index_ extract_len, Args_... args) {
     const auto NR = matrix.nrow();
     const auto NC = matrix.ncol();
 
-    auto sequence = simulate_test_access_sequence(NR, NC, options);
+    auto sequence = simulate_test_access_sequence(NR, NC, use_row, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
-    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args...);
+    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args...);
 
     tatami::Options opt;
     opt.sparse_ordered_index = false;
-    auto swork_uns = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_uns = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = false;
-    auto swork_uns_v = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_uns_v = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_value = false;
-    auto swork_uns_n = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_uns_n = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = true;
-    auto swork_uns_i = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_uns_i = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
 
-    sanisizer::as_size_type<std::vector<Value_> >(extent);
-    std::vector<Value_> mat_vbuffer(extent), mat_vstore1(extent), mat_vstore2(extent); 
-    sanisizer::as_size_type<std::vector<Index_> >(extent);
-    std::vector<Index_> mat_ibuffer(extent), mat_istore1(extent), mat_istore2(extent);
+    sanisizer::as_size_type<std::vector<Value_> >(extract_len);
+    std::vector<Value_> mat_vbuffer(extract_len), mat_vstore1(extract_len), mat_vstore2(extract_len); 
+    sanisizer::as_size_type<std::vector<Index_> >(extract_len);
+    std::vector<Index_> mat_ibuffer(extract_len), mat_istore1(extract_len), mat_istore2(extract_len);
 
     std::vector<std::pair<Index_, Value_> > collected;
     std::vector<Value_> sorted_v;
@@ -167,35 +167,13 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
     }
 }
 
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options) {
-    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
-    internal::test_unsorted_access_base<use_oracle_>(matrix, options, nsecondary);
-}
-
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double relative_length, const TestAccessOptions& options) {
-    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
-    const Index_ start = nsecondary * relative_start;
-    const Index_ length = nsecondary * relative_length;
-    internal::test_unsorted_access_base<use_oracle_>(matrix, options, nsecondary, start, length);
-}
-
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double probability, const TestAccessOptions& options) {
-    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
-    auto index_ptr = create_indexed_subset(
-        nsecondary,
-        relative_start,
-        probability,
-        static_cast<SeedType>(
-            create_seed(matrix.nrow(), matrix.ncol(), options)
-            + static_cast<SeedType>(1001 * probability)
-            + static_cast<SeedType>(13 * relative_start)
-        )
-    );
-    const Index_ num_indices = index_ptr->size();
-    internal::test_unsorted_access_base<use_oracle_>(matrix, options, num_indices, std::move(index_ptr));
+template<typename Value_, typename Index_, typename ...Args_>
+void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, const TestAccessOptions& options, Args_... args) {
+    if (options.use_oracle) {
+        test_unsorted_access_base<true>(matrix, use_row, options, std::forward<Args_>(args)...);
+    } else {
+        test_unsorted_access_base<false>(matrix, use_row, options, std::forward<Args_>(args)...);
+    }
 }
 
 }
@@ -207,76 +185,104 @@ void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, 
  * Test unsorted sparse access to the full extent of a row/column.
  * Any discrepancies between sorted and unsorted accesses on `matrix` will raise a GoogleTest error.
  * This is intended for `tatami::Matrix` subclasses where `tatami::Options::sparse_ordered_index = false` has an effect.
- * Subclasses implementing delayed operations should consider tests with `UnorderedWrapper` instances to check that unordered access in the seed is handled correctly.
+ *
+ * When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with `ReversedIndicesWrapper` instances before calling this function.
+ * This ensures that unordered access in the seed is handled correctly.
  *
  * @tparam Value_ Type of the data.
- * @tparam Index_ Integer type for the row/column index.
+ * @tparam Index_ Integer type of the row/column index.
  *
  * @param matrix Matrix for which to test access.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
  * @param options Further options for testing.
  */
 template<typename Value_, typename Index_>
-void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options) {
-    if (options.use_oracle) {
-        internal::test_unsorted_full_access<true>(matrix, options);
-    } else {
-        internal::test_unsorted_full_access<false>(matrix, options);
-    }
+void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, const TestAccessOptions& options) {
+    const Index_ nsecondary = (use_row ? matrix.ncol() : matrix.nrow());
+    internal::test_unsorted_access(matrix, use_row, options, nsecondary);
 }
 
 /**
  * Test unsorted sparse access to a contiguous block of a row/column.
  * Any discrepancies between sorted and unsorted accesses on `matrix` will raise a GoogleTest error.
  * This is intended for `tatami::Matrix` subclasses where `tatami::Options::sparse_ordered_index = false` has an effect.
- * Subclasses implementing delayed operations should consider tests with `UnorderedWrapper` instances to check that unordered access in the seed is handled correctly.
+ *
+ * When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with `ReversedIndicesWrapper` instances before calling this function.
+ * This ensures that unordered access in the seed is handled correctly.
  *
  * @tparam Value_ Type of the data.
- * @tparam Index_ Integer type for the row/column index.
+ * @tparam Index_ Integer type of the row/column index.
  *
  * @param matrix Matrix for which to test access.
- * @param relative_start Start of the block, as a proportion of the extent of the non-target dimension.
- * The (floored) product of this value and the non-target extent is used as the index of the first row/column of the block.
- * This should lie in `[0, 1)`.
- * @param relative_length Length of the block, as a proportion of the extent of the non-target dimension.
- * This should lie in `[0, 1)`, and the sum of `relative_start` and `relative_length` should be no greater than 1.
- * The (floored) product of this value and the non-target extent is used as the number of rows/columns in the block.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param start Start of the block on the non-target dimension.
+ * These are the columns if `use_row = true` and the rows otherwise.
+ * @param length Length of the block on the non-target dimension.
  * @param options Further options for testing.
  */
 template<typename Value_, typename Index_>
-void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double relative_length, const TestAccessOptions& options) {
-    if (options.use_oracle) {
-        internal::test_unsorted_block_access<true>(matrix, relative_start, relative_length, options);
-    } else {
-        internal::test_unsorted_block_access<false>(matrix, relative_start, relative_length, options);
-    }
+void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, Index_ start, Index_ length, const TestAccessOptions& options) {
+    internal::test_unsorted_access(matrix, use_row, options, length, start, length);
 }
 
 /**
  * Test unsorted sparse access to an indexed subset of a row/column.
  * Any discrepancies between sorted and unsorted accesses on `matrix` will raise a GoogleTest error.
  * This function is intended for `tatami::Matrix` subclasses where `tatami::Options::sparse_ordered_index = false` has an effect.
- * Subclasses implementing delayed operations should consider tests with `UnorderedWrapper` instances to check that unordered access in the seed is handled correctly.
+ *
+ * When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with `ReversedIndicesWrapper` instances before calling this function.
+ * This ensures that unordered access in the seed is handled correctly.
  *
  * @tparam Value_ Type of the data.
- * @tparam Index_ Integer type for the row/column index.
+ * @tparam Index_ Integer type of the row/column index.
  *
  * @param matrix Matrix for which to test access.
- * @param relative_start Start of the indexed subset, as a proportion of the extent of the non-target dimension.
- * The (floored) product of this value and the non-target extent is used as the index of the first row/column in the indexed subset.
- * This should lie in `[0, 1)`.
- * @param probability Probability of sampling rows/columns when simulating the indexed subset.
- * This should lie in `[0, 1]`.
- * Only rows/columns after the first index (as defined by `relative_start`) are considered.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param indices_ptr Pointer to a vector of sorted and unique indices on the non-target dimension.
+ * These are the columns if `use_row = true` and the rows otherwise.
  * @param options Further options for testing.
  */
 template<typename Value_, typename Index_>
-void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double probability, const TestAccessOptions& options) {
-    if (options.use_oracle) {
-        internal::test_unsorted_indexed_access<true>(matrix, relative_start, probability, options);
-    } else {
-        internal::test_unsorted_indexed_access<false>(matrix, relative_start, probability, options);
-    }
+void test_unsorted_access(const tatami::Matrix<Value_, Index_>& matrix, const bool use_row, const tatami::VectorPtr<Index_>& indices_ptr, const TestAccessOptions& options) {
+    internal::test_unsorted_access(matrix, use_row, options, static_cast<Index_>(indices_ptr->size()), indices_ptr);
 }
+
+/**
+ * @cond
+ */
+// Back-compatibility.
+template<typename Value_, typename Index_>
+void test_unsorted_full_access(const tatami::Matrix<Value_, Index_>& matrix, const TestAccessOptions& options) {
+    test_unsorted_access(matrix, options.use_row, options);
+}
+
+template<typename Value_, typename Index_>
+void test_unsorted_block_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double relative_length, const TestAccessOptions& options) {
+    auto block = define_non_target_block(matrix, options.use_row, relative_start, relative_length);
+    test_unsorted_access(matrix, options.use_row, block.first, block.second, options);
+}
+
+template<typename Value_, typename Index_>
+void test_unsorted_indexed_access(const tatami::Matrix<Value_, Index_>& matrix, double relative_start, double probability, const TestAccessOptions& options) {
+    const Index_ nsecondary = (options.use_row ? matrix.ncol() : matrix.nrow());
+    auto index_ptr = create_indexed_subset(
+        nsecondary,
+        relative_start,
+        probability,
+        static_cast<SeedType>(
+            create_seed(matrix.nrow(), matrix.ncol(), options.use_row, options)
+            + static_cast<SeedType>(1001 * probability)
+            + static_cast<SeedType>(13 * relative_start)
+        )
+    );
+    test_unsorted_access(matrix, options.use_row, index_ptr, options);
+}
+/**
+ * @endcond
+ */
 
 }
 

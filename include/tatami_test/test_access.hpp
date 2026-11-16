@@ -14,8 +14,9 @@
 #include "tatami/utils/new_extractor.hpp"
 #include "tatami/utils/ConsecutiveOracle.hpp"
 #include "tatami/utils/FixedOracle.hpp"
+#include "tatami/utils/copy.hpp"
 
-#include "create_indexed_subset.hpp"
+#include "define_non_target_part.hpp"
 #include "utils.hpp"
 
 /**
@@ -44,10 +45,12 @@ struct TestAccessOptions {
     bool use_oracle = false;
 
     /**
-     * Whether to test row access. 
-     * If `false`, column access is tested instead.
+     * @cond
      */
     bool use_row = true;
+    /**
+     * @endcond
+     */
 
     /**
      * Ordering of row/column accesses in the test.
@@ -63,6 +66,12 @@ struct TestAccessOptions {
      * Whether to check that "sparse" matrices actually have density below 1.
      */
     bool check_sparse = true;
+
+    /**
+     * Seed to use for random number generation when `jump > 1` or `order = TestAccessOrder::RANDOM`.
+     * If unset, defaults to the return value of `create_seed()`.
+     */
+    std::optional<SeedType> seed;
 };
 
 /**
@@ -101,6 +110,27 @@ inline auto standard_test_access_options_combinations() {
 }
 
 /**
+ * Create a seed from the `test_access()` options.
+ * This provides deterministic variation in the random stream across test scenarios.
+ *
+ * @param NR Number of rows of the matrix to be tested.
+ * @param NC Number of columns of the matrix to be tested.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param options Options for testing access.
+ *
+ * @return Seed value.
+ */
+template<typename Index_>
+SeedType create_seed(const Index_ NR, const Index_ NC, const bool use_row, const TestAccessOptions& options) {
+    SeedType seed = static_cast<SeedType>(NR) * static_cast<SeedType>(NC);
+    seed += 13u * static_cast<SeedType>(use_row);
+    seed += 57u * static_cast<SeedType>(options.order);
+    seed += 101u * static_cast<SeedType>(options.jump);
+    return seed;
+}
+
+/**
  * @cond
  */
 namespace internal {
@@ -112,9 +142,9 @@ void compare_vectors(const std::vector<Value_>& expected, const std::vector<Valu
     for (I<decltype(n_expected)> i = 0; i < n_expected; ++i) {
         auto expected_val = expected[i], observed_val = observed[i];
         if (std::isnan(expected_val)) {
-            EXPECT_EQ(std::isnan(expected_val), std::isnan(observed_val)) << "mismatching NaNs at position " << i << " (" << context << ")";
+            ASSERT_EQ(std::isnan(expected_val), std::isnan(observed_val)) << "mismatching NaNs at position " << i << " (" << context << ")";
         } else {
-            EXPECT_EQ(expected_val, observed_val) << "different values at position " << i << " (" << context << ")";
+            ASSERT_EQ(expected_val, observed_val) << "different values at position " << i << " (" << context << ")";
         }
     }
 }
@@ -125,21 +155,12 @@ void compare_vectors(const std::vector<Value_>& expected, const std::vector<Valu
 }
 
 template<typename Index_>
-SeedType create_seed(const Index_ NR, const Index_ NC, const TestAccessOptions& options) {
-    SeedType seed = static_cast<SeedType>(NR) * static_cast<SeedType>(NC);
-    seed += 13 * static_cast<SeedType>(options.use_row);
-    seed += 57 * static_cast<SeedType>(options.order);
-    seed += 101 * static_cast<SeedType>(options.jump);
-    return seed;
-}
+std::vector<Index_> simulate_test_access_sequence(const Index_ NR, const Index_ NC, bool use_row, const TestAccessOptions& options) {
+    RngEngine rng(create_seed(NR, NC, use_row, options));
 
-template<typename Index_>
-std::vector<Index_> simulate_test_access_sequence(const Index_ NR, const Index_ NC, const TestAccessOptions& options) {
-    std::vector<Index_> sequence;
-    const auto limit = (options.use_row ? NR : NC);
-
-    RngEngine rng(create_seed(NR, NC, options));
     Index_ start = rng() % options.jump;
+    std::vector<Index_> sequence;
+    const auto limit = (use_row ? NR : NC);
     if (start < limit) {
         while (1) {
             sequence.push_back(start);
@@ -180,6 +201,7 @@ template<bool use_oracle_, typename Value_, typename Index_, class SparseExpand_
 void test_access_base(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference, 
+    bool use_row,
     const TestAccessOptions& options, 
     const Index_ extent,
     const SparseExpand_ sparse_expand, 
@@ -190,20 +212,20 @@ void test_access_base(
     const auto NC = matrix.ncol();
     ASSERT_EQ(NC, reference.ncol());
 
-    auto refwork = (options.use_row ? reference.dense_row(args...) : reference.dense_column(args...));
+    auto refwork = (use_row ? reference.dense_row(args...) : reference.dense_column(args...));
 
-    auto sequence = simulate_test_access_sequence(NR, NC, options);
+    auto sequence = simulate_test_access_sequence(NR, NC, use_row, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
-    auto pwork = tatami::new_extractor<false, use_oracle_>(&matrix, options.use_row, oracle, args...);
+    auto pwork = tatami::new_extractor<false, use_oracle_>(&matrix, use_row, oracle, args...);
 
-    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args...);
+    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args...);
     tatami::Options opt;
     opt.sparse_extract_index = false;
-    auto swork_v = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_v = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_value = false;
-    auto swork_n = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_n = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = true;
-    auto swork_i = tatami::new_extractor<true, use_oracle_>(&matrix, options.use_row, oracle, args..., opt);
+    auto swork_i = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
 
     sanisizer::as_size_type<std::vector<Value_> >(extent);
     std::vector<Value_> mat_dense_buffer(extent), ref_dense_buffer(extent), mat_vbuffer(extent), mat_vstore1(extent), mat_vstore2(extent); 
@@ -328,106 +350,19 @@ void test_access_base(
     }
 }
 
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_full_access(
+template<typename Value_, typename Index_, typename ...Args_>
+void test_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
-    const tatami::Matrix<Value_, Index_>& reference,
-    const TestAccessOptions& options
+    const tatami::Matrix<Value_, Index_>& reference, 
+    const bool use_row,
+    const TestAccessOptions& options, 
+    Args_... args
 ) {
-    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    auto expected = sanisizer::create<std::vector<Value_> >(nsecondary);
-
-    test_access_base<use_oracle_>(
-        matrix,
-        reference,
-        options,
-        nsecondary,
-        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
-            std::fill(expected.begin(), expected.end(), 0);
-            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
-                expected[svec.index[i]] = svec.value[i];
-            }
-            return expected;
-        }
-    );
-}
-
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_block_access(
-    const tatami::Matrix<Value_, Index_>& matrix, 
-    const tatami::Matrix<Value_, Index_>& reference,
-    const double relative_start,
-    const double relative_length,
-    const TestAccessOptions& options
-) {
-    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    const Index_ start = nsecondary * relative_start;
-    const Index_ length = nsecondary * relative_length;
-    auto expected = sanisizer::create<std::vector<Value_> >(length);
-
-    test_access_base<use_oracle_>(
-        matrix, 
-        reference, 
-        options,
-        length,
-        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
-            std::fill(expected.begin(), expected.end(), 0);
-            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
-                expected[svec.index[i] - start] = svec.value[i];
-            }
-            return expected;
-        },
-        start,
-        length
-    );
-}
-
-template<bool use_oracle_, typename Value_, typename Index_>
-void test_indexed_access(
-    const tatami::Matrix<Value_, Index_>& matrix, 
-    const tatami::Matrix<Value_, Index_>& reference,
-    const double relative_start,
-    const double probability,
-    const TestAccessOptions& options
-) {
-    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
-    auto index_ptr = create_indexed_subset(
-        nsecondary,
-        relative_start,
-        probability,
-        static_cast<SeedType>(
-            create_seed(matrix.nrow(), matrix.ncol(), options)
-            + static_cast<SeedType>(999 * probability)
-            + static_cast<SeedType>(85 * relative_start)
-        )
-    );
-
-    const Index_ num_indices = index_ptr->size();
-    constexpr std::size_t placeholder = -1;
-    auto reposition = sanisizer::create<std::vector<std::size_t> >(nsecondary, placeholder);
-    {
-        const auto& indices = *index_ptr;
-        for (Index_ i = 0; i < num_indices; ++i) {
-            reposition[indices[i]] = i;
-        }
+    if (options.use_oracle) {
+        test_access_base<true>(matrix, reference, use_row, options, std::forward<Args_>(args)...);
+    } else {
+        test_access_base<false>(matrix, reference, use_row, options, std::forward<Args_>(args)...);
     }
-
-    auto expected = sanisizer::create<std::vector<Value_> >(num_indices);
-
-    test_access_base<use_oracle_>(
-        matrix,
-        reference,
-        options,
-        num_indices,
-        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
-            std::fill(expected.begin(), expected.end(), 0);
-            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
-                expected[reposition[svec.index[i]]] = svec.value[i];
-            }
-            return expected;
-        },
-        std::move(index_ptr)
-    );
 }
 
 }
@@ -444,20 +379,34 @@ void test_indexed_access(
  *
  * @param matrix Matrix for which to test access.
  * @param reference Reference matrix containing the same values as `matrix`.
- * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
- * @param options Further options for testing.
+ * This typically uses a simpler representation of the same data, e.g., a `tatami::DenseMatrix`.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param options Further options. 
  */
 template<typename Value_, typename Index_>
-void test_full_access(
+void test_access(
     const tatami::Matrix<Value_, Index_>& matrix,
     const tatami::Matrix<Value_, Index_>& reference,
+    const bool use_row,
     const TestAccessOptions& options
 ) {
-    if (options.use_oracle) {
-        internal::test_full_access<true>(matrix, reference, options);
-    } else {
-        internal::test_full_access<false>(matrix, reference, options);
-    }
+    const Index_ nsecondary = (use_row ? reference.ncol() : reference.nrow());
+    auto expected = sanisizer::create<std::vector<Value_> >(nsecondary);
+    internal::test_access(
+        matrix,
+        reference,
+        use_row,
+        options,
+        nsecondary,
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
+                expected[svec.index[i]] = svec.value[i];
+            }
+            return expected;
+        }
+    );
 }
 
 /**
@@ -469,28 +418,40 @@ void test_full_access(
  *
  * @param matrix Matrix for which to test access.
  * @param reference Reference matrix containing the same values as `matrix`.
- * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
- * @param relative_start Start of the block, as a proportion of the extent of the non-target dimension.
- * The (floored) product of this value and the non-target extent is used as the index of the first row/column of the block.
- * This should lie in `[0, 1)`.
- * @param relative_length Length of the block, as a proportion of the extent of the non-target dimension.
- * This should lie in `[0, 1)`, and the sum of `relative_start` and `relative_length` should be no greater than 1.
- * The (floored) product of this value and the non-target extent is used as the number of rows/columns in the block.
- * @param options Further options for testing.
+ * This typically uses a simpler representation of the same data, e.g., a `tatami::DenseMatrix`.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param start Start of the block on the non-target dimension.
+ * These are the columns if `use_row = true` and the rows otherwise.
+ * @param length Length of the block on the non-target dimension.
+ * @param options Further options. 
  */
 template<typename Value_, typename Index_>
-void test_block_access(
+void test_access(
     const tatami::Matrix<Value_, Index_>& matrix, 
     const tatami::Matrix<Value_, Index_>& reference,
-    double relative_start,
-    double relative_length,
+    const bool use_row,
+    const Index_ start,
+    const Index_ length,
     const TestAccessOptions& options
 ) {
-    if (options.use_oracle) {
-        internal::test_block_access<true>(matrix, reference, relative_start, relative_length, options);
-    } else {
-        internal::test_block_access<false>(matrix, reference, relative_start, relative_length, options);
-    }
+    auto expected = sanisizer::create<std::vector<Value_> >(length);
+    internal::test_access(
+        matrix, 
+        reference, 
+        use_row,
+        options,
+        length,
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
+                expected[svec.index[i] - start] = svec.value[i];
+            }
+            return expected;
+        },
+        start,
+        length
+    );
 }
 
 /**
@@ -502,42 +463,98 @@ void test_block_access(
  *
  * @param matrix Matrix for which to test access.
  * @param reference Reference matrix containing the same values as `matrix`.
- * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
- * @param relative_start Start of the indexed subset, as a proportion of the extent of the non-target dimension.
- * The (floored) product of this value and the non-target extent is used as the index of the first row/column in the indexed subset.
- * This should lie in `[0, 1)`.
- * @param probability Probability of sampling rows/columns when simulating the indexed subset.
- * This should lie in `[0, 1]`.
- * Only rows/columns after the first index (as defined by `relative_start`) are considered.
+ * This typically uses a simpler representation of the same data, e.g., a `tatami::DenseMatrix`.
+ * @param use_row Whether to test row access. 
+ * If `false`, column access is tested instead.
+ * @param indices_ptr Pointer to a vector of sorted and unique indices on the non-target dimension.
+ * These are the columns if `use_row = true` and the rows otherwise.
  * @param options Further options for testing.
  */
 template<typename Value_, typename Index_>
-void test_indexed_access(
+void test_access(
     const tatami::Matrix<Value_, Index_>& matrix,
     const tatami::Matrix<Value_, Index_>& reference,
-    double relative_start,
-    double probability,
+    const bool use_row,
+    const tatami::VectorPtr<Index_>& indices_ptr,
     const TestAccessOptions& options
 ) {
-    if (options.use_oracle) {
-        internal::test_indexed_access<true>(matrix, reference, relative_start, probability, options);
-    } else {
-        internal::test_indexed_access<false>(matrix, reference, relative_start, probability, options);
+    const Index_ num_indices = indices_ptr->size();
+    constexpr std::size_t placeholder = -1;
+    const Index_ nsecondary = (use_row ? reference.ncol() : reference.nrow());
+    auto reposition = sanisizer::create<std::vector<std::size_t> >(nsecondary, placeholder);
+    {
+        const auto& indices = *indices_ptr;
+        for (Index_ i = 0; i < num_indices; ++i) {
+            reposition[indices[i]] = i;
+        }
     }
+
+    auto expected = sanisizer::create<std::vector<Value_> >(num_indices);
+    internal::test_access(
+        matrix,
+        reference,
+        use_row,
+        options,
+        num_indices,
+        [&](const tatami::SparseRange<Value_, Index_>& svec) -> const std::vector<Value_>& {
+            std::fill(expected.begin(), expected.end(), 0);
+            for (I<decltype(svec.number)> i = 0; i < svec.number; ++i) {
+                expected[reposition[svec.index[i]]] = svec.value[i];
+            }
+            return expected;
+        },
+        indices_ptr
+    );
 }
 
+
 /**
- * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = false`.
- * All other options are set to their defaults.
- * This is intended for quick testing of matrix access when a full parametrized test suite is not required.
- *
- * @tparam Value_ Type of the data.
- * @tparam Index_ Integer type for the row/column index.
- *
- * @param matrix Matrix for which to test access.
- * @param reference Reference matrix containing the same values as `matrix`.
- * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
+ * @cond
  */
+// For back-compatibility.
+template<typename Value_, typename Index_>
+void test_full_access(
+    const tatami::Matrix<Value_, Index_>& matrix,
+    const tatami::Matrix<Value_, Index_>& reference,
+    const TestAccessOptions& options
+) {
+    test_access(matrix, reference, options.use_row, options);
+}
+
+template<typename Value_, typename Index_>
+void test_block_access(
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    const double relative_start,
+    const double relative_length,
+    const TestAccessOptions& options
+) {
+    auto block = define_non_target_block(matrix, options.use_row, relative_start, relative_length);
+    test_access(matrix, reference, options.use_row, block.first, block.second, options);
+}
+
+template<typename Value_, typename Index_>
+void test_indexed_access(
+    const tatami::Matrix<Value_, Index_>& matrix, 
+    const tatami::Matrix<Value_, Index_>& reference,
+    const double relative_start,
+    const double probability,
+    const TestAccessOptions& options
+) {
+    const Index_ nsecondary = (options.use_row ? reference.ncol() : reference.nrow());
+    auto indices_ptr = create_indexed_subset(
+        nsecondary,
+        relative_start,
+        probability,
+        static_cast<SeedType>(
+            create_seed(matrix.nrow(), matrix.ncol(), options.use_row, options)
+            + static_cast<SeedType>(999 * probability)
+            + static_cast<SeedType>(85 * relative_start)
+        )
+    );
+    test_access(matrix, reference, options.use_row, indices_ptr, options);
+}
+
 template<typename Value_, typename Index_>
 void test_simple_column_access(const tatami::Matrix<Value_, Index_>& matrix, const tatami::Matrix<Value_, Index_>& reference) {
     TestAccessOptions options;
@@ -545,24 +562,15 @@ void test_simple_column_access(const tatami::Matrix<Value_, Index_>& matrix, con
     test_full_access(matrix, reference, options);
 }
 
-/**
- * Equivalent to `test_full_access()` with `TestAccessOptions::use_row = true`.
- * All other options are set to their defaults.
- * This is intended for quick testing of matrix access when a full parametrized test suite is not required.
- *
- * @tparam Value_ Type of the data.
- * @tparam Index_ Integer type for the row/column index.
- *
- * @param matrix Matrix for which to test access.
- * @param reference Reference matrix containing the same values as `matrix`.
- * This typically uses a "known-good" representation like a `tatami::DenseRowMatrix`.
- */
 template<typename Value_, typename Index_>
 void test_simple_row_access(const tatami::Matrix<Value_, Index_>& matrix, const tatami::Matrix<Value_, Index_>& reference) {
     TestAccessOptions options;
     options.use_row = false;
     test_full_access(matrix, reference, options);
 }
+/**
+ * @endcond
+ */
 
 }
 
