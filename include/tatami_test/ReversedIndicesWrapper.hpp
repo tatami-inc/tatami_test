@@ -31,7 +31,7 @@ private:
 
 public:
     tatami::SparseRange<Value_, Index_> fetch(Index_ i, Value_* vbuffer, Index_* ibuffer) {
-        auto range = my_host->fetch(Fix(i), vbuffer, ibuffer);
+        auto range = my_host->fetch(i, vbuffer, ibuffer);
         if (!my_must_sort) {
             if (range.value) {
                 tatami::copy_n(range.value, range.number, vbuffer);

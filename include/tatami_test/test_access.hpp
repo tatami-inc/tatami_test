@@ -237,7 +237,7 @@ void test_access_base(
         {
             std::fill(ref_dense_buffer.begin(), ref_dense_buffer.end(), 0);
             const auto ref_buf = ref_dense_buffer.data();
-            const auto ref_ptr = refwork->fetch(Fix(i), ref_buf);
+            const auto ref_ptr = refwork->fetch(i, ref_buf);
             tatami::copy_n(ref_ptr, extent, ref_buf);
         }
 
@@ -249,7 +249,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return pwork->fetch(mat_buf);
                 } else {
-                    return pwork->fetch(Fix(i), mat_buf);
+                    return pwork->fetch(i, mat_buf);
                 }
             }();
             tatami::copy_n(mat_ptr, extent, mat_buf);
@@ -267,7 +267,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return swork->fetch(vbuf, ibuf);
                 } else {
-                    return swork->fetch(Fix(i), vbuf, ibuf);
+                    return swork->fetch(i, vbuf, ibuf);
                 }
             }();
             compare_vectors(ref_dense_buffer, sparse_expand(observed), "sparse retrieval");
@@ -300,7 +300,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return swork_i->fetch(NULL, ibuf);
                 } else {
-                    return swork_i->fetch(Fix(i), NULL, ibuf);
+                    return swork_i->fetch(i, NULL, ibuf);
                 }
             }();
 
@@ -319,7 +319,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return swork_v->fetch(vbuf, NULL);
                 } else {
-                    return swork_v->fetch(Fix(i), vbuf, NULL);
+                    return swork_v->fetch(i, vbuf, NULL);
                 }
             }();
 
@@ -335,7 +335,7 @@ void test_access_base(
                 if constexpr(use_oracle_) {
                     return swork_n->fetch(NULL, NULL);
                 } else {
-                    return swork_n->fetch(Fix(i), NULL, NULL);
+                    return swork_n->fetch(i, NULL, NULL);
                 }
             }();
 

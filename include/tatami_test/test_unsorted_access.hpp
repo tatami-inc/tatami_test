@@ -67,7 +67,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork->fetch(vbuf, ibuf);
                 } else {
-                    return swork->fetch(Fix(i), vbuf, ibuf);
+                    return swork->fetch(i, vbuf, ibuf);
                 }
             }();
 
@@ -88,7 +88,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork_uns->fetch(vbuf, ibuf);
                 } else {
-                    return swork_uns->fetch(Fix(i), vbuf, ibuf);
+                    return swork_uns->fetch(i, vbuf, ibuf);
                 }
             }();
 
@@ -122,7 +122,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork_uns_i->fetch(NULL, ibuf);
                 } else {
-                    return swork_uns_i->fetch(Fix(i), NULL, ibuf);
+                    return swork_uns_i->fetch(i, NULL, ibuf);
                 }
             }();
 
@@ -141,7 +141,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork_uns_v->fetch(vbuf, NULL);
                 } else {
-                    return swork_uns_v->fetch(Fix(i), vbuf, NULL);
+                    return swork_uns_v->fetch(i, vbuf, NULL);
                 }
             }();
 
@@ -156,7 +156,7 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
                 if constexpr(use_oracle_) {
                     return swork_uns_n->fetch(NULL, NULL);
                 } else {
-                    return swork_uns_n->fetch(Fix(i), NULL, NULL);
+                    return swork_uns_n->fetch(i, NULL, NULL);
                 }
             }();
 
