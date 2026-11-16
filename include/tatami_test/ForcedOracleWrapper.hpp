@@ -24,7 +24,7 @@ namespace tatami_test {
  * This wrapper ensures that `tatami::Matrix::uses_oracle()` always returns true.
  * The aim is to enable testing of `tatami::Matrix` subclasses that implement delayed operations on an existing "seed" matrix,
  * where the subclass changes its behavior depending on the return value of `tatami::Matrix::uses_oracle()`.
- * By forcing this to be true, we can check all possible behaviors in `test_full_access()` and friends. 
+ * By forcing the seed to use an oracle, we can test the all behaviors of the delayed subclass in `test_access()`. 
  */
 template<typename Value_, typename Index_>
 class ForcedOracleWrapper final : public tatami::Matrix<Value_, Index_> {

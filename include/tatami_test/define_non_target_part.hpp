@@ -229,7 +229,7 @@ bool check_indices(const tatami::Matrix<Value_, Index_>& matrix, bool use_row, c
     return indices_ptr->back() < nsecondary;
 }
 /** 
-* @cond
+* @endcond
 */
 
 }

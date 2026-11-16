@@ -37,7 +37,7 @@ namespace tatami_test {
 enum class TestAccessOrder : char { FORWARD, REVERSE, RANDOM };
 
 /**
- * @brief Options for `test_full_access()` and friends.
+ * @brief Options for `test_access()`. 
  */
 struct TestAccessOptions {
     /**
@@ -83,7 +83,7 @@ typedef std::tuple<bool, bool, TestAccessOrder, int> StandardTestAccessOptions;
 
 /**
  * Convert from tuple-like options into a `TestAccessOptions` object.
- * This allows `TEST_P` bodies to easily convert the `GetParam()`-supplied tuple into options for `test_full_access()` and friends.
+ * This allows `TEST_P` bodies to easily convert the `GetParam()`-supplied tuple into options for `test_access()`. 
  *
  * @param x Options as a tuple.
  * @return The same options as a `TestAccessOptions` object.
@@ -509,7 +509,6 @@ void test_access(
         indices_ptr
     );
 }
-
 
 /**
  * @cond
