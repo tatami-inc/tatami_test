@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.12.0">
   <compound kind="file">
-    <name>create_indexed_subset.hpp</name>
+    <name>define_non_target_part.hpp</name>
     <path>tatami_test/</path>
-    <filename>create__indexed__subset_8hpp.html</filename>
+    <filename>define__non__target__part_8hpp.html</filename>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
@@ -52,6 +52,7 @@
     <path>tatami_test/</path>
     <filename>tatami__test_8hpp.html</filename>
     <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
+    <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="ForcedOracleWrapper_8hpp" name="ForcedOracleWrapper.hpp" local="yes" import="no" module="no" objc="no">ForcedOracleWrapper.hpp</includes>
     <includes id="ReversedIndicesWrapper_8hpp" name="ReversedIndicesWrapper.hpp" local="yes" import="no" module="no" objc="no">ReversedIndicesWrapper.hpp</includes>
     <includes id="simulate__vector_8hpp" name="simulate_vector.hpp" local="yes" import="no" module="no" objc="no">simulate_vector.hpp</includes>
@@ -65,7 +66,7 @@
     <name>test_access.hpp</name>
     <path>tatami_test/</path>
     <filename>test__access_8hpp.html</filename>
-    <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
+    <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::TestAccessOptions</class>
     <namespace>tatami_test</namespace>
@@ -74,7 +75,7 @@
     <name>test_unsorted_access.hpp</name>
     <path>tatami_test/</path>
     <filename>test__unsorted__access_8hpp.html</filename>
-    <includes id="create__indexed__subset_8hpp" name="create_indexed_subset.hpp" local="yes" import="no" module="no" objc="no">create_indexed_subset.hpp</includes>
+    <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
@@ -240,13 +241,6 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>bool</type>
-      <name>use_row</name>
-      <anchorfile>structtatami__test_1_1TestAccessOptions.html</anchorfile>
-      <anchor>a69195a58cb2aaea730ff90a1dbe44bb7</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
       <type>TestAccessOrder</type>
       <name>order</name>
       <anchorfile>structtatami__test_1_1TestAccessOptions.html</anchorfile>
@@ -265,6 +259,13 @@
       <name>check_sparse</name>
       <anchorfile>structtatami__test_1_1TestAccessOptions.html</anchorfile>
       <anchor>ada12c5cca227834bd6e3c1a8c456bc35</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; SeedType &gt;</type>
+      <name>seed</name>
+      <anchorfile>structtatami__test_1_1TestAccessOptions.html</anchorfile>
+      <anchor>a0495964403236468e0951ab5c8a47a82</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -311,10 +312,38 @@
     </member>
     <member kind="function">
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
-      <name>create_indexed_subset</name>
+      <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a2e5c1d145e445abaacd7288399d0a598</anchor>
-      <arglist>(const Index_ extent, const double relative_start, const double probability, const SeedType seed)</arglist>
+      <anchor>af5ea268b2566f56037d1b18d10d12318</anchor>
+      <arglist>(const Index_ start, const Index_ max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
+      <name>define_non_target_indices</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a7d7fe6cd2ade9e2168ba069934e13bb0</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
+      <name>define_non_target_indices</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a4e30604115ca09229365a64359a3e356</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9c6448a942867179e4d3ac1575940171</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_length)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a459e0bdc55199f59f0d55d2b9fc2fb12</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Value_ &gt;</type>
@@ -380,60 +409,53 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>test_full_access</name>
+      <type>SeedType</type>
+      <name>create_seed</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>afea1690d97476f2d8be2e04d28ce048c</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const TestAccessOptions &amp;options)</arglist>
+      <anchor>a9e7a3ae6603f6dd813eb9de249aef2b6</anchor>
+      <arglist>(const Index_ NR, const Index_ NC, const bool use_row, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_block_access</name>
+      <name>test_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a142b6b606adaeec9c51a45e2db22ef0f</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double relative_length, const TestAccessOptions &amp;options)</arglist>
+      <anchor>adf699e62f3309c9c7b9a710dd7f72dc9</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_indexed_access</name>
+      <name>test_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>aa58922974821ab084b27f08829051616</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, double relative_start, double probability, const TestAccessOptions &amp;options)</arglist>
+      <anchor>a6aa86b581ba0bea195c5e3c71d036b24</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const Index_ start, const Index_ length, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_simple_column_access</name>
+      <name>test_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>ac2e64e45eb99ffaf7180c5b9fcfa6183</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</arglist>
+      <anchor>aa347779eb0ad5d3f789a140846c9b7c8</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const tatami::VectorPtr&lt; Index_ &gt; &amp;indices_ptr, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_simple_row_access</name>
+      <name>test_unsorted_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>aa7122306c2b56cbe367065397a6db86b</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference)</arglist>
+      <anchor>a069a246bb66b83fa60f09852537424b6</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_unsorted_full_access</name>
+      <name>test_unsorted_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a200be8429d1b577801821309f303b347</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const TestAccessOptions &amp;options)</arglist>
+      <anchor>abaae665f27c3751afb62501a4695896a</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, Index_ start, Index_ length, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
-      <name>test_unsorted_block_access</name>
+      <name>test_unsorted_access</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a60f759dbbe3b9cfa2f929c144d109320</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, double relative_start, double relative_length, const TestAccessOptions &amp;options)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>test_unsorted_indexed_access</name>
-      <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>aa9bc71bfba4f9790690f7631976439af</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, double relative_start, double probability, const TestAccessOptions &amp;options)</arglist>
+      <anchor>a629b6b398645be60a1c10b23e9271bca</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const tatami::VectorPtr&lt; Index_ &gt; &amp;indices_ptr, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
