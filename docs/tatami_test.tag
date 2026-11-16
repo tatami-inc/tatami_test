@@ -5,12 +5,14 @@
     <path>tatami_test/</path>
     <filename>define__non__target__part_8hpp.html</filename>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>fetch.hpp</name>
     <path>tatami_test/</path>
     <filename>fetch_8hpp.html</filename>
     <class kind="struct">tatami_test::SparseVector</class>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>ForcedOracleWrapper.hpp</name>
@@ -18,6 +20,7 @@
     <filename>ForcedOracleWrapper_8hpp.html</filename>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="class">tatami_test::ForcedOracleWrapper</class>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>ReversedIndicesWrapper.hpp</name>
@@ -25,6 +28,7 @@
     <filename>ReversedIndicesWrapper_8hpp.html</filename>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="class">tatami_test::ReversedIndicesWrapper</class>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>simulate_compressed_sparse.hpp</name>
@@ -33,6 +37,7 @@
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::SimulateCompressedSparseOptions</class>
     <class kind="struct">tatami_test::SimulateCompressedSparseResult</class>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>simulate_vector.hpp</name>
@@ -40,6 +45,22 @@
     <filename>simulate__vector_8hpp.html</filename>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::SimulateVectorOptions</class>
+    <namespace>tatami_test</namespace>
+  </compound>
+  <compound kind="file">
+    <name>tatami_test.hpp</name>
+    <path>tatami_test/</path>
+    <filename>tatami__test_8hpp.html</filename>
+    <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
+    <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
+    <includes id="ForcedOracleWrapper_8hpp" name="ForcedOracleWrapper.hpp" local="yes" import="no" module="no" objc="no">ForcedOracleWrapper.hpp</includes>
+    <includes id="ReversedIndicesWrapper_8hpp" name="ReversedIndicesWrapper.hpp" local="yes" import="no" module="no" objc="no">ReversedIndicesWrapper.hpp</includes>
+    <includes id="simulate__vector_8hpp" name="simulate_vector.hpp" local="yes" import="no" module="no" objc="no">simulate_vector.hpp</includes>
+    <includes id="simulate__compressed__sparse_8hpp" name="simulate_compressed_sparse.hpp" local="yes" import="no" module="no" objc="no">simulate_compressed_sparse.hpp</includes>
+    <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
+    <includes id="test__unsorted__access_8hpp" name="test_unsorted_access.hpp" local="yes" import="no" module="no" objc="no">test_unsorted_access.hpp</includes>
+    <includes id="throws__error_8hpp" name="throws_error.hpp" local="yes" import="no" module="no" objc="no">throws_error.hpp</includes>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>test_access.hpp</name>
@@ -48,6 +69,7 @@
     <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::TestAccessOptions</class>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>test_unsorted_access.hpp</name>
@@ -55,16 +77,19 @@
     <filename>test__unsorted__access_8hpp.html</filename>
     <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="test__access_8hpp" name="test_access.hpp" local="yes" import="no" module="no" objc="no">test_access.hpp</includes>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>throws_error.hpp</name>
     <path>tatami_test/</path>
     <filename>throws__error_8hpp.html</filename>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="file">
     <name>utils.hpp</name>
     <path>tatami_test/</path>
     <filename>utils_8hpp.html</filename>
+    <namespace>tatami_test</namespace>
   </compound>
   <compound kind="class">
     <name>tatami_test::ForcedOracleWrapper</name>
@@ -242,6 +267,202 @@
       <anchorfile>structtatami__test_1_1TestAccessOptions.html</anchorfile>
       <anchor>a0495964403236468e0951ab5c8a47a82</anchor>
       <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>tatami_test</name>
+    <filename>namespacetatami__test.html</filename>
+    <class kind="class">tatami_test::ForcedOracleWrapper</class>
+    <class kind="class">tatami_test::ReversedIndicesWrapper</class>
+    <class kind="struct">tatami_test::SimulateCompressedSparseOptions</class>
+    <class kind="struct">tatami_test::SimulateCompressedSparseResult</class>
+    <class kind="struct">tatami_test::SimulateVectorOptions</class>
+    <class kind="struct">tatami_test::SparseVector</class>
+    <class kind="struct">tatami_test::TestAccessOptions</class>
+    <member kind="typedef">
+      <type>std::tuple&lt; bool, bool, TestAccessOrder, int &gt;</type>
+      <name>StandardTestAccessOptions</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a78113992690d23f99b22438c9b1a61bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::mt19937_64</type>
+      <name>RngEngine</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a5c588365e28155cfa9d18ac9d6452cc2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>RngEngine::result_type</type>
+      <name>SeedType</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a6bdf707f9d2b9be18d6dee82f017c16b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>TestAccessOrder</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9441f51f38f3ecdda9630e3357dea497</anchor>
+      <arglist></arglist>
+      <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497abfec72bb37910c61f36b6c29a1f7ec31">FORWARD</enumvalue>
+      <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a642e0b6684e6165e142c074f1cd8d55c">REVERSE</enumvalue>
+      <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a170e02e86972c2be8559884cc3c12254">RANDOM</enumvalue>
+    </member>
+    <member kind="function">
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
+      <name>define_non_target_indices</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>af5ea268b2566f56037d1b18d10d12318</anchor>
+      <arglist>(const Index_ start, const Index_ max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
+      <name>define_non_target_indices</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a7d7fe6cd2ade9e2168ba069934e13bb0</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>tatami::VectorPtr&lt; Index_ &gt;</type>
+      <name>define_non_target_indices</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a4e30604115ca09229365a64359a3e356</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9c6448a942867179e4d3ac1575940171</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_length)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a459e0bdc55199f59f0d55d2b9fc2fb12</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Value_ &gt;</type>
+      <name>fetch</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a67eb6169ca54e92cc30b4561f9cbaf18</anchor>
+      <arglist>(tatami::MyopicDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, std::size_t number)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Value_ &gt;</type>
+      <name>fetch</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>afcf21ccbd5e11a3ebee4192ba9f32b2d</anchor>
+      <arglist>(tatami::OracularDenseExtractor&lt; Value_, Index_ &gt; &amp;ext, std::size_t number)</arglist>
+    </member>
+    <member kind="function">
+      <type>SparseVector&lt; Value_, Index_ &gt;</type>
+      <name>fetch</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9c02bdbebec60640a968aaf28594a2df</anchor>
+      <arglist>(tatami::MyopicSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, Index_ i, std::size_t number)</arglist>
+    </member>
+    <member kind="function">
+      <type>SparseVector&lt; Value_, Index_ &gt;</type>
+      <name>fetch</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a78cedbe93c84e5133cb5b136f72b236e</anchor>
+      <arglist>(tatami::OracularSparseExtractor&lt; Value_, Index_ &gt; &amp;ext, std::size_t number)</arglist>
+    </member>
+    <member kind="function">
+      <type>SimulateCompressedSparseResult&lt; Value_, Index_ &gt;</type>
+      <name>simulate_compressed_sparse</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>aa076a2922437c462af9449a06534e494</anchor>
+      <arglist>(const Index_ primary, const Index_ secondary, const SimulateCompressedSparseOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Type_ &gt;</type>
+      <name>simulate_vector</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a510a5abf30fd00f9a634b4374903157f</anchor>
+      <arglist>(const Length_ length, const SimulateVectorOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::vector&lt; Type_ &gt;</type>
+      <name>simulate_vector</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a5c33db162521e2a547b39aae979a7b46</anchor>
+      <arglist>(const Index_ nrow, const Index_ ncol, const SimulateVectorOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>TestAccessOptions</type>
+      <name>convert_test_access_options</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>ad1dc03cc54827ca6bd114bf31b1cd8f2</anchor>
+      <arglist>(const StandardTestAccessOptions &amp;x)</arglist>
+    </member>
+    <member kind="function">
+      <type>auto</type>
+      <name>standard_test_access_options_combinations</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>afd66d2d9483c0249e2fb17df2973f428</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type>SeedType</type>
+      <name>create_seed</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9e7a3ae6603f6dd813eb9de249aef2b6</anchor>
+      <arglist>(const Index_ NR, const Index_ NC, const bool use_row, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>adf699e62f3309c9c7b9a710dd7f72dc9</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a6aa86b581ba0bea195c5e3c71d036b24</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const Index_ start, const Index_ length, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>aa347779eb0ad5d3f789a140846c9b7c8</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const tatami::Matrix&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const tatami::VectorPtr&lt; Index_ &gt; &amp;indices_ptr, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_unsorted_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a069a246bb66b83fa60f09852537424b6</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_unsorted_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>abaae665f27c3751afb62501a4695896a</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, Index_ start, Index_ length, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>test_unsorted_access</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a629b6b398645be60a1c10b23e9271bca</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const tatami::VectorPtr&lt; Index_ &gt; &amp;indices_ptr, const TestAccessOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>throws_error</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>aa092fbf9c16bb002953e8594a2f9b3a6</anchor>
+      <arglist>(Function_ fun, const std::string &amp;msg)</arglist>
     </member>
   </compound>
   <compound kind="page">

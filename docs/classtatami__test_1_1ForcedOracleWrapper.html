@@ -85,7 +85,7 @@ $(function(){ initResizable(false); });
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>tatami_test</b></li><li class="navelem"><a class="el" href="classtatami__test_1_1ForcedOracleWrapper.html">ForcedOracleWrapper</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacetatami__test.html">tatami_test</a></li><li class="navelem"><a class="el" href="classtatami__test_1_1ForcedOracleWrapper.html">ForcedOracleWrapper</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div id="doc-content">
@@ -367,7 +367,7 @@ class tatami_test::ForcedOracleWrapper&lt; Value_, Index_ &gt;</div><p>Force ora
   </table>
   </dd>
 </dl>
-<p>This wrapper ensures that <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a68da21245203cf9349648c5452cdb2ca">tatami::Matrix::uses_oracle()</a></code> always returns true. The aim is to enable testing of <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses that implement delayed operations on an existing "seed" matrix, where the subclass changes its behavior depending on the return value of <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a68da21245203cf9349648c5452cdb2ca">tatami::Matrix::uses_oracle()</a></code>. By forcing this to be true, we can check all possible behaviors in <code>test_full_access()</code> and friends. </p>
+<p>This wrapper ensures that <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a68da21245203cf9349648c5452cdb2ca">tatami::Matrix::uses_oracle()</a></code> always returns true. The aim is to enable testing of <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses that implement delayed operations on an existing "seed" matrix, where the subclass changes its behavior depending on the return value of <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html#a68da21245203cf9349648c5452cdb2ca">tatami::Matrix::uses_oracle()</a></code>. By forcing the seed to use an oracle, we can test the all behaviors of the delayed subclass in <code><a class="el" href="namespacetatami__test.html#adf699e62f3309c9c7b9a710dd7f72dc9">test_access()</a></code>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af94bb7adddc01275a34e57470c1b138c" name="af94bb7adddc01275a34e57470c1b138c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af94bb7adddc01275a34e57470c1b138c">&#9670;&#160;</a></span>ForcedOracleWrapper()</h2>

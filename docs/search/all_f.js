@@ -8,5 +8,5 @@ var searchData=
   ['retrievefragmentedsparsecontentsoptions_5',['RetrieveFragmentedSparseContentsOptions',['https://tatami-inc.github.io/tatami/structtatami_1_1RetrieveFragmentedSparseContentsOptions.html',1,'tatami']]],
   ['reversedindiceswrapper_6',['ReversedIndicesWrapper',['../classtatami__test_1_1ReversedIndicesWrapper.html',1,'tatami_test::ReversedIndicesWrapper&lt; Value_, Index_ &gt;'],['../classtatami__test_1_1ReversedIndicesWrapper.html#a9c7a3c529eb78382631547da1da564fc',1,'tatami_test::ReversedIndicesWrapper::ReversedIndicesWrapper()']]],
   ['reversedindiceswrapper_2ehpp_7',['ReversedIndicesWrapper.hpp',['../ReversedIndicesWrapper_8hpp.html',1,'']]],
-  ['rngengine_8',['RngEngine',['../utils_8hpp.html#a5c588365e28155cfa9d18ac9d6452cc2',1,'tatami_test']]]
+  ['rngengine_8',['RngEngine',['../namespacetatami__test.html#a5c588365e28155cfa9d18ac9d6452cc2',1,'tatami_test']]]
 ];
