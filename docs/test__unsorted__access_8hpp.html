@@ -91,7 +91,6 @@ $(function(){ initResizable(false); });
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">test_unsorted_access.hpp File Reference</div></div>
 </div><!--header-->
@@ -104,6 +103,7 @@ $(function(){ initResizable(false); });
 <code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;random&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;cassert&gt;</code><br />
 <code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/new__extractor_8hpp.html">tatami/utils/new_extractor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/ConsecutiveOracle_8hpp.html">tatami/utils/ConsecutiveOracle.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="elRef" href="https://tatami-inc.github.io/tatami/FixedOracle_8hpp.html">tatami/utils/FixedOracle.hpp</a>&quot;</code><br />
@@ -112,27 +112,175 @@ $(function(){ initResizable(false); });
 </div>
 <p><a href="test__unsorted__access_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html">tatami_test</a></td></tr>
-<tr class="memdesc:namespacetatami__test"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilities for testing <b>tatami</b> libraries. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a069a246bb66b83fa60f09852537424b6" id="r_a069a246bb66b83fa60f09852537424b6"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
-<tr class="memitem:a069a246bb66b83fa60f09852537424b6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#a069a246bb66b83fa60f09852537424b6">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
+<tr class="memitem:a069a246bb66b83fa60f09852537424b6"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a069a246bb66b83fa60f09852537424b6">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
 <tr class="separator:a069a246bb66b83fa60f09852537424b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abaae665f27c3751afb62501a4695896a" id="r_abaae665f27c3751afb62501a4695896a"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
-<tr class="memitem:abaae665f27c3751afb62501a4695896a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#abaae665f27c3751afb62501a4695896a">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, Index_ start, Index_ length, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
+<tr class="memitem:abaae665f27c3751afb62501a4695896a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#abaae665f27c3751afb62501a4695896a">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, Index_ start, Index_ length, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
 <tr class="separator:abaae665f27c3751afb62501a4695896a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a629b6b398645be60a1c10b23e9271bca" id="r_a629b6b398645be60a1c10b23e9271bca"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
-<tr class="memitem:a629b6b398645be60a1c10b23e9271bca"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacetatami__test.html#a629b6b398645be60a1c10b23e9271bca">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const <a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f">tatami::VectorPtr</a>&lt; Index_ &gt; &amp;indices_ptr, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
+<tr class="memitem:a629b6b398645be60a1c10b23e9271bca"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a629b6b398645be60a1c10b23e9271bca">tatami_test::test_unsorted_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const bool use_row, const <a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f">tatami::VectorPtr</a>&lt; Index_ &gt; &amp;indices_ptr, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
 <tr class="separator:a629b6b398645be60a1c10b23e9271bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Test unsorted sparse access on a <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code>. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a629b6b398645be60a1c10b23e9271bca" name="a629b6b398645be60a1c10b23e9271bca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a629b6b398645be60a1c10b23e9271bca">&#9670;&#160;</a></span>test_unsorted_access() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Value_ , typename Index_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void tatami_test::test_unsorted_access </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>matrix</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>use_row</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f">tatami::VectorPtr</a>&lt; Index_ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>indices_ptr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Test unsorted sparse access to an indexed subset of a row/column. Any discrepancies between sorted and unsorted accesses on <code>matrix</code> will raise a GoogleTest error. This function is intended for <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses where <code><a class="elRef" href="https://tatami-inc.github.io/tatami/structtatami_1_1Options.html#a4d2e6f2631a7e813bfbf3f215594a79b">tatami::Options::sparse_ordered_index</a> = false</code> has an effect.</p>
+<p>When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with <code>ReversedIndicesWrapper</code> instances before calling this function. This ensures that unordered access in the seed is handled correctly.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Value_</td><td>Type of the data. </td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column index.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>Matrix for which to test access. </td></tr>
+    <tr><td class="paramname">use_row</td><td>Whether to test row access. If <code>false</code>, column access is tested instead. </td></tr>
+    <tr><td class="paramname">indices_ptr</td><td>Pointer to a vector of sorted and unique indices on the non-target dimension. These are the columns if <code>use_row = true</code> and the rows otherwise. </td></tr>
+    <tr><td class="paramname">options</td><td>Further options for testing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a069a246bb66b83fa60f09852537424b6" name="a069a246bb66b83fa60f09852537424b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a069a246bb66b83fa60f09852537424b6">&#9670;&#160;</a></span>test_unsorted_access() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Value_ , typename Index_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void tatami_test::test_unsorted_access </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>matrix</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>use_row</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Test unsorted sparse access to the full extent of a row/column. Any discrepancies between sorted and unsorted accesses on <code>matrix</code> will raise a GoogleTest error. This is intended for <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses where <code><a class="elRef" href="https://tatami-inc.github.io/tatami/structtatami_1_1Options.html#a4d2e6f2631a7e813bfbf3f215594a79b">tatami::Options::sparse_ordered_index</a> = false</code> has an effect.</p>
+<p>When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with <code>ReversedIndicesWrapper</code> instances before calling this function. This ensures that unordered access in the seed is handled correctly.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Value_</td><td>Type of the data. </td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column index.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>Matrix for which to test access. </td></tr>
+    <tr><td class="paramname">use_row</td><td>Whether to test row access. If <code>false</code>, column access is tested instead. </td></tr>
+    <tr><td class="paramname">options</td><td>Further options for testing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abaae665f27c3751afb62501a4695896a" name="abaae665f27c3751afb62501a4695896a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaae665f27c3751afb62501a4695896a">&#9670;&#160;</a></span>test_unsorted_access() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Value_ , typename Index_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void tatami_test::test_unsorted_access </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>matrix</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>use_row</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Index_</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Index_</td>          <td class="paramname"><span class="paramname"><em>length</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Test unsorted sparse access to a contiguous block of a row/column. Any discrepancies between sorted and unsorted accesses on <code>matrix</code> will raise a GoogleTest error. This is intended for <code><a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a></code> subclasses where <code><a class="elRef" href="https://tatami-inc.github.io/tatami/structtatami_1_1Options.html#a4d2e6f2631a7e813bfbf3f215594a79b">tatami::Options::sparse_ordered_index</a> = false</code> has an effect.</p>
+<p>When testing subclasses implementing delayed operations, we recommend wrapping the seed(s) with <code>ReversedIndicesWrapper</code> instances before calling this function. This ensures that unordered access in the seed is handled correctly.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Value_</td><td>Type of the data. </td></tr>
+    <tr><td class="paramname">Index_</td><td>Integer type of the row/column index.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">matrix</td><td>Matrix for which to test access. </td></tr>
+    <tr><td class="paramname">use_row</td><td>Whether to test row access. If <code>false</code>, column access is tested instead. </td></tr>
+    <tr><td class="paramname">start</td><td>Start of the block on the non-target dimension. These are the columns if <code>use_row = true</code> and the rows otherwise. </td></tr>
+    <tr><td class="paramname">length</td><td>Length of the block on the non-target dimension. </td></tr>
+    <tr><td class="paramname">options</td><td>Further options for testing. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0

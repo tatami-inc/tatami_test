@@ -22,7 +22,7 @@ var searchData=
   ['consecutiveoracle_2ehpp_19',['ConsecutiveOracle.hpp',['https://tatami-inc.github.io/tatami/ConsecutiveOracle_8hpp.html',1,'']]],
   ['constantmatrix_20',['ConstantMatrix',['https://tatami-inc.github.io/tatami/classtatami_1_1ConstantMatrix.html',1,'tatami::ConstantMatrix&lt; typename Value_, typename Index_ &gt;'],['https://tatami-inc.github.io/tatami/classtatami_1_1ConstantMatrix.html#a173e1c4de0b42fcd1c8bf360208cd22c',1,'tatami::ConstantMatrix::ConstantMatrix()']]],
   ['constantmatrix_2ehpp_21',['ConstantMatrix.hpp',['https://tatami-inc.github.io/tatami/ConstantMatrix_8hpp.html',1,'']]],
-  ['convert_5ftest_5faccess_5foptions_22',['convert_test_access_options',['../namespacetatami__test.html#ad1dc03cc54827ca6bd114bf31b1cd8f2',1,'tatami_test']]],
+  ['convert_5ftest_5faccess_5foptions_22',['convert_test_access_options',['../test__access_8hpp.html#ad1dc03cc54827ca6bd114bf31b1cd8f2',1,'tatami_test']]],
   ['convert_5fto_5fcompressed_5fsparse_23',['convert_to_compressed_sparse',['https://tatami-inc.github.io/tatami/namespacetatami.html#ae4758e123ce35dfe718a331a66ac0e16',1,'tatami']]],
   ['convert_5fto_5fcompressed_5fsparse_2ehpp_24',['convert_to_compressed_sparse.hpp',['https://tatami-inc.github.io/tatami/convert__to__compressed__sparse_8hpp.html',1,'']]],
   ['convert_5fto_5fdense_25',['convert_to_dense',['https://tatami-inc.github.io/tatami/namespacetatami.html#ac5f5ff476ecb172e59c3535cedb966cd',1,'tatami::convert_to_dense(const Matrix&lt; InputValue_, InputIndex_ &gt; &amp;matrix, const bool row_major, StoredValue_ *const store, const ConvertToDenseOptions &amp;options)'],['https://tatami-inc.github.io/tatami/namespacetatami.html#a512b86bd654884abaa4b42f0640b30e9',1,'tatami::convert_to_dense(const Matrix&lt; InputValue_, InputIndex_ &gt; &amp;matrix, const bool row_major, const ConvertToDenseOptions &amp;options)']]],
@@ -35,5 +35,5 @@ var searchData=
   ['copy_2ehpp_32',['copy.hpp',['https://tatami-inc.github.io/tatami/copy_8hpp.html',1,'']]],
   ['copy_5fn_33',['copy_n',['https://tatami-inc.github.io/tatami/namespacetatami.html#aca84df9f6331751c29b0bcc0ca656af7',1,'tatami']]],
   ['create_5fcontainer_5fof_5findex_5fsize_34',['create_container_of_Index_size',['https://tatami-inc.github.io/tatami/namespacetatami.html#ada885a7e7ae9dcafcaf98cde30622afc',1,'tatami']]],
-  ['create_5fseed_35',['create_seed',['../namespacetatami__test.html#a9e7a3ae6603f6dd813eb9de249aef2b6',1,'tatami_test']]]
+  ['create_5fseed_35',['create_seed',['../test__access_8hpp.html#a9e7a3ae6603f6dd813eb9de249aef2b6',1,'tatami_test']]]
 ];

@@ -115,20 +115,18 @@ Simulating data</h1>
 <div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">density</a> = 0.5;</div>
 <div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">lower</a> = 5;</div>
 <div class="line">opt.<a class="code hl_variable" href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">upper</a> = 100;</div>
-<div class="line"><span class="keyword">auto</span> res = <a class="code hl_function" href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">tatami_test::simulate_vector</a>(100, opt);</div>
-<div class="ttc" id="anamespacetatami__test_html_a510a5abf30fd00f9a634b4374903157f"><div class="ttname"><a href="namespacetatami__test.html#a510a5abf30fd00f9a634b4374903157f">tatami_test::simulate_vector</a></div><div class="ttdeci">std::vector&lt; Type_ &gt; simulate_vector(const Length_ length, const SimulateVectorOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:56</div></div>
+<div class="line"><span class="keyword">auto</span> res = tatami_test::simulate_vector(100, opt);</div>
 <div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html">tatami_test::SimulateVectorOptions</a></div><div class="ttdoc">Options for simulate_vector().</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:22</div></div>
 <div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a297d554e6333c808bdfd14b32175972e"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a297d554e6333c808bdfd14b32175972e">tatami_test::SimulateVectorOptions::upper</a></div><div class="ttdeci">double upper</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:31</div></div>
 <div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a4af160216796b467c9f0e8d4d62b56f1"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1">tatami_test::SimulateVectorOptions::density</a></div><div class="ttdeci">double density</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:36</div></div>
 <div class="ttc" id="astructtatami__test_1_1SimulateVectorOptions_html_a4bc0678d456ffab766ca4e684c300d76"><div class="ttname"><a href="structtatami__test_1_1SimulateVectorOptions.html#a4bc0678d456ffab766ca4e684c300d76">tatami_test::SimulateVectorOptions::lower</a></div><div class="ttdeci">double lower</div><div class="ttdef"><b>Definition</b> simulate_vector.hpp:26</div></div>
 </div><!-- fragment --><p>We can also simulate compressed sparse data to quickly create the corresponding sparse matrices:</p>
-<div class="fragment"><div class="line"><span class="keyword">auto</span> sparse_res = <a class="code hl_function" href="namespacetatami__test.html#aa076a2922437c462af9449a06534e494">tatami_test::simulate_compressed_sparse</a>(</div>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> sparse_res = tatami_test::simulate_compressed_sparse(</div>
 <div class="line">    <span class="comment">/* primary = */</span> 100, </div>
 <div class="line">    <span class="comment">/* secondary = */</span> 500, </div>
 <div class="line">    <span class="comment">/* density = */</span> 0.1, </div>
 <div class="line">    <span class="comment">/* options = */</span> <a class="code hl_struct" href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a>()</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacetatami__test_html_aa076a2922437c462af9449a06534e494"><div class="ttname"><a href="namespacetatami__test.html#aa076a2922437c462af9449a06534e494">tatami_test::simulate_compressed_sparse</a></div><div class="ttdeci">SimulateCompressedSparseResult&lt; Value_, Index_ &gt; simulate_compressed_sparse(const Index_ primary, const Index_ secondary, const SimulateCompressedSparseOptions &amp;options)</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:86</div></div>
 <div class="ttc" id="astructtatami__test_1_1SimulateCompressedSparseOptions_html"><div class="ttname"><a href="structtatami__test_1_1SimulateCompressedSparseOptions.html">tatami_test::SimulateCompressedSparseOptions</a></div><div class="ttdoc">Options for simulate_compressed_sparse().</div><div class="ttdef"><b>Definition</b> simulate_compressed_sparse.hpp:22</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
 Testing data access</h1>
@@ -146,7 +144,7 @@ Testing data access</h1>
 <div class="line">tatami_test::test_full_access(*sparse, *dense, options);</div>
 <div class="ttc" id="aclasstatami_1_1DenseRowMatrix_html"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/classtatami_1_1DenseRowMatrix.html">tatami::DenseRowMatrix</a></div></div>
 <div class="ttc" id="anamespacetatami_html_ae4758e123ce35dfe718a331a66ac0e16"><div class="ttname"><a href="https://tatami-inc.github.io/tatami/namespacetatami.html#ae4758e123ce35dfe718a331a66ac0e16">tatami::convert_to_compressed_sparse</a></div><div class="ttdeci">std::shared_ptr&lt; Matrix&lt; Value_, Index_ &gt; &gt; convert_to_compressed_sparse(const Matrix&lt; InputValue_, InputIndex_ &gt; &amp;matrix, const bool row, const ConvertToCompressedSparseOptions &amp;options)</div></div>
-<div class="ttc" id="astructtatami__test_1_1TestAccessOptions_html"><div class="ttname"><a href="structtatami__test_1_1TestAccessOptions.html">tatami_test::TestAccessOptions</a></div><div class="ttdoc">Options for test_full_access() and friends.</div><div class="ttdef"><b>Definition</b> test_access.hpp:41</div></div>
+<div class="ttc" id="astructtatami__test_1_1TestAccessOptions_html"><div class="ttname"><a href="structtatami__test_1_1TestAccessOptions.html">tatami_test::TestAccessOptions</a></div><div class="ttdoc">Options for test_full_access() and friends.</div><div class="ttdef"><b>Definition</b> test_access.hpp:42</div></div>
 </div><!-- fragment --><p>We can also test access of a contiguous block, defined as a proportion of the extent non-target dimension. In the chunk below, the columns are the target dimension to be extracted, so the block starts at 10% of the number of rows and has length equal to 50% of the number of rows.</p>
 <div class="fragment"><div class="line">options.use_row = <span class="keyword">false</span>; <span class="comment">// test column access.</span></div>
 <div class="line">tatami_test::test_block_access(</div>
@@ -192,10 +190,9 @@ Seed wrappers for delayed operations</h1>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
 Other useful things</h1>
 <p>We can check that errors are thrown with the expected message:</p>
-<div class="fragment"><div class="line"><a class="code hl_function" href="namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6">tatami_test::throws_error</a>([&amp;]() {</div>
+<div class="fragment"><div class="line">tatami_test::throws_error([&amp;]() {</div>
 <div class="line">    <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;foobar&quot;</span>);</div>
 <div class="line">}, <span class="stringliteral">&quot;foobar&quot;</span>);</div>
-<div class="ttc" id="anamespacetatami__test_html_aa092fbf9c16bb002953e8594a2f9b3a6"><div class="ttname"><a href="namespacetatami__test.html#aa092fbf9c16bb002953e8594a2f9b3a6">tatami_test::throws_error</a></div><div class="ttdeci">void throws_error(Function_ fun, const std::string &amp;msg)</div><div class="ttdef"><b>Definition</b> throws_error.hpp:23</div></div>
 </div><!-- fragment --><p>We also provide a wrapper around the <code>fetch</code> + <code>copy_n</code> combination, which directly returns a vector of the desired row/column contents.</p>
 <div class="fragment"><div class="line"><span class="keyword">auto</span> ext = dense-&gt;dense_column();</div>
 <div class="line"><span class="keyword">auto</span> column = fetch(*ext, 10, dense-&gt;nrow());</div>
