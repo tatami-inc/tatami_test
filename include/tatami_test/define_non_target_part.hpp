@@ -10,6 +10,7 @@
 #include "tatami/base/Matrix.hpp"
 #include "sanisizer/sanisizer.hpp"
 
+#include "create_seed.hpp"
 #include "utils.hpp"
 
 /**
@@ -49,9 +50,7 @@ tatami::VectorPtr<Index_> define_non_target_indices(const Index_ start, const In
     if (seed.has_value()) {
         seed0 = *seed;
     } else  {
-        seed0 = static_cast<SeedType>(start) * 13u +
-            static_cast<SeedType>(max) * 117u +
-            probability * 1234567890u;
+        seed0 = create_seed(start, max, probability);
     }
 
     RngEngine rng(seed0);

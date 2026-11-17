@@ -8,6 +8,7 @@ add_executable(
     src/test_unsorted_access.cpp
     src/ReversedIndicesWrapper.cpp
     src/ForcedOracleWrapper.cpp
+    src/create_seed.cpp
 )
 
 target_link_libraries(

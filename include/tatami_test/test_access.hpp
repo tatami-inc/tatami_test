@@ -18,6 +18,7 @@
 #include "tatami/utils/copy.hpp"
 
 #include "define_non_target_part.hpp"
+#include "create_seed.hpp"
 #include "utils.hpp"
 
 /**
@@ -141,29 +142,12 @@ inline auto standard_test_access_options_combinations() {
  */
 
 /**
- * Create a seed from the `test_access()` options.
- * This provides deterministic variation in the random stream across test scenarios.
- *
- * @param NR Number of rows of the matrix to be tested.
- * @param NC Number of columns of the matrix to be tested.
- * @param use_row Whether to test row access. 
- * If `false`, column access is tested instead.
- * @param options Options for testing access.
- *
- * @return Seed value.
- */
-template<typename Index_>
-SeedType create_seed(const Index_ NR, const Index_ NC, const bool use_row, const TestAccessOptions& options) {
-    SeedType seed = static_cast<SeedType>(NR) * static_cast<SeedType>(NC);
-    seed += 13u * static_cast<SeedType>(use_row);
-    seed += 57u * static_cast<SeedType>(options.order);
-    seed += 101u * static_cast<SeedType>(options.jump);
-    return seed;
-}
-
-/**
  * @cond
  */
+inline SeedType combine_hash(SeedType old_seed, const TestAccessOptions& options) {
+    return combine_hash(old_seed, options.use_oracle, (int)options.order, options.jump);
+}
+
 namespace internal {
 
 template<typename Value_>
