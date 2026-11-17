@@ -331,22 +331,22 @@
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>af5ea268b2566f56037d1b18d10d12318</anchor>
-      <arglist>(const Index_ start, const Index_ max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+      <anchor>a9bb6cdb04618aed0cfa4a32c41e2b0b3</anchor>
+      <arglist>(const Index_ start, const Index_ length, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
     </member>
     <member kind="function">
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a7d7fe6cd2ade9e2168ba069934e13bb0</anchor>
-      <arglist>(const Index_ extent, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+      <anchor>a7c53a6ddba727b2b383cb44235367ffc</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_length, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
     </member>
     <member kind="function">
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a4e30604115ca09229365a64359a3e356</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_max, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
+      <anchor>aeb4061953314a728e3a84e1cad2c0407</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
     </member>
     <member kind="function">
       <type>std::pair&lt; Index_, Index_ &gt;</type>
