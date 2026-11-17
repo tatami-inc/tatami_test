@@ -33,7 +33,8 @@ namespace tatami_test {
  * If unset, a suitable value is generated from `start`, `max` and `probability`.
  *
  * @return Pointer to a vector of sorted and unique indices. 
- * If `[start, max)` is not empty, this is guaranteed to contain at least one element, starting with `start`.
+ * If `[start, max)` is not empty, this is guaranteed to contain at least one element,
+ * where the first and last elements are guaranteed to be `start` and `max - 1`, respectively.
  */
 template<typename Index_>
 tatami::VectorPtr<Index_> define_non_target_indices(const Index_ start, const Index_ max, const double probability, const std::optional<SeedType>& seed) {
@@ -60,6 +61,9 @@ tatami::VectorPtr<Index_> define_non_target_indices(const Index_ start, const In
         if (udist(rng) < probability) {
             ptr->push_back(i);
         }
+    }
+    if (ptr->back() != static_cast<Index_>(max - 1)) {
+        ptr->push_back(max - 1);
     }
 
     return output;
