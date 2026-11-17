@@ -1,9 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.12.0">
   <compound kind="file">
+    <name>create_seed.hpp</name>
+    <path>tatami_test/</path>
+    <filename>create__seed_8hpp.html</filename>
+    <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
+    <namespace>tatami_test</namespace>
+  </compound>
+  <compound kind="file">
     <name>define_non_target_part.hpp</name>
     <path>tatami_test/</path>
     <filename>define__non__target__part_8hpp.html</filename>
+    <includes id="create__seed_8hpp" name="create_seed.hpp" local="yes" import="no" module="no" objc="no">create_seed.hpp</includes>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <namespace>tatami_test</namespace>
   </compound>
@@ -52,6 +60,7 @@
     <path>tatami_test/</path>
     <filename>tatami__test_8hpp.html</filename>
     <includes id="fetch_8hpp" name="fetch.hpp" local="yes" import="no" module="no" objc="no">fetch.hpp</includes>
+    <includes id="create__seed_8hpp" name="create_seed.hpp" local="yes" import="no" module="no" objc="no">create_seed.hpp</includes>
     <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
     <includes id="ForcedOracleWrapper_8hpp" name="ForcedOracleWrapper.hpp" local="yes" import="no" module="no" objc="no">ForcedOracleWrapper.hpp</includes>
     <includes id="ReversedIndicesWrapper_8hpp" name="ReversedIndicesWrapper.hpp" local="yes" import="no" module="no" objc="no">ReversedIndicesWrapper.hpp</includes>
@@ -67,6 +76,7 @@
     <path>tatami_test/</path>
     <filename>test__access_8hpp.html</filename>
     <includes id="define__non__target__part_8hpp" name="define_non_target_part.hpp" local="yes" import="no" module="no" objc="no">define_non_target_part.hpp</includes>
+    <includes id="create__seed_8hpp" name="create_seed.hpp" local="yes" import="no" module="no" objc="no">create_seed.hpp</includes>
     <includes id="utils_8hpp" name="utils.hpp" local="yes" import="no" module="no" objc="no">utils.hpp</includes>
     <class kind="struct">tatami_test::TestAccessOptions</class>
     <namespace>tatami_test</namespace>
@@ -311,6 +321,13 @@
       <enumvalue file="namespacetatami__test.html" anchor="a9441f51f38f3ecdda9630e3357dea497a170e02e86972c2be8559884cc3c12254">RANDOM</enumvalue>
     </member>
     <member kind="function">
+      <type>SeedType</type>
+      <name>create_seed</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a46f2e553222dfd266c25d7e42c658edf</anchor>
+      <arglist>(Args_ &amp;&amp;... args)</arglist>
+    </member>
+    <member kind="function">
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
@@ -407,13 +424,6 @@
       <anchorfile>namespacetatami__test.html</anchorfile>
       <anchor>a7ced20d10827c3892757b16ccf23725c</anchor>
       <arglist>()</arglist>
-    </member>
-    <member kind="function">
-      <type>SeedType</type>
-      <name>create_seed</name>
-      <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a9e7a3ae6603f6dd813eb9de249aef2b6</anchor>
-      <arglist>(const Index_ NR, const Index_ NC, const bool use_row, const TestAccessOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>

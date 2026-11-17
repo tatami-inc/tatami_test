@@ -141,6 +141,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a46f2e553222dfd266c25d7e42c658edf" id="r_a46f2e553222dfd266c25d7e42c658edf"><td class="memTemplParams" colspan="2">template&lt;typename... Args_&gt; </td></tr>
+<tr class="memitem:a46f2e553222dfd266c25d7e42c658edf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a46f2e553222dfd266c25d7e42c658edf">create_seed</a> (Args_ &amp;&amp;... args)</td></tr>
+<tr class="separator:a46f2e553222dfd266c25d7e42c658edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5ea268b2566f56037d1b18d10d12318" id="r_af5ea268b2566f56037d1b18d10d12318"><td class="memTemplParams" colspan="2">template&lt;typename Index_ &gt; </td></tr>
 <tr class="memitem:af5ea268b2566f56037d1b18d10d12318"><td class="memTemplItemLeft" align="right" valign="top"><a class="elRef" href="https://tatami-inc.github.io/tatami/namespacetatami.html#a1a9c70ebcfa94bba3fea89202868f22f">tatami::VectorPtr</a>&lt; Index_ &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#af5ea268b2566f56037d1b18d10d12318">define_non_target_indices</a> (const Index_ start, const Index_ max, const double probability, const std::optional&lt; <a class="el" href="#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a> &gt; &amp;seed)</td></tr>
 <tr class="separator:af5ea268b2566f56037d1b18d10d12318"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,9 +184,6 @@ Functions</h2></td></tr>
 <tr class="separator:a4a9ef1c756f87a9b583abb86cebe6121"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ced20d10827c3892757b16ccf23725c" id="r_a7ced20d10827c3892757b16ccf23725c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ced20d10827c3892757b16ccf23725c">combine_test_access_options</a> ()</td></tr>
 <tr class="separator:a7ced20d10827c3892757b16ccf23725c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e7a3ae6603f6dd813eb9de249aef2b6" id="r_a9e7a3ae6603f6dd813eb9de249aef2b6"><td class="memTemplParams" colspan="2">template&lt;typename Index_ &gt; </td></tr>
-<tr class="memitem:a9e7a3ae6603f6dd813eb9de249aef2b6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a9e7a3ae6603f6dd813eb9de249aef2b6">create_seed</a> (const Index_ NR, const Index_ NC, const bool use_row, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
-<tr class="separator:a9e7a3ae6603f6dd813eb9de249aef2b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf699e62f3309c9c7b9a710dd7f72dc9" id="r_adf699e62f3309c9c7b9a710dd7f72dc9"><td class="memTemplParams" colspan="2">template&lt;typename Value_ , typename Index_ &gt; </td></tr>
 <tr class="memitem:adf699e62f3309c9c7b9a710dd7f72dc9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#adf699e62f3309c9c7b9a710dd7f72dc9">test_access</a> (const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;matrix, const <a class="elRef" href="https://tatami-inc.github.io/tatami/classtatami_1_1Matrix.html">tatami::Matrix</a>&lt; Value_, Index_ &gt; &amp;reference, const bool use_row, const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;options)</td></tr>
 <tr class="separator:adf699e62f3309c9c7b9a710dd7f72dc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -349,47 +349,36 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9e7a3ae6603f6dd813eb9de249aef2b6" name="a9e7a3ae6603f6dd813eb9de249aef2b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e7a3ae6603f6dd813eb9de249aef2b6">&#9670;&#160;</a></span>create_seed()</h2>
+<a id="a46f2e553222dfd266c25d7e42c658edf" name="a46f2e553222dfd266c25d7e42c658edf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46f2e553222dfd266c25d7e42c658edf">&#9670;&#160;</a></span>create_seed()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Index_ &gt; </div>
+template&lt;typename... Args_&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="#a6bdf707f9d2b9be18d6dee82f017c16b">SeedType</a> tatami_test::create_seed </td>
           <td>(</td>
-          <td class="paramtype">const Index_</td>          <td class="paramname"><span class="paramname"><em>NR</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">Args_ &amp;&amp;...</td>          <td class="paramname"><span class="paramname"><em>args</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">const Index_</td>          <td class="paramname"><span class="paramname"><em>NC</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>use_row</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structtatami__test_1_1TestAccessOptions.html">TestAccessOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Create a seed from the <code><a class="el" href="#adf699e62f3309c9c7b9a710dd7f72dc9">test_access()</a></code> options. This provides deterministic variation in the random stream across test scenarios.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">NR</td><td>Number of rows of the matrix to be tested. </td></tr>
-    <tr><td class="paramname">NC</td><td>Number of columns of the matrix to be tested. </td></tr>
-    <tr><td class="paramname">use_row</td><td>Whether to test row access. If <code>false</code>, column access is tested instead. </td></tr>
-    <tr><td class="paramname">options</td><td>Options for testing access.</td></tr>
+<p>Create an RNG seed from some input values, typically test parameters. This provides deterministic variation in the RNG stream across test scenarios.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Args_</td><td>One or more integer, floating-point or boolean types; or any <code>std::pair</code>, <code>std::tuple</code> or <code>std::vector</code> consisting of any combination of such types; or a <code><a class="el" href="structtatami__test_1_1TestAccessOptions.html" title="Options for test_access().">TestAccessOptions</a></code> object, using its <code>use_oracle</code>, <code>order</code> and <code>jump</code> members.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Seed value. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>At least one value.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A seed for <code>RngEngine</code>. </dd></dl>
 
 </div>
 </div>
