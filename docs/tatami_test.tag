@@ -328,6 +328,20 @@
       <arglist>(Args_ &amp;&amp;... args)</arglist>
     </member>
     <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a9c6448a942867179e4d3ac1575940171</anchor>
+      <arglist>(const Index_ extent, const double relative_start, const double relative_length)</arglist>
+    </member>
+    <member kind="function">
+      <type>std::pair&lt; Index_, Index_ &gt;</type>
+      <name>define_non_target_block</name>
+      <anchorfile>namespacetatami__test.html</anchorfile>
+      <anchor>a459e0bdc55199f59f0d55d2b9fc2fb12</anchor>
+      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length)</arglist>
+    </member>
+    <member kind="function">
       <type>tatami::VectorPtr&lt; Index_ &gt;</type>
       <name>define_non_target_indices</name>
       <anchorfile>namespacetatami__test.html</anchorfile>
@@ -347,20 +361,6 @@
       <anchorfile>namespacetatami__test.html</anchorfile>
       <anchor>aeb4061953314a728e3a84e1cad2c0407</anchor>
       <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length, const double probability, const std::optional&lt; SeedType &gt; &amp;seed)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::pair&lt; Index_, Index_ &gt;</type>
-      <name>define_non_target_block</name>
-      <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a9c6448a942867179e4d3ac1575940171</anchor>
-      <arglist>(const Index_ extent, const double relative_start, const double relative_length)</arglist>
-    </member>
-    <member kind="function">
-      <type>std::pair&lt; Index_, Index_ &gt;</type>
-      <name>define_non_target_block</name>
-      <anchorfile>namespacetatami__test.html</anchorfile>
-      <anchor>a459e0bdc55199f59f0d55d2b9fc2fb12</anchor>
-      <arglist>(const tatami::Matrix&lt; Value_, Index_ &gt; &amp;matrix, bool use_row, const double relative_start, const double relative_length)</arglist>
     </member>
     <member kind="function">
       <type>std::vector&lt; Value_ &gt;</type>
