@@ -27,12 +27,14 @@ inline SeedType combine_hash(SeedType old_seed, SeedType val) {
     return val + 0x9e3779b9 + (old_seed<<6) + (old_seed>>2);
 }
 
-inline SeedType combine_hash(SeedType old_seed, int val) {
-    // SeedType should also be unsigned, so integer casts to SeedType are always well-defined.
+// SeedType should also be unsigned, so integer casts to SeedType are always well-defined.
+template<typename Integer_>
+std::enable_if_t<std::is_integral_v<Integer_>, SeedType> combine_hash(SeedType old_seed, Integer_ val) {
     return combine_hash(old_seed, static_cast<SeedType>(val));
 }
 
-inline SeedType combine_hash(SeedType old_seed, double val) {
+template<typename Float_>
+std::enable_if_t<std::is_floating_point_v<Float_>, SeedType> combine_hash(SeedType old_seed, Float_ val) {
     SeedType dummy;
     std::copy_n(reinterpret_cast<const char*>(&val), std::min(sizeof(SeedType), sizeof(val)), reinterpret_cast<char*>(&dummy));
     return combine_hash(old_seed, dummy);
