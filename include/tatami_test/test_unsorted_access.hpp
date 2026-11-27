@@ -9,7 +9,7 @@
 #include <cmath>
 #include <cassert>
 
-#include "tatami/utils/new_extractor.hpp"
+#include "tatami/utils/make_Extractor.hpp"
 #include "tatami/utils/ConsecutiveOracle.hpp"
 #include "tatami/utils/FixedOracle.hpp"
 
@@ -35,17 +35,17 @@ void test_unsorted_access_base(const tatami::Matrix<Value_, Index_>& matrix, con
 
     auto sequence = simulate_test_access_sequence(NR, NC, use_row, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
-    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args...);
+    auto swork = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., tatami::Options());
 
     tatami::Options opt;
     opt.sparse_ordered_index = false;
-    auto swork_uns = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_uns = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = false;
-    auto swork_uns_v = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_uns_v = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_value = false;
-    auto swork_uns_n = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_uns_n = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = true;
-    auto swork_uns_i = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_uns_i = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
 
     sanisizer::as_size_type<std::vector<Value_> >(extract_len);
     std::vector<Value_> mat_vbuffer(extract_len), mat_vstore1(extract_len), mat_vstore2(extract_len); 

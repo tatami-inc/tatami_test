@@ -12,7 +12,7 @@
 #include <type_traits>
 #include <cassert>
 
-#include "tatami/utils/new_extractor.hpp"
+#include "tatami/utils/make_Extractor.hpp"
 #include "tatami/utils/ConsecutiveOracle.hpp"
 #include "tatami/utils/FixedOracle.hpp"
 #include "tatami/utils/copy.hpp"
@@ -227,20 +227,20 @@ void test_access_base(
     const auto NC = matrix.ncol();
     ASSERT_EQ(NC, reference.ncol());
 
-    auto refwork = (use_row ? reference.dense_row(args...) : reference.dense_column(args...));
+    auto refwork = reference.dense(use_row, args..., tatami::Options());
 
     auto sequence = simulate_test_access_sequence(NR, NC, use_row, options);
     auto oracle = create_oracle<use_oracle_>(sequence, options);
-    auto pwork = tatami::new_extractor<false, use_oracle_>(&matrix, use_row, oracle, args...);
+    auto pwork = tatami::make_Extractor<false, use_oracle_>(matrix, use_row, oracle, args..., tatami::Options());
 
-    auto swork = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args...);
     tatami::Options opt;
+    auto swork = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = false;
-    auto swork_v = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_v = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_value = false;
-    auto swork_n = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_n = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
     opt.sparse_extract_index = true;
-    auto swork_i = tatami::new_extractor<true, use_oracle_>(&matrix, use_row, oracle, args..., opt);
+    auto swork_i = tatami::make_Extractor<true, use_oracle_>(matrix, use_row, oracle, args..., opt);
 
     sanisizer::as_size_type<std::vector<Value_> >(extent);
     std::vector<Value_> mat_dense_buffer(extent), ref_dense_buffer(extent), mat_vbuffer(extent), mat_vstore1(extent), mat_vstore2(extent); 
