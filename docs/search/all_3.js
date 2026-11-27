@@ -153,6 +153,5 @@ var searchData=
   ['densematrix_3c_20value_5f_2c_20index_5f_2c_20storage_5f_20_3e_150',['DenseMatrix&lt; Value_, Index_, Storage_ &gt;',['https://tatami-inc.github.io/tatami/classtatami_1_1DenseMatrix.html',1,'tatami']]],
   ['denserowmatrix_151',['DenseRowMatrix',['https://tatami-inc.github.io/tatami/classtatami_1_1DenseRowMatrix.html',1,'tatami::DenseRowMatrix&lt; typename Value_, typename Index_, class Storage_ &gt;'],['https://tatami-inc.github.io/tatami/classtatami_1_1DenseRowMatrix.html#a17956d69228777bc58124f80ea1eb37e',1,'tatami::DenseRowMatrix::DenseRowMatrix()']]],
   ['density_152',['density',['../structtatami__test_1_1SimulateCompressedSparseOptions.html#ac9b8c0023b59db929b693332f42ea3e3',1,'tatami_test::SimulateCompressedSparseOptions::density'],['../structtatami__test_1_1SimulateVectorOptions.html#a4af160216796b467c9f0e8d4d62b56f1',1,'tatami_test::SimulateVectorOptions::density']]],
-  ['difference_5ftype_153',['difference_type',['https://tatami-inc.github.io/tatami/structtatami_1_1SomeNumericArray_1_1Iterator.html#aefb9a8cadab1f35ebe83a01e76c2520f',1,'tatami::SomeNumericArray::Iterator']]],
-  ['dimensionselectiontype_154',['DimensionSelectionType',['https://tatami-inc.github.io/tatami/namespacetatami.html#a0a2ecaf58e2b69bb4a808e814aeb16a1',1,'tatami']]]
+  ['dimensionselectiontype_153',['DimensionSelectionType',['https://tatami-inc.github.io/tatami/namespacetatami.html#a0a2ecaf58e2b69bb4a808e814aeb16a1',1,'tatami']]]
 ];
